@@ -7,7 +7,7 @@ android {
     compileSdk 30
 
     defaultConfig {
-        applicationId "com.example.bkstinfo"
+        applicationId "com.wonrax.bkstinfo"
         minSdk 24
         targetSdk 30
         versionCode 1
