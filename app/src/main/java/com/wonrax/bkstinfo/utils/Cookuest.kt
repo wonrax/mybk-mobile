@@ -1,4 +1,4 @@
-package com.example.bkstinfo.utils
+package com.wonrax.bkstinfo.utils
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request

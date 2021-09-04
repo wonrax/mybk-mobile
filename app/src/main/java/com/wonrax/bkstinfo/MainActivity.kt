@@ -1,9 +1,9 @@
-package com.example.bkstinfo
+package com.wonrax.bkstinfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
-import com.example.bkstinfo.utils.Cookuest
-import com.example.bkstinfo.utils.OkHttpClientSingleton
+import com.wonrax.bkstinfo.utils.Cookuest
+import com.wonrax.bkstinfo.utils.OkHttpClientSingleton
 
 class MainActivity : AppCompatActivity() {
 

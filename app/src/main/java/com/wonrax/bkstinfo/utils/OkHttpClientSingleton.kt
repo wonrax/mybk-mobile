@@ -1,4 +1,4 @@
-package com.example.bkstinfo.utils
+package com.wonrax.bkstinfo.utils
 
 import android.content.Context
 import com.franmontiel.persistentcookiejar.ClearableCookieJar
@@ -25,9 +25,9 @@ class OkHttpClientSingleton {
                     return
                 }
                 val newInstance = OkHttpClientSingleton()
-                OkHttpClientSingleton.cookieJar =
+                cookieJar =
                     PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(context))
-                OkHttpClientSingleton.httpClient = OkHttpClient.Builder()
+                httpClient = OkHttpClient.Builder()
                     .cookieJar(cookieJar as PersistentCookieJar)
                     .build()
             }
