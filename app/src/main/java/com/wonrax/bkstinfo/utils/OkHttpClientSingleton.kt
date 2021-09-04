@@ -24,7 +24,6 @@ class OkHttpClientSingleton {
                 if (recheckInstance != null) {
                     return
                 }
-                val newInstance = OkHttpClientSingleton()
                 cookieJar =
                     PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(context))
                 httpClient = OkHttpClient.Builder()
