@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'org.jlleitschuh.gradle.ktlint' version '10.1.0'
 }
 
 android {
@@ -42,4 +43,12 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.github.franmontiel:PersistentCookieJar:1.0.1'
+}
+
+ktlint {
+    enableExperimentalRules.set(true)
+    filter {
+        // Exclude generated files
+        exclude("**/build/**")
+    }
 }

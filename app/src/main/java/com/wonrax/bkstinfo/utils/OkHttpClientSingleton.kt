@@ -10,7 +10,9 @@ import okhttp3.OkHttpClient
 class OkHttpClientSingleton {
     companion object {
         @Volatile private var isInitiated: Boolean = false
+
         @Volatile var httpClient: OkHttpClient = OkHttpClient()
+
         @Volatile private var cookieJar: ClearableCookieJar? = null
 
         fun init(context: Context) {

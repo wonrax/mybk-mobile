@@ -14,6 +14,7 @@ object Cookuest {
     private val JSON: MediaType = "application/json; charset=utf-8".toMediaType()
     private val httpClient = OkHttpClientSingleton.httpClient
     private var requestTemplate: Request.Builder = Request.Builder()
+
     @Throws(IOException::class)
     fun post(url: String, json: String?): String {
         val body: RequestBody = json?.toRequestBody(JSON) ?: "".toRequestBody()
