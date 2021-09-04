@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private fun signIn() {
         val textView = findViewById<TextView>(R.id.httpResponse)
         val url = "https://sso.hcmut.edu.vn/cas/login"
-        Cookuest.get(url)
+        Cookuest.get(url, onResponse = { Cookuest.get(url) })
     }
 }
 

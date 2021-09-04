@@ -9,19 +9,19 @@ import okhttp3.OkHttpClient
 
 class OkHttpClientSingleton {
     companion object {
-        @Volatile private var INSTANCE: OkHttpClientSingleton? = null
+        @Volatile private var isInitiated: Boolean = false
         @Volatile var httpClient: OkHttpClient = OkHttpClient()
         @Volatile private var cookieJar: ClearableCookieJar? = null
 
         fun init(context: Context) {
-            val instance = INSTANCE
-            if (instance != null) {
+            val check = isInitiated
+            if (check) {
                 return
             }
             synchronized(this) {
                 // Double check
-                val recheckInstance = INSTANCE
-                if (recheckInstance != null) {
+                val recheck = isInitiated
+                if (recheck) {
                     return
                 }
                 cookieJar =
@@ -29,6 +29,7 @@ class OkHttpClientSingleton {
                 httpClient = OkHttpClient.Builder()
                     .cookieJar(cookieJar as PersistentCookieJar)
                     .build()
+                isInitiated = true
             }
         }
     }
