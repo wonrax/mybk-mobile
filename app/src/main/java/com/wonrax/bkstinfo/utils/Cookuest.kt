@@ -1,8 +1,13 @@
 package com.wonrax.bkstinfo.utils
-import okhttp3.*
+
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
 import okio.IOException
 
 object Cookuest {
@@ -39,7 +44,7 @@ object Cookuest {
     }
 
     @Throws(IOException::class)
-    fun get(url: String, onResponse: ((Response) -> Unit)? = null, onError: ((IOException) -> Unit)? = null): Unit {
+    fun get(url: String, onResponse: ((Response) -> Unit)? = null, onError: ((IOException) -> Unit)? = null) {
         val request: Request = requestTemplate
             .url(url)
             .get()

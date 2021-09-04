@@ -1,7 +1,7 @@
 package com.wonrax.bkstinfo
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.wonrax.bkstinfo.utils.Cookuest
 import com.wonrax.bkstinfo.utils.OkHttpClientSingleton
 
@@ -23,5 +23,3 @@ class MainActivity : AppCompatActivity() {
         Cookuest.get(url, onResponse = { Cookuest.get(url) })
     }
 }
-
-
