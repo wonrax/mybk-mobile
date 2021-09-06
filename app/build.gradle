@@ -65,6 +65,8 @@ dependencies {
     implementation 'com.github.franmontiel:PersistentCookieJar:1.0.1'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    debugImplementation 'com.facebook.stetho:stetho:1.5.1'
+    debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
 }
 
 ktlint {

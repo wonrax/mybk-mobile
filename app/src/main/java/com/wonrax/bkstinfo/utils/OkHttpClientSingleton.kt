@@ -1,10 +1,12 @@
 package com.wonrax.bkstinfo.utils
 
 import android.content.Context
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.franmontiel.persistentcookiejar.ClearableCookieJar
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
+import com.wonrax.bkstinfo.BuildConfig
 import okhttp3.OkHttpClient
 
 class OkHttpClientSingleton {
@@ -30,6 +32,12 @@ class OkHttpClientSingleton {
                     PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(context))
                 httpClient = OkHttpClient.Builder()
                     .cookieJar(cookieJar as PersistentCookieJar)
+                    .apply {
+                        // Network inspection
+                        if (BuildConfig.DEBUG) {
+                            addNetworkInterceptor(StethoInterceptor())
+                        }
+                    }
                     .build()
                 isInitiated = true
             }
