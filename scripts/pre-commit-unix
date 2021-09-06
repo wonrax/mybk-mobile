@@ -2,8 +2,6 @@
 
 echo "Running lint check..."
 
-# Try auto formatting first
-./gradlew app:ktlintFormat --daemon
 # Lint check
 ./gradlew app:ktlintCheck --daemon
 
