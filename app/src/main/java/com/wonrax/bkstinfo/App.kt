@@ -2,7 +2,7 @@ package com.wonrax.bkstinfo
 
 import android.app.Application
 import com.facebook.stetho.Stetho
-import com.wonrax.bkstinfo.utils.OkHttpClientSingleton
+import com.wonrax.bkstinfo.network.OkHttpClientSingleton
 
 class App : Application() {
     override fun onCreate() {
@@ -13,6 +13,6 @@ class App : Application() {
             Stetho.initializeWithDefaults(this)
         }
         // Init singleton to enable cookies
-        OkHttpClientSingleton.init(applicationContext)
+        OkHttpClientSingleton.init(this)
     }
 }

@@ -61,7 +61,8 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    debugImplementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
     implementation 'com.github.franmontiel:PersistentCookieJar:1.0.1'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
@@ -70,7 +71,7 @@ dependencies {
 }
 
 ktlint {
-    enableExperimentalRules.set(true)
+    enableExperimentalRules.set(false)
     filter {
         // Exclude generated files
         exclude("**/build/**")

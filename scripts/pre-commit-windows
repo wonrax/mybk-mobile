@@ -1,4 +1,5 @@
 #!C:/Program\ Files/Git/usr/bin/sh.exe
+# shellcheck disable=SC2239
 
 echo "Running lint check..."
 

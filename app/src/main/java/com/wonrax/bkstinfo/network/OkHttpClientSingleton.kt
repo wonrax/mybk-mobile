@@ -1,4 +1,4 @@
-package com.wonrax.bkstinfo.utils
+package com.wonrax.bkstinfo.network
 
 import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
@@ -7,15 +7,20 @@ import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import com.wonrax.bkstinfo.BuildConfig
+import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 
 class OkHttpClientSingleton {
     companion object {
-        @Volatile private var isInitiated: Boolean = false
+        @Volatile
+        private var isInitiated: Boolean = false
 
-        @Volatile var httpClient: OkHttpClient = OkHttpClient()
+        @Volatile
+        lateinit var httpClient: OkHttpClient
 
-        @Volatile private var cookieJar: ClearableCookieJar? = null
+        @Volatile
+        private lateinit var cookieJar: ClearableCookieJar
 
         fun init(context: Context) {
             val check = isInitiated
@@ -36,7 +41,25 @@ class OkHttpClientSingleton {
                         // Network inspection
                         if (BuildConfig.DEBUG) {
                             addNetworkInterceptor(StethoInterceptor())
+                            addInterceptor(
+                                HttpLoggingInterceptor().apply {
+                                    setLevel(
+                                        HttpLoggingInterceptor.Level.BASIC
+                                    )
+                                }
+                            )
                         }
+                        followRedirects(true)
+                        followSslRedirects(false)
+                        connectionSpecs(
+                            listOf(
+                                ConnectionSpec.CLEARTEXT,
+                                ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                                    .allEnabledTlsVersions()
+                                    .allEnabledCipherSuites()
+                                    .build()
+                            )
+                        )
                     }
                     .build()
                 isInitiated = true
