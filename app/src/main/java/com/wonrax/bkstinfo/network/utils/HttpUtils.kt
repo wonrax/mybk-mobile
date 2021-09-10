@@ -1,7 +1,8 @@
 package com.wonrax.bkstinfo.network.utils
 
 object HttpUtils {
-    /** Turn an HTTP url to an HTTPS URL
+    /**
+     * Turn an HTTP url to an HTTPS URL
      * @param url The HTTP url to be converted
      */
     fun httpToHttpsURL(url: String): String {

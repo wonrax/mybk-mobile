@@ -4,7 +4,8 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 object HtmlUtils {
-    /** Get value of a HTML element.
+    /**
+     * Get value of a HTML element.
      * @param tag Specify the tag of the element
      * @param name Specify the name attribute of the element
      * @param input The string to be parsed

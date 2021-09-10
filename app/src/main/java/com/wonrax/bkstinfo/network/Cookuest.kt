@@ -14,6 +14,7 @@ object Cookuest {
         addHeader("Accept", "*/*")
     }
 
+    // TODO Write docs
     @Throws(IOException::class)
     fun post(
         url: String,
@@ -44,6 +45,7 @@ object Cookuest {
         httpClient.newCall(request).execute().use { response -> return response.body!!.string() }
     }
 
+    // TODO Write docs
     @Throws(IOException::class)
     fun get(
         url: String,
