@@ -9,6 +9,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,11 +18,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import com.wonrax.bkstinfo.network.Cookuest
 import com.wonrax.bkstinfo.network.Response
+import com.wonrax.bkstinfo.network.utils.HtmlUtils.getHtmlElementValue
+import com.wonrax.bkstinfo.network.utils.HttpUtils.httpToHttpsURL
 import com.wonrax.bkstinfo.ui.theme.BKSTINFOTheme
 import okhttp3.FormBody
 import okhttp3.RequestBody
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,117 +31,184 @@ class MainActivity : ComponentActivity() {
             BKSTINFOTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+                    Greeting()
                 }
             }
         }
     }
 }
 
-private const val username: String = ""
-private const val password: String = ""
-
 @Composable
-fun Greeting(name: String) {
-    var displayText by remember { mutableStateOf("Hellow, pls login") }
-    Column() {
-        Text(displayText)
+fun Greeting() {
+    var displayLoginStatus by remember { mutableStateOf("Hellow, pls login") }
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    Column {
+        TextField(
+            value = username,
+            onValueChange = { username = it },
+            label = { Text("Username") }
+        )
+        TextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Password") }
+        )
         Button(
-            onClick = { signIn { displayText = it.body } },
+            onClick = {
+                signIn(username, password) { loginStatus: LoginStatus ->
+                    displayLoginStatus =
+                        when (loginStatus) {
+                            LoginStatus.WRONG_PASSWORD -> "Wrong password, please try again"
+                            LoginStatus.LOGGED_IN -> "Login successfully"
+                            LoginStatus.UNKNOWN -> "Something went wrong on our side, please try again later"
+                            else -> displayLoginStatus
+                        }
+                }
+            },
             colors = ButtonDefaults.textButtonColors(
                 backgroundColor = Color.White
             )
         ) {
             Text("Sign in")
         }
+        Text(displayLoginStatus)
     }
 }
 
-private fun signIn(onLoggedIn: (Response) -> Unit) {
+/**
+ * Sign in function, will login into SSO with provided credentials and get the access token
+ * from mybk if the credentials are valid. The callback is called to reflect UI change.
+ * @param username Username of the user's credential
+ * @param password Password of the user's credential
+ * @param onLoggedIn The callback which is called when there's an login status event
+ */
+private fun signIn(username: String, password: String, onLoggedIn: ((LoginStatus) -> Unit)?) {
     Cookuest.get(
         "https://sso.hcmut.edu.vn/cas/login",
-        onResponse = { response: Response ->
-
-            val checkLoggedIn = checkAlreadyLoggedIn(response)
+        onResponse = { ssoResponse: Response ->
 
             val getToken = {
                 getMybkToken { response ->
-                    onLoggedIn(response)
                     val token = getHtmlElementValue(
                         tag = "meta",
                         name = "_token",
                         input = response.body,
                         attr = "content"
                     )
+                    if (token == null)
+                        onLoggedIn?.invoke(LoginStatus.UNKNOWN)
+                    else
+                        onLoggedIn?.invoke(LoginStatus.LOGGED_IN)
                     print("Mybk Token: ")
                     println(token)
                 }
             }
 
-            if (!checkLoggedIn.isLoggedIn) {
-                // Prepare form body containing required credentials to login
-                val body: RequestBody = FormBody.Builder().apply {
-                    add("_eventId", "submit")
-                    add("execution", checkLoggedIn.execution)
-                    add("lt", checkLoggedIn.lt)
-                    add("username", username)
-                    add("password", password)
-                }.build()
-                Cookuest.post(
-                    "https://sso.hcmut.edu.vn/cas/login",
-                    requestBody = body,
-                    onResponse = { response ->
-                        getToken()
-                    }
-                )
-            } else getToken()
+            val checkLoggedIn = checkLoginStatus(ssoResponse)
+
+            when (checkLoggedIn.loginStatus) {
+                LoginStatus.UNAUTHORIZED -> {
+                    // Prepare form body containing required credentials to login
+                    val body: RequestBody = FormBody.Builder().apply {
+                        add("_eventId", "submit")
+                        add("execution", checkLoggedIn.execution)
+                        add("lt", checkLoggedIn.lt)
+                        add("username", username)
+                        add("password", password)
+                    }.build()
+                    Cookuest.post(
+                        "https://sso.hcmut.edu.vn/cas/login",
+                        requestBody = body,
+                        onResponse = { ssoWithCredentialResponse ->
+                            val loginStatus =
+                                checkLoginStatus(ssoWithCredentialResponse).loginStatus
+                            onLoggedIn?.invoke(loginStatus)
+                            when (loginStatus) {
+                                LoginStatus.LOGGED_IN -> {
+                                    getToken()
+                                }
+                                else -> {
+                                }
+                            }
+                        }
+                    )
+                }
+
+                LoginStatus.LOGGED_IN -> {
+                    onLoggedIn?.invoke(LoginStatus.LOGGED_IN)
+                    getToken()
+                }
+
+                else -> {
+                }
+            }
         }
     )
 }
 
-private val checkAlreadyLoggedIn = { response: Response ->
+enum class LoginStatus {
+    LOGGED_IN, WRONG_PASSWORD, UNAUTHORIZED, UNKNOWN
+}
+
+/**
+ * Check login status based on the response HTML from SSO.
+ *
+ * Lambda params: response - the response HTML from SSO
+ */
+private val checkLoginStatus = { response: Response ->
     // Parse 'lt' and 'execution' in HTML form rendered in the request. We'll need this for
     // submitting along login credentials
     val htmlStringContent = response.body
     val lt: String = getHtmlElementValue(name = "lt", input = htmlStringContent) ?: ""
     val execution: String = getHtmlElementValue(name = "execution", input = htmlStringContent) ?: ""
-    var isLoggedIn = false
-
-    if (lt == "" || execution == "") {
-        isLoggedIn = true
-    }
+    val loginStatus =
+        if (htmlStringContent.contains("The credentials you provided cannot be determined to be authentic"))
+            LoginStatus.WRONG_PASSWORD
+        else if (htmlStringContent.contains("<h2>Log In Successful</h2>"))
+            LoginStatus.LOGGED_IN
+        else if (lt != "" || execution != "")
+            LoginStatus.UNAUTHORIZED
+        else LoginStatus.UNKNOWN
 
     object {
-        var isLoggedIn = isLoggedIn
-        val lt = lt
-        val execution = execution
+        var loginStatus: LoginStatus = loginStatus
+        val lt: String = lt
+        val execution: String = execution
     }
 }
 
+/** Get mybk access token by calling SSO login URL with mybk redirect parameter.
+ * If success it will automatically redirect to mybk/stinfo and
+ * call the callback with successful response.
+ * Else exception will be thrown.
+ *
+ * Prerequisite: the app has already had a valid SSO access cookies.
+ * @param callback The callback which is called when there's an login status event
+ */
 private fun getMybkToken(callback: ((Response) -> Unit)?) {
     Cookuest.get(
         "https://sso.hcmut.edu.vn/cas/login?service=http%3A%2F%2Fmybk.hcmut.edu.vn%2Fstinfo%2F",
-        onResponse = { response ->
+        onResponse = { ssoResponse ->
             // Normally, OkHttp will follow the redirect automatically, but newer android sdks
             // doesn't permit HTTP traffic, so we've got to do the manual way: converting the
             // HTTP URLs to HTTPS URLs and then redirect.
             // This takes more work but also more secure (I suppose).
-            if (response.code == 302) {
-                val redirect: String =
-                    response.headers["Location"] ?: throw Exception("Possibly expired stinfo token")
-                val url: String = httpToHttpsURL(redirect)
+            if (ssoResponse.code == 302) {
+                val redirectTicketURL: String =
+                    ssoResponse.headers["Location"]
+                        ?: throw Exception("Possibly expired stinfo token")
                 // Verify ticket
                 Cookuest.get(
-                    url,
-                    onResponse = { response ->
-                        if (response.code == 302) {
-                            val redirect: String =
-                                response.headers["Location"]
+                    httpToHttpsURL(redirectTicketURL),
+                    onResponse = { mybkResponse ->
+                        if (mybkResponse.code == 302) {
+                            val mybkRedirectURL: String =
+                                mybkResponse.headers["Location"]
                                     ?: throw Exception("Possibly expired stinfo token")
-                            val url: String = httpToHttpsURL(redirect)
-                            // Get access tokens (response's Set-Cookie headers)
+                            // Get access tokens (which are response's Set-Cookie headers)
                             Cookuest.get(
-                                url,
+                                httpToHttpsURL(mybkRedirectURL),
                                 onResponse = { response ->
                                     if (callback != null) callback(response)
                                 }
@@ -151,22 +219,4 @@ private fun getMybkToken(callback: ((Response) -> Unit)?) {
             }
         }
     )
-}
-
-private fun httpToHttpsURL(url: String): String {
-    return url.substring(0, 4) + 's' + url.substring(4)
-}
-
-private fun getHtmlElementValue(
-    tag: String = "",
-    name: String,
-    input: String,
-    attr: String = "value"
-): String? {
-    val r: Pattern = Pattern.compile("<$tag.*?name=\"${name}\".*?$attr=\"([^\"]*)\"[^>]*?/>")
-    val m: Matcher = r.matcher(input)
-    if (m.find()) {
-        return m.group(1)
-    }
-    return null
 }
