@@ -76,3 +76,6 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+
+# Release builds
+app/release/
