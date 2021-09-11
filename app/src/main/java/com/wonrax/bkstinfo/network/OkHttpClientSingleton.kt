@@ -20,7 +20,7 @@ class OkHttpClientSingleton {
         lateinit var httpClient: OkHttpClient
 
         @Volatile
-        private lateinit var cookieJar: ClearableCookieJar
+        lateinit var cookieJar: ClearableCookieJar
 
         fun init(context: Context) {
             val check = isInitiated

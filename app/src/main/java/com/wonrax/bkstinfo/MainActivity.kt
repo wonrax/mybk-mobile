@@ -18,7 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.wonrax.bkstinfo.models.DeviceUser
-import com.wonrax.bkstinfo.models.LoginStatus
+import com.wonrax.bkstinfo.models.SSOState
 import com.wonrax.bkstinfo.ui.theme.BKSTINFOTheme
 
 class MainActivity : ComponentActivity() {
@@ -54,12 +54,19 @@ fun Greeting() {
         )
         Button(
             onClick = {
-                DeviceUser().signIn(username, password) { loginStatus: LoginStatus ->
+                DeviceUser.signIn(username, password) { loginStatus: SSOState ->
                     displayLoginStatus =
                         when (loginStatus) {
-                            LoginStatus.WRONG_PASSWORD -> "Wrong password, please try again"
-                            LoginStatus.LOGGED_IN -> "Login successfully"
-                            LoginStatus.UNKNOWN -> "Something went wrong on our side, please try again later"
+                            SSOState.WRONG_PASSWORD -> "Wrong password, please try again"
+                            SSOState.LOGGED_IN -> {
+                                DeviceUser.getMybkToken()
+                                "Login successfully"
+                            }
+                            SSOState.UNKNOWN -> "Something went wrong on our side, please try again"
+                            SSOState.TOO_MANY_TRIES ->
+                                "The CAS has blocked you temporarily because you've performed " +
+                                    "too many failed login attempts! Please wait at least 5 " +
+                                    "minutes before retrying. Check your password carefully!"
                             else -> displayLoginStatus
                         }
                 }
