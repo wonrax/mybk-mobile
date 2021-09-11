@@ -1,5 +1,8 @@
 package com.wonrax.bkstinfo.models
 
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.wonrax.bkstinfo.network.Cookuest
 import com.wonrax.bkstinfo.network.Response
 import com.wonrax.bkstinfo.network.utils.HtmlUtils
@@ -43,9 +46,16 @@ private const val HTML_LOGIN_SUCCESS = "<h2>Log In Successful</h2>"
 private const val HTML_WRONG_CREDENTIAL =
     "The credentials you provided cannot be determined to be authentic"
 
+private const val SHARED_PREFERENCES_NAME = "UserCredentials"
+private const val SHARE_PREFS_USERNAME_KEY = "username"
+private const val SHARE_PREFS_PASSWORD_KEY = "password"
+
 enum class SSOState {
     /** Initial state */
     UNAUTHORIZED,
+
+    /** Can't find any saved credentials in local storage */
+    NO_CREDENTIALS,
 
     /** Log in successfully */
     LOGGED_IN,
@@ -72,6 +82,26 @@ enum class MybkState {
 }
 
 object DeviceUser {
+    private var username: String? = null
+    private var password: String? = null
+    private lateinit var sharedPrefs: SharedPreferences
+
+    fun init(context: Context) {
+        if (this::sharedPrefs.isInitialized) return
+        synchronized(this) {
+            // Double check
+            if (this::sharedPrefs.isInitialized) {
+                return
+            }
+            sharedPrefs = context.getSharedPreferences(
+                SHARED_PREFERENCES_NAME,
+                Context.MODE_PRIVATE
+            )
+            username = sharedPrefs.getString(SHARE_PREFS_USERNAME_KEY, null)
+            password = sharedPrefs.getString(SHARE_PREFS_PASSWORD_KEY, null)
+        }
+    }
+
     /**
      * Sign in function, will login into SSO with provided credentials and get the access token
      * from mybk if the credentials are valid. The callback is called to reflect UI change.
@@ -88,7 +118,7 @@ object DeviceUser {
             SSO_URL,
             onResponse = { ssoResponse: Response ->
 
-                val checkLoggedIn = checkLoginStatus(ssoResponse)
+                val checkLoggedIn = checkSSOLoginStatus(ssoResponse)
 
                 when (checkLoggedIn.loginStatus) {
                     SSOState.UNAUTHORIZED -> {
@@ -105,7 +135,7 @@ object DeviceUser {
                             requestBody = body,
                             onResponse = { ssoWithCredentialResponse ->
                                 val loginStatus =
-                                    checkLoginStatus(ssoWithCredentialResponse).loginStatus
+                                    checkSSOLoginStatus(ssoWithCredentialResponse).loginStatus
                                 onLoggedIn?.invoke(loginStatus)
                             }
                         )
@@ -124,7 +154,7 @@ object DeviceUser {
      *
      * Lambda params: response - the response HTML from SSO
      */
-    private val checkLoginStatus = { response: Response ->
+    private val checkSSOLoginStatus = { response: Response ->
 
         // Parse 'lt' and 'execution' in HTML form rendered in the request. We'll need this for
         // submitting along login credentials
@@ -207,7 +237,8 @@ object DeviceUser {
 
     /**
      * Login with SSO credentials. If the process completes successfully, the access token
-     * cookies of SSO will be saved inside OkHttp's CookieJar.
+     * cookies of SSO will be saved inside OkHttp's CookieJar. The credentials will then be saved
+     * inside local storage SharedPreferences.
      *
      * If either the username or password is null, the function will get the
      * credentials from SharedPrefs.
@@ -222,10 +253,39 @@ object DeviceUser {
         onLoggedIn: ((SSOState) -> Unit)? = null
     ) {
         if (username != null && password != null) {
-            ssoSignIn(username, password, onLoggedIn)
+            ssoSignIn(username, password) { ssoState ->
+                onLoggedIn?.invoke(ssoState)
+                if (ssoState == SSOState.LOGGED_IN)
+                    updateCredentialsStore(username, password)
+            }
         } else {
-            // TODO Check if mybk tokens are still valid or Get saved credentials from SharedPrefs
-            return
+            // Avoid race condition
+            val savedUsername = this.username
+            val savedPassword = this.password
+
+            if (savedPassword == null || savedUsername == null)
+                onLoggedIn?.invoke(SSOState.NO_CREDENTIALS)
+            else
+                ssoSignIn(savedUsername, savedPassword, onLoggedIn)
+        }
+    }
+
+    /**
+     * Update credential in both memory and SharedPreferences
+     */
+    private fun updateCredentialsStore(username: String?, password: String?) {
+        this.username = username
+        this.password = password
+        sharedPrefs.edit(commit = true) {
+            if (username != null)
+                putString(SHARE_PREFS_USERNAME_KEY, username)
+            else
+                remove(SHARE_PREFS_USERNAME_KEY)
+
+            if (password != null)
+                putString(SHARE_PREFS_PASSWORD_KEY, password)
+            else
+                remove(SHARE_PREFS_PASSWORD_KEY)
         }
     }
 }
