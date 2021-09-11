@@ -11,59 +11,57 @@ import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 
-class OkHttpClientSingleton {
-    companion object {
-        @Volatile
-        private var isInitiated: Boolean = false
+object OkHttpClientSingleton {
+    @Volatile
+    private var isInitiated: Boolean = false
 
-        @Volatile
-        lateinit var httpClient: OkHttpClient
+    @Volatile
+    lateinit var httpClient: OkHttpClient
 
-        @Volatile
-        lateinit var cookieJar: ClearableCookieJar
+    @Volatile
+    lateinit var cookieJar: ClearableCookieJar
 
-        fun init(context: Context) {
-            val check = isInitiated
-            if (check) {
+    fun init(context: Context) {
+        val check = isInitiated
+        if (check) {
+            return
+        }
+        synchronized(this) {
+            // Double check
+            val recheck = isInitiated
+            if (recheck) {
                 return
             }
-            synchronized(this) {
-                // Double check
-                val recheck = isInitiated
-                if (recheck) {
-                    return
-                }
-                cookieJar =
-                    PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(context))
-                httpClient = OkHttpClient.Builder()
-                    .cookieJar(cookieJar as PersistentCookieJar)
-                    .apply {
-                        // Network inspection
-                        if (BuildConfig.DEBUG) {
-                            addNetworkInterceptor(StethoInterceptor())
-                            addInterceptor(
-                                HttpLoggingInterceptor().apply {
-                                    setLevel(
-                                        HttpLoggingInterceptor.Level.BASIC
-                                    )
-                                }
-                            )
-                        }
-                        followRedirects(true)
-                        followSslRedirects(false)
-                        connectionSpecs(
-                            listOf(
-                                ConnectionSpec.CLEARTEXT,
-                                ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                                    .allEnabledTlsVersions()
-                                    .allEnabledCipherSuites()
-                                    .build()
-                            )
+            cookieJar =
+                PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(context))
+            httpClient = OkHttpClient.Builder()
+                .cookieJar(cookieJar as PersistentCookieJar)
+                .apply {
+                    // Network inspection
+                    if (BuildConfig.DEBUG) {
+                        addNetworkInterceptor(StethoInterceptor())
+                        addInterceptor(
+                            HttpLoggingInterceptor().apply {
+                                setLevel(
+                                    HttpLoggingInterceptor.Level.BASIC
+                                )
+                            }
                         )
                     }
-                    .build()
-                isInitiated = true
-            }
+                    followRedirects(true)
+                    followSslRedirects(false)
+                    connectionSpecs(
+                        listOf(
+                            ConnectionSpec.CLEARTEXT,
+                            ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                                .allEnabledTlsVersions()
+                                .allEnabledCipherSuites()
+                                .build()
+                        )
+                    )
+                }
+                .build()
+            isInitiated = true
         }
     }
 }

@@ -7,6 +7,42 @@ import com.wonrax.bkstinfo.network.utils.HttpUtils
 import okhttp3.FormBody
 import okhttp3.RequestBody
 
+/**
+ * Single Sign-on URL of HCMUT's Central Authentication Service (CAS)
+ *
+ * This URL serves to purposes:
+ * - GET the HTML content, which contains "lt" and "execution". These fields need to be
+ * sent along with the login credentials.
+ * - POST and use the HTML response to check the validity of the provided credentials.
+ */
+private const val SSO_URL = "https://sso.hcmut.edu.vn/cas/login"
+
+/**
+ * GET this URL after a successful SSO login to be redirected to mybk stinfo,
+ * from which you can get the mybk access token from.
+ */
+private const val SSO_MYBK_REDIRECT_URL =
+    "https://sso.hcmut.edu.vn/cas/login?service=http%3A%2F%2Fmybk.hcmut.edu.vn%2Fstinfo%2F"
+
+/**
+ * HTML response of this URL contains stinfo token inside a meta tag if authorized.
+ */
+private const val STINFO_URL =
+    "https://mybk.hcmut.edu.vn/stinfo/"
+
+/**
+ * The string that appeared in the HTML response when the credentials are confirmed
+ * to be valid
+ */
+private const val HTML_LOGIN_SUCCESS = "<h2>Log In Successful</h2>"
+
+/**
+ * The string that appeared in the HTML response when the credentials are confirmed
+ * to be invalid
+ */
+private const val HTML_WRONG_CREDENTIAL =
+    "The credentials you provided cannot be determined to be authentic"
+
 enum class SSOState {
     /** Initial state */
     UNAUTHORIZED,
@@ -31,42 +67,6 @@ enum class MybkState {
 
 class DeviceUser {
     companion object {
-        /**
-         * Single Sign-on URL of HCMUT's Central Authentication Service (CAS)
-         *
-         * This URL serves to purposes:
-         * - GET the HTML content, which contains "lt" and "execution". These fields need to be
-         * sent along with the login credentials.
-         * - POST and use the HTML response to check the validity of the provided credentials.
-         */
-        private const val SSO_URL = "https://sso.hcmut.edu.vn/cas/login"
-
-        /**
-         * GET this URL after a successful SSO login to be redirected to mybk stinfo,
-         * from which you can get the mybk access token from.
-         */
-        private const val SSO_MYBK_REDIRECT_URL =
-            "https://sso.hcmut.edu.vn/cas/login?service=http%3A%2F%2Fmybk.hcmut.edu.vn%2Fstinfo%2F"
-
-        /**
-         * HTML response of this URL contains stinfo token inside a meta tag if authorized.
-         */
-        private const val STINFO_URL =
-            "https://mybk.hcmut.edu.vn/stinfo/"
-
-        /**
-         * The string that appeared in the HTML response when the credentials are confirmed
-         * to be valid
-         */
-        private const val HTML_LOGIN_SUCCESS = "<h2>Log In Successful</h2>"
-
-        /**
-         * The string that appeared in the HTML response when the credentials are confirmed
-         * to be invalid
-         */
-        private const val HTML_WRONG_CREDENTIAL =
-            "The credentials you provided cannot be determined to be authentic"
-
         /**
          * Sign in function, will login into SSO with provided credentials and get the access token
          * from mybk if the credentials are valid. The callback is called to reflect UI change.
