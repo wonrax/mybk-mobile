@@ -102,6 +102,14 @@ object DeviceUser {
         }
     }
 
+    fun getUsername(): String? {
+        return username
+    }
+
+    fun getPassword(): String? {
+        return password
+    }
+
     /**
      * Sign in function, will login into SSO with provided credentials and get the access token
      * from mybk if the credentials are valid. The callback is called to reflect UI change.
