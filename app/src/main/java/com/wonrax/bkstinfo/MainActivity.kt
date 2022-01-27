@@ -30,12 +30,12 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             BKSTINFOTheme(false) {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colors.background
-            ) {
-                Greeting("Hehe")
-            }
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colors.background
+                ) {
+                    Greeting("Hehe")
+                }
             }
         }
     }

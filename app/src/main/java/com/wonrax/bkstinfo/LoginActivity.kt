@@ -41,7 +41,6 @@ class LoginActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun LoginForm() {
     var displayLoginStatus by remember { mutableStateOf("Hellow, pls login") }
@@ -72,8 +71,8 @@ fun LoginForm() {
                             SSOState.UNKNOWN -> "Something went wrong on our side, please try again"
                             SSOState.TOO_MANY_TRIES ->
                                 "The CAS has blocked you temporarily because you've performed " +
-                                        "too many failed login attempts! Please wait at least 5 " +
-                                        "minutes before retrying. Check your password carefully!"
+                                    "too many failed login attempts! Please wait at least 5 " +
+                                    "minutes before retrying. Check your password carefully!"
                             else -> displayLoginStatus
                         }
                 }
