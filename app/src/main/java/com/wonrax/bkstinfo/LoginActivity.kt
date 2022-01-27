@@ -68,7 +68,7 @@ fun LoginForm() {
                     if (loginStatus == SSOState.LOGGED_IN) {
                         context.startActivity(Intent(context, MainActivity::class.java))
 
-                        // TODO: Investigate if this return immediately or continue to execute
+                        // TODO: Investigate if this returns immediately or continue to execute
                         // code below
                         context.finish()
                     }

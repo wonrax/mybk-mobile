@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.wonrax.bkstinfo.models.DeviceUser
 import com.wonrax.bkstinfo.ui.theme.BKSTINFOTheme
+import com.wonrax.bkstinfo.network.Cookuest
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +26,7 @@ class MainActivity : ComponentActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
 
+            // TODO: Investigate if this returns immediately or continue to execute code below
             return
         }
 

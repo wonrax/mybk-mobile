@@ -237,8 +237,6 @@ object DeviceUser {
                     callback?.invoke(MybkState.LOGGED_IN)
                 else
                     callback?.invoke(MybkState.UNKNOWN)
-                print("Mybk Token: ")
-                println(token)
             }
         )
     }

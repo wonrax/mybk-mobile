@@ -11,6 +11,10 @@ import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 
+/**
+ * Needs to be a singleton in order to share a cookie jar, which is needed for MyBK authentication
+ * and requests.
+ */
 object OkHttpClientSingleton {
     @Volatile
     private var isInitiated: Boolean = false
