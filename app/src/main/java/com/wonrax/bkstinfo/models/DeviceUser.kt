@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.wonrax.bkstinfo.network.Cookuest
 import com.wonrax.bkstinfo.network.Response
+import com.wonrax.bkstinfo.network.await
 import com.wonrax.bkstinfo.network.utils.HtmlUtils
 import com.wonrax.bkstinfo.network.utils.HttpUtils
 import okhttp3.FormBody
@@ -115,46 +116,32 @@ object DeviceUser {
      * from mybk if the credentials are valid. The callback is called to reflect UI change.
      * @param username Username of the user's credential
      * @param password Password of the user's credential
-     * @param onLoggedIn The callback which is called when there's an login status event
      */
-    private fun ssoSignIn(
+    private suspend fun ssoSignIn(
         username: String,
-        password: String,
-        onLoggedIn: ((SSOState) -> Unit)?
-    ) {
-        Cookuest.get(
-            SSO_URL,
-            onResponse = { ssoResponse: Response ->
+        password: String
+    ): SSOState {
+        val ssoResponse = Cookuest.get(SSO_URL).await()
+        val checkLoggedIn = checkSSOLoginStatus(ssoResponse)
 
-                val checkLoggedIn = checkSSOLoginStatus(ssoResponse)
-
-                when (checkLoggedIn.loginStatus) {
-                    SSOState.UNAUTHORIZED -> {
-                        // Prepare form body containing required credentials to login
-                        val body: RequestBody = FormBody.Builder().apply {
-                            add("_eventId", "submit")
-                            add("execution", checkLoggedIn.execution)
-                            add("lt", checkLoggedIn.lt)
-                            add("username", username)
-                            add("password", password)
-                        }.build()
-                        Cookuest.post(
-                            SSO_URL,
-                            requestBody = body,
-                            onResponse = { ssoWithCredentialResponse ->
-                                val loginStatus =
-                                    checkSSOLoginStatus(ssoWithCredentialResponse).loginStatus
-                                onLoggedIn?.invoke(loginStatus)
-                            }
-                        )
-                    }
-
-                    else -> {
-                        onLoggedIn?.invoke(checkLoggedIn.loginStatus)
-                    }
-                }
+        return when (checkLoggedIn.loginStatus) {
+            SSOState.UNAUTHORIZED -> {
+                // Prepare form body containing required credentials to login
+                val body: RequestBody = FormBody.Builder().apply {
+                    add("_eventId", "submit")
+                    add("execution", checkLoggedIn.execution)
+                    add("lt", checkLoggedIn.lt)
+                    add("username", username)
+                    add("password", password)
+                }.build()
+                val ssoWithCredentialResponse = Cookuest.post(
+                    SSO_URL,
+                    requestBody = body
+                ).await()
+                return checkSSOLoginStatus(ssoWithCredentialResponse).loginStatus
             }
-        )
+            else -> checkLoggedIn.loginStatus
+        }
     }
 
     /**
@@ -198,47 +185,39 @@ object DeviceUser {
      * Else exception will be thrown.
      *
      * Prerequisite: the app has already had a valid SSO access cookies.
-     * @param callback The callback which is called when there's an login status event
      */
-    fun getMybkToken(callback: ((MybkState) -> Unit)? = null) {
-        Cookuest.get(
-            SSO_MYBK_REDIRECT_URL,
-            onResponse = { ssoResponse ->
-                // Normally, OkHttp will follow the redirect automatically, but newer
-                // android sdks doesn't permit HTTP traffic, so we've got to do the manual way:
-                // converting the HTTP URLs to HTTPS URLs and then redirect.
-                // This takes more work but also more secure (I suppose).
-                if (ssoResponse.code == 302) {
-                    val redirectTicketURL: String =
-                        ssoResponse.headers["Location"] ?: ""
-                    // Verify ticket
-                    Cookuest.get(
-                        HttpUtils.httpToHttpsURL(redirectTicketURL),
-                        onResponse = { getStinfoToken(callback) }
-                    )
-                } else { // Invalid cookies, require SSO re-login
-                    callback?.invoke(MybkState.SSO_REQUIRED)
-                }
-            }
-        )
+    suspend fun getMybkToken(): MybkState {
+        val ssoResponse = Cookuest.get(SSO_MYBK_REDIRECT_URL).await()
+
+        // Normally, OkHttp will follow the redirect automatically, but newer
+        // android sdks doesn't permit HTTP traffic, so we've got to do the manual way:
+        // converting the HTTP URLs to HTTPS URLs and then redirect.
+        // This takes more work but also more secure (I suppose).
+        return if (ssoResponse.code == 302) {
+            val redirectTicketURL: String =
+                ssoResponse.headers["Location"] ?: ""
+            // Verify ticket
+            Cookuest.get(HttpUtils.httpToHttpsURL(redirectTicketURL)).await()
+            getStinfoToken()
+        } else { // Invalid cookies, require SSO re-login
+            MybkState.SSO_REQUIRED
+        }
     }
 
-    private fun getStinfoToken(callback: ((MybkState) -> Unit)?) {
-        Cookuest.get(
-            STINFO_URL,
-            onResponse = { response ->
-                val token = HtmlUtils.getHtmlElementValue(
-                    input = response.body,
-                    tag = "meta",
-                    name = "_token",
-                    attr = "content"
-                )
-                if (token != null)
-                    callback?.invoke(MybkState.LOGGED_IN)
-                else
-                    callback?.invoke(MybkState.UNKNOWN)
-            }
+    private suspend fun getStinfoToken(): MybkState {
+        val response = Cookuest.get(STINFO_URL).await()
+
+        val token = HtmlUtils.getHtmlElementValue(
+            input = response.body,
+            tag = "meta",
+            name = "_token",
+            attr = "content"
         )
+
+        if (token != null)
+            return MybkState.LOGGED_IN
+        else
+            return MybkState.UNKNOWN
     }
 
     /**
@@ -251,28 +230,24 @@ object DeviceUser {
      *
      * @param username Username of the user's credential
      * @param password Password of the user's credential
-     * @param onLoggedIn The callback which is called when there's an login status event
      */
-    fun signIn(
+    suspend fun signIn(
         username: String? = null,
-        password: String? = null,
-        onLoggedIn: ((SSOState) -> Unit)? = null
-    ) {
-        if (username != null && password != null) {
-            ssoSignIn(username, password) { ssoState ->
-                onLoggedIn?.invoke(ssoState)
-                if (ssoState == SSOState.LOGGED_IN)
-                    updateCredentialsStore(username, password)
-            }
+        password: String? = null
+    ): SSOState {
+        return if (username != null && password != null) {
+            val ssoState = ssoSignIn(username, password)
+            if (ssoState == SSOState.LOGGED_IN) updateCredentialsStore(username, password)
+            ssoState
         } else {
             // Avoid race condition
             val savedUsername = this.username
             val savedPassword = this.password
 
             if (savedPassword == null || savedUsername == null)
-                onLoggedIn?.invoke(SSOState.NO_CREDENTIALS)
+                SSOState.NO_CREDENTIALS
             else
-                ssoSignIn(savedUsername, savedPassword, onLoggedIn)
+                ssoSignIn(savedUsername, savedPassword)
         }
     }
 
