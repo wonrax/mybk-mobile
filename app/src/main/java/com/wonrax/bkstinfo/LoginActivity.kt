@@ -1,5 +1,7 @@
 package com.wonrax.bkstinfo
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.wonrax.bkstinfo.models.DeviceUser
 import com.wonrax.bkstinfo.models.SSOState
@@ -46,6 +49,7 @@ fun LoginForm() {
     var displayLoginStatus by remember { mutableStateOf("Hellow, pls login") }
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val context = LocalContext.current as Activity
     Column {
         TextField(
             value = username,
@@ -61,6 +65,13 @@ fun LoginForm() {
         Button(
             onClick = {
                 DeviceUser.signIn(username, password) { loginStatus: SSOState ->
+                    if (loginStatus == SSOState.LOGGED_IN) {
+                        context.startActivity(Intent(context, MainActivity::class.java))
+
+                        // TODO: Investigate if this return immediately or continue to execute
+                        // code below
+                        context.finish()
+                    }
                     displayLoginStatus =
                         when (loginStatus) {
                             SSOState.WRONG_PASSWORD -> "Wrong password, please try again"

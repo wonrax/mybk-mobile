@@ -21,11 +21,11 @@ class MainActivity : ComponentActivity() {
 
         if (DeviceUser.getUsername() == null || DeviceUser.getPassword() == null) {
             println("debug: not logged in")
-            val intent = Intent(this, LoginActivity::class.java).apply {
-                putExtra("hêh", "what")
-            }
-            startActivity(intent)
+
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
+
+            return
         }
 
         setContent {
