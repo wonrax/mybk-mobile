@@ -214,10 +214,10 @@ object DeviceUser {
             attr = "content"
         )
 
-        if (token != null)
-            return MybkState.LOGGED_IN
+        return if (token != null)
+            MybkState.LOGGED_IN
         else
-            return MybkState.UNKNOWN
+            MybkState.UNKNOWN
     }
 
     /**

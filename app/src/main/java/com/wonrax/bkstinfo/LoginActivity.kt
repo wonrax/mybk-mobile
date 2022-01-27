@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.wonrax.bkstinfo.models.DeviceUser
 import com.wonrax.bkstinfo.models.SSOState
 import com.wonrax.bkstinfo.ui.theme.BKSTINFOTheme
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class LoginActivity : ComponentActivity() {
@@ -68,7 +69,7 @@ fun LoginForm() {
         )
         Button(
             onClick = {
-                composableScope.launch {
+                composableScope.launch(IO) {
 
                     val loginStatus = DeviceUser.signIn(username, password)
 
