@@ -16,9 +16,9 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/title_activity_main"
             android:fitsSystemWindows="true"
-            android:theme="@style/BKSTINFO.NoActionBar.SplashScreen">
+            android:label="@string/title_activity_main"
+            android:theme="@style/SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
