@@ -64,7 +64,7 @@ enum class SSOState {
     /** SSO Login required */
     WRONG_PASSWORD,
 
-    /** Login request returns code forbidden because of too many tries */
+    /** Login request returns forbidden code because of too many tries */
     TOO_MANY_TRIES,
 
     /** Unexpected flow */
@@ -113,7 +113,7 @@ object DeviceUser {
 
     /**
      * Sign in function, will login into SSO with provided credentials and get the access token
-     * from mybk if the credentials are valid. The callback is called to reflect UI change.
+     * from mybk if the credentials are valid.
      * @param username Username of the user's credential
      * @param password Password of the user's credential
      */
@@ -180,11 +180,6 @@ object DeviceUser {
 
     /**
      * Get mybk access token by calling SSO login URL with mybk redirect parameter.
-     * If success it will automatically redirect to mybk/stinfo and
-     * call the callback with successful response.
-     * Else exception will be thrown.
-     *
-     * Prerequisite: the app has already had a valid SSO access cookies.
      */
     suspend fun getMybkToken(): MybkState {
         val ssoResponse = Cookuest.get(SSO_MYBK_REDIRECT_URL).await()
@@ -225,7 +220,7 @@ object DeviceUser {
      * cookies of SSO will be saved inside OkHttp's CookieJar. The credentials will then be saved
      * inside local storage SharedPreferences.
      *
-     * If either the username or password is null, the function will get the
+     * If either the username or password is null, this function will get the
      * credentials from SharedPrefs.
      *
      * @param username Username of the user's credential
@@ -251,6 +246,7 @@ object DeviceUser {
         }
     }
 
+    // TODO Encrypt these credentials
     /**
      * Update credential in both memory and SharedPreferences
      */
