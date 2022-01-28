@@ -84,8 +84,8 @@ object DeviceUser {
     private var password: String? = null
 
     fun init(context: Context) {
-        username = LocalStorage.get(SHARE_PREFS_USERNAME_KEY)
-        password = LocalStorage.get(SHARE_PREFS_PASSWORD_KEY)
+        username = EncryptedStorage.get(SHARE_PREFS_USERNAME_KEY)
+        password = EncryptedStorage.get(SHARE_PREFS_PASSWORD_KEY)
     }
 
     fun getUsername(): String? {
@@ -238,8 +238,7 @@ object DeviceUser {
     private fun updateCredentialsStore(username: String?, password: String?) {
         this.username = username
         this.password = password
-        LocalStorage.set(SHARE_PREFS_USERNAME_KEY, username)
-        LocalStorage.set(SHARE_PREFS_PASSWORD_KEY, password)
-        print(LocalStorage.get(SHARE_PREFS_USERNAME_KEY))
+        EncryptedStorage.set(SHARE_PREFS_USERNAME_KEY, username)
+        EncryptedStorage.set(SHARE_PREFS_PASSWORD_KEY, password)
     }
 }

@@ -19,9 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setTheme(R.style.BKSTINFO_NoActionBar)
 
-        println("debug: ${DeviceUser.getUsername()}")
         if (DeviceUser.getUsername() == null || DeviceUser.getPassword() == null) {
-            println("debug: not logged in")
 
             startActivity(Intent(this, LoginActivity::class.java))
             finish()

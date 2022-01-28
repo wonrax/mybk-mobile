@@ -8,7 +8,7 @@ import androidx.security.crypto.MasterKeys
 
 private const val SHARED_PREFERENCES_NAME = "UserCredentials"
 
-object LocalStorage {
+object EncryptedStorage {
     private lateinit var sharedPrefs: SharedPreferences
 
     fun init(context: Context) {
