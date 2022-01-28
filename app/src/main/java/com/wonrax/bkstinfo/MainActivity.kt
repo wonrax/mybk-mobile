@@ -12,9 +12,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.wonrax.bkstinfo.models.DeviceUser
+import com.wonrax.bkstinfo.models.MybkState
+import com.wonrax.bkstinfo.network.Cookuest
+import com.wonrax.bkstinfo.network.await
 import com.wonrax.bkstinfo.ui.theme.BKSTINFOTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.FormBody
+import okhttp3.RequestBody
 
 class MainActivity : ComponentActivity() {
+    private fun setMainTheme() {
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.BKSTINFO_NoActionBar)
@@ -35,7 +45,39 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Hehe")
+                    Greeting("Hello, please wait")
+                }
+            }
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            DeviceUser.signIn()
+            val status = DeviceUser.getMybkToken()
+            val token = DeviceUser.getStInfoToken()
+
+            val body: RequestBody = FormBody.Builder().apply {
+                if (token != null) {
+                    add("_token", token)
+                }
+            }.build()
+
+            val scheduleResponse = Cookuest.post(
+                "https://mybk.hcmut.edu.vn/stinfo/lichthi/ajax_lichhoc",
+                body
+            ).await()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                if (status == MybkState.LOGGED_IN) {
+                    setContent {
+                        BKSTINFOTheme(false) {
+                            Surface(
+                                modifier = Modifier.fillMaxSize(),
+                                color = MaterialTheme.colors.background
+                            ) {
+                                Greeting(scheduleResponse.body)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -43,7 +85,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
+fun Greeting(name: String?) {
     Text(text = "Hello $name!")
 }
 

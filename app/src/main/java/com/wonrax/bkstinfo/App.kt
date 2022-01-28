@@ -18,6 +18,6 @@ class App : Application() {
         OkHttpClientSingleton.init(this)
 
         EncryptedStorage.init(this)
-        DeviceUser.init(this) // This must comes after EncryptedStorage (dependency)
+        DeviceUser.init() // This must comes after EncryptedStorage (dependency)
     }
 }

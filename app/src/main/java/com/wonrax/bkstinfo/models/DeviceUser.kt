@@ -1,6 +1,5 @@
 package com.wonrax.bkstinfo.models
 
-import android.content.Context
 import com.wonrax.bkstinfo.network.Cookuest
 import com.wonrax.bkstinfo.network.Response
 import com.wonrax.bkstinfo.network.await
@@ -82,8 +81,9 @@ enum class MybkState {
 object DeviceUser {
     private var username: String? = null
     private var password: String? = null
+    private var stinfoToken: String? = null
 
-    fun init(context: Context) {
+    fun init() {
         username = EncryptedStorage.get(SHARE_PREFS_USERNAME_KEY)
         password = EncryptedStorage.get(SHARE_PREFS_PASSWORD_KEY)
     }
@@ -94,6 +94,10 @@ object DeviceUser {
 
     fun getPassword(): String? {
         return password
+    }
+
+    fun getStInfoToken(): String? {
+        return stinfoToken
     }
 
     /**
@@ -194,9 +198,10 @@ object DeviceUser {
             attr = "content"
         )
 
-        return if (token != null)
+        return if (token != null) {
+            stinfoToken = token
             MybkState.LOGGED_IN
-        else
+        } else
             MybkState.UNKNOWN
     }
 
@@ -231,7 +236,6 @@ object DeviceUser {
         }
     }
 
-    // TODO Encrypt these credentials
     /**
      * Update credential in both memory and SharedPreferences
      */

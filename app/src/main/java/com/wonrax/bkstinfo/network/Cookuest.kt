@@ -64,6 +64,9 @@ public suspend fun Call.await(recordStack: Boolean = false): CustomResponse {
     }
 }
 
+/**
+ * A custom OkHttp3 wrapper
+ */
 object Cookuest {
     private val httpClient = OkHttpClientSingleton.httpClient
     private val requestTemplate: Request.Builder = Request.Builder().apply {
