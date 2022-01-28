@@ -19,13 +19,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setTheme(R.style.BKSTINFO_NoActionBar)
 
+        println("debug: ${DeviceUser.getUsername()}")
         if (DeviceUser.getUsername() == null || DeviceUser.getPassword() == null) {
             println("debug: not logged in")
 
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
 
-            // TODO: Investigate if this returns immediately or continue to execute code below
+            // If we don't have return here, the code below continues to execute even when we're
+            // in another activity
             return
         }
 

@@ -76,18 +76,17 @@ fun LoginForm() {
                     if (loginStatus == SSOState.LOGGED_IN) {
                         context.startActivity(Intent(context, MainActivity::class.java))
 
-                        // TODO: Investigate if this returns immediately or continue to execute
-                        // code below
                         context.finish()
+                        return@launch
                     }
 
                     displayLoginStatus =
                         when (loginStatus) {
                             SSOState.WRONG_PASSWORD -> "Wrong password, please try again"
-                            SSOState.LOGGED_IN -> {
-                                DeviceUser.getMybkToken()
-                                "Login successfully"
-                            }
+//                            SSOState.LOGGED_IN -> {
+//                                DeviceUser.getMybkToken()
+//                                "Login successfully"
+//                            }
                             SSOState.UNKNOWN -> "Something went wrong on our side, please try again"
                             SSOState.TOO_MANY_TRIES ->
                                 "The CAS has blocked you temporarily because you've performed " +

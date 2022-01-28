@@ -73,6 +73,10 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
+
+    // Encrypted SharedPrefs
+    implementation "androidx.security:security-crypto:1.0.0"
+
 }
 
 ktlint {

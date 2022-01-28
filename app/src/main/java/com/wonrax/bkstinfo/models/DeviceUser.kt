@@ -1,8 +1,6 @@
 package com.wonrax.bkstinfo.models
 
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.core.content.edit
 import com.wonrax.bkstinfo.network.Cookuest
 import com.wonrax.bkstinfo.network.Response
 import com.wonrax.bkstinfo.network.await
@@ -47,7 +45,6 @@ private const val HTML_LOGIN_SUCCESS = "<h2>Log In Successful</h2>"
 private const val HTML_WRONG_CREDENTIAL =
     "The credentials you provided cannot be determined to be authentic"
 
-private const val SHARED_PREFERENCES_NAME = "UserCredentials"
 private const val SHARE_PREFS_USERNAME_KEY = "username"
 private const val SHARE_PREFS_PASSWORD_KEY = "password"
 
@@ -85,22 +82,10 @@ enum class MybkState {
 object DeviceUser {
     private var username: String? = null
     private var password: String? = null
-    private lateinit var sharedPrefs: SharedPreferences
 
     fun init(context: Context) {
-        if (this::sharedPrefs.isInitialized) return
-        synchronized(this) {
-            // Double check
-            if (this::sharedPrefs.isInitialized) {
-                return
-            }
-            sharedPrefs = context.getSharedPreferences(
-                SHARED_PREFERENCES_NAME,
-                Context.MODE_PRIVATE
-            )
-            username = sharedPrefs.getString(SHARE_PREFS_USERNAME_KEY, null)
-            password = sharedPrefs.getString(SHARE_PREFS_PASSWORD_KEY, null)
-        }
+        username = LocalStorage.get(SHARE_PREFS_USERNAME_KEY)
+        password = LocalStorage.get(SHARE_PREFS_PASSWORD_KEY)
     }
 
     fun getUsername(): String? {
@@ -253,16 +238,8 @@ object DeviceUser {
     private fun updateCredentialsStore(username: String?, password: String?) {
         this.username = username
         this.password = password
-        sharedPrefs.edit(commit = true) {
-            if (username != null)
-                putString(SHARE_PREFS_USERNAME_KEY, username)
-            else
-                remove(SHARE_PREFS_USERNAME_KEY)
-
-            if (password != null)
-                putString(SHARE_PREFS_PASSWORD_KEY, password)
-            else
-                remove(SHARE_PREFS_PASSWORD_KEY)
-        }
+        LocalStorage.set(SHARE_PREFS_USERNAME_KEY, username)
+        LocalStorage.set(SHARE_PREFS_PASSWORD_KEY, password)
+        print(LocalStorage.get(SHARE_PREFS_USERNAME_KEY))
     }
 }
