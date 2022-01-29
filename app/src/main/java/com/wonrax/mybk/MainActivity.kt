@@ -1,4 +1,4 @@
-package com.wonrax.bkstinfo
+package com.wonrax.mybk
 
 import android.content.Intent
 import android.os.Bundle
@@ -17,11 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.wonrax.bkstinfo.models.DeviceUser
-import com.wonrax.bkstinfo.models.MybkState
-import com.wonrax.bkstinfo.network.Cookuest
-import com.wonrax.bkstinfo.network.await
-import com.wonrax.bkstinfo.ui.theme.BKSTINFOTheme
+import com.wonrax.mybk.models.DeviceUser
+import com.wonrax.mybk.models.MybkState
+import com.wonrax.mybk.network.Cookuest
+import com.wonrax.mybk.network.await
+import com.wonrax.mybk.ui.theme.MybkTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,11 +29,9 @@ import okhttp3.FormBody
 import okhttp3.RequestBody
 
 class MainActivity : ComponentActivity() {
-    private fun setMainTheme() {
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.BKSTINFO_NoActionBar)
+        setTheme(R.style.Mybk_NoActionBar)
 
         if (DeviceUser.username == null || DeviceUser.password == null) {
 
@@ -46,7 +44,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            BKSTINFOTheme(false) {
+            MybkTheme(false) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background,
@@ -81,7 +79,7 @@ class MainActivity : ComponentActivity() {
             CoroutineScope(Dispatchers.Main).launch {
                 if (status == MybkState.LOGGED_IN) {
                     setContent {
-                        BKSTINFOTheme(false) {
+                        MybkTheme(false) {
                             Surface(
                                 modifier = Modifier.fillMaxSize(),
                                 color = MaterialTheme.colors.background
@@ -104,7 +102,7 @@ fun Greeting(name: String?) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    BKSTINFOTheme {
+    MybkTheme {
         Greeting("Android")
     }
 }

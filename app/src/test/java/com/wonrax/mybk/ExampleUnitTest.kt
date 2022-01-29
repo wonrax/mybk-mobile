@@ -1,4 +1,4 @@
-package com.wonrax.bkstinfo
+package com.wonrax.mybk
 
 import org.junit.Assert
 import org.junit.Test

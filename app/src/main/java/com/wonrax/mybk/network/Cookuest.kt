@@ -1,4 +1,4 @@
-package com.wonrax.bkstinfo.network
+package com.wonrax.mybk.network
 
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.Call
@@ -9,7 +9,7 @@ import okhttp3.Response
 import okio.IOException
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import com.wonrax.bkstinfo.network.Response as CustomResponse
+import com.wonrax.mybk.network.Response as CustomResponse
 
 /**
  * Suspend extension that allows suspend [Call] inside coroutine.

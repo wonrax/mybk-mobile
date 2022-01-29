@@ -1,4 +1,4 @@
-package com.wonrax.bkstinfo.ui.theme
+package com.wonrax.mybk.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

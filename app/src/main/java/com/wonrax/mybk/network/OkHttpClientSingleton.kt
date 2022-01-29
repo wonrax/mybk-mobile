@@ -1,4 +1,4 @@
-package com.wonrax.bkstinfo.network
+package com.wonrax.mybk.network
 
 import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
@@ -6,7 +6,7 @@ import com.franmontiel.persistentcookiejar.ClearableCookieJar
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
-import com.wonrax.bkstinfo.BuildConfig
+import com.wonrax.mybk.BuildConfig
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

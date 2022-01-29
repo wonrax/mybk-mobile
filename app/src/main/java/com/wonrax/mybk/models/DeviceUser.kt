@@ -1,10 +1,10 @@
-package com.wonrax.bkstinfo.models
+package com.wonrax.mybk.models
 
-import com.wonrax.bkstinfo.network.Cookuest
-import com.wonrax.bkstinfo.network.Response
-import com.wonrax.bkstinfo.network.await
-import com.wonrax.bkstinfo.network.utils.HtmlUtils
-import com.wonrax.bkstinfo.network.utils.HttpUtils
+import com.wonrax.mybk.network.Cookuest
+import com.wonrax.mybk.network.Response
+import com.wonrax.mybk.network.await
+import com.wonrax.mybk.network.utils.HtmlUtils
+import com.wonrax.mybk.network.utils.HttpUtils
 import okhttp3.FormBody
 import okhttp3.RequestBody
 

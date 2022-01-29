@@ -1,4 +1,4 @@
-package com.wonrax.bkstinfo.network
+package com.wonrax.mybk.network
 
 import okhttp3.Headers
 

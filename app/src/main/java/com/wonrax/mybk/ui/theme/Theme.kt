@@ -1,4 +1,4 @@
-package com.wonrax.bkstinfo.ui.theme
+package com.wonrax.mybk.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
@@ -28,7 +28,7 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun BKSTINFOTheme(
+fun MybkTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content:
         @Composable()

@@ -1,4 +1,4 @@
-package com.wonrax.bkstinfo
+package com.wonrax.mybk
 
 import android.app.Activity
 import android.content.Intent
@@ -23,18 +23,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import com.wonrax.bkstinfo.models.DeviceUser
-import com.wonrax.bkstinfo.models.SSOState
-import com.wonrax.bkstinfo.ui.theme.BKSTINFOTheme
+import com.wonrax.mybk.models.DeviceUser
+import com.wonrax.mybk.models.SSOState
+import com.wonrax.mybk.ui.theme.MybkTheme
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.BKSTINFO_NoActionBar)
+        setTheme(R.style.Mybk_NoActionBar)
         setContent {
-            BKSTINFOTheme(false) {
+            MybkTheme(false) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),

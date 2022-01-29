@@ -1,4 +1,4 @@
-package com.wonrax.bkstinfo
+package com.wonrax.mybk
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        Assert.assertEquals("com.wonrax.bkstinfo", appContext.packageName)
+        Assert.assertEquals("com.wonrax.mybk", appContext.packageName)
     }
 }

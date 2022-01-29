@@ -1,4 +1,4 @@
-package com.wonrax.bkstinfo.network.utils
+package com.wonrax.mybk.network.utils
 
 object HttpUtils {
     /**

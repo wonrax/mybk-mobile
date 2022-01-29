@@ -1,10 +1,11 @@
-package com.wonrax.bkstinfo
+package com.wonrax.mybk
 
 import android.app.Application
+import com.facebook.stetho.BuildConfig
 import com.facebook.stetho.Stetho
-import com.wonrax.bkstinfo.models.DeviceUser
-import com.wonrax.bkstinfo.models.EncryptedStorage
-import com.wonrax.bkstinfo.network.OkHttpClientSingleton
+import com.wonrax.mybk.models.DeviceUser
+import com.wonrax.mybk.models.EncryptedStorage
+import com.wonrax.mybk.network.OkHttpClientSingleton
 
 class App : Application() {
     override fun onCreate() {

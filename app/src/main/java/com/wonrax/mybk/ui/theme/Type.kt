@@ -1,4 +1,4 @@
-package com.wonrax.bkstinfo.ui.theme
+package com.wonrax.mybk.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
