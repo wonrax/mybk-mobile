@@ -79,25 +79,15 @@ enum class MybkState {
 }
 
 object DeviceUser {
-    private var username: String? = null
-    private var password: String? = null
-    private var stinfoToken: String? = null
+    var username: String? = null
+
+    var password: String? = null
+
+    var stinfoToken: String? = null
 
     fun init() {
         username = EncryptedStorage.get(SHARE_PREFS_USERNAME_KEY)
         password = EncryptedStorage.get(SHARE_PREFS_PASSWORD_KEY)
-    }
-
-    fun getUsername(): String? {
-        return username
-    }
-
-    fun getPassword(): String? {
-        return password
-    }
-
-    fun getStInfoToken(): String? {
-        return stinfoToken
     }
 
     /**

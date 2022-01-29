@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setTheme(R.style.BKSTINFO_NoActionBar)
 
-        if (DeviceUser.getUsername() == null || DeviceUser.getPassword() == null) {
+        if (DeviceUser.username == null || DeviceUser.password == null) {
 
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             DeviceUser.signIn()
             val status = DeviceUser.getMybkToken()
-            val token = DeviceUser.getStInfoToken()
+            val token = DeviceUser.stinfoToken
 
             val body: RequestBody = FormBody.Builder().apply {
                 if (token != null) {
