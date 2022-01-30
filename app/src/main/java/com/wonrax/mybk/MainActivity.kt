@@ -4,19 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.wonrax.mybk.models.DeviceUser
-import com.wonrax.mybk.models.MybkState
-import com.wonrax.mybk.network.Cookuest
-import com.wonrax.mybk.network.await
 import com.wonrax.mybk.ui.MybkUI
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import okhttp3.FormBody
-import okhttp3.RequestBody
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,37 +25,35 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            MybkUI {
-                CircularProgressIndicator()
-            }
+            MybkUI()
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            DeviceUser.signIn()
-            val status = DeviceUser.getMybkToken()
-            val token = DeviceUser.stinfoToken
-
-            val body: RequestBody = FormBody.Builder().apply {
-                if (token != null) {
-                    add("_token", token)
-                }
-            }.build()
-
-            val scheduleResponse = Cookuest.post(
-                "https://mybk.hcmut.edu.vn/stinfo/lichthi/ajax_lichhoc",
-                body
-            ).await()
-
-            CoroutineScope(Dispatchers.Main).launch {
-                if (status == MybkState.LOGGED_IN) {
-                    setContent {
-                        MybkUI {
-                            Greeting(scheduleResponse.body)
-                        }
-                    }
-                }
-            }
-        }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            DeviceUser.signIn()
+//            val status = DeviceUser.getMybkToken()
+//            val token = DeviceUser.stinfoToken
+//
+//            val body: RequestBody = FormBody.Builder().apply {
+//                if (token != null) {
+//                    add("_token", token)
+//                }
+//            }.build()
+//
+//            val scheduleResponse = Cookuest.post(
+//                "https://mybk.hcmut.edu.vn/stinfo/lichthi/ajax_lichhoc",
+//                body
+//            ).await()
+//
+//            CoroutineScope(Dispatchers.Main).launch {
+//                if (status == MybkState.LOGGED_IN) {
+//                    setContent {
+//                        MybkUI {
+//                            Greeting(scheduleResponse.body)
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 }
 

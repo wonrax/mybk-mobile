@@ -43,19 +43,19 @@ sealed class Screen(
     val icon: Int,
 ) {
     object Home : Screen("home", "Trang chủ", R.drawable.ic_home)
-    object Search : Screen("seacrh", "Lịch học", R.drawable.ic_calendar)
-    object Profile : Screen("profile", "Bảng điểm", R.drawable.ic_document)
-    object Settings : Screen("settings", "Cá nhân", R.drawable.ic_profile)
+    object Schedules : Screen("schedules", "Lịch học", R.drawable.ic_calendar)
+    object Transcript : Screen("transcript", "Bảng điểm", R.drawable.ic_document)
+    object Profile : Screen("profile", "Cá nhân", R.drawable.ic_profile)
 
     object Items {
         val list = listOf(
-            Home, Search, Profile, Settings
+            Home, Schedules, Transcript, Profile
         )
     }
 }
 
 @Composable
-fun BottomNavigation() {
+fun BottomNavigation(onItemClick: (String) -> Unit) {
     val items = Screen.Items.list
 
     Row(
@@ -72,7 +72,7 @@ fun BottomNavigation() {
             Column(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
-                    .clickable { }
+                    .clickable { onItemClick(screen.id) }
                     .padding(16.dp, 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -87,5 +87,5 @@ fun BottomNavigation() {
 @Composable
 @Preview(widthDp = 393)
 fun P1() {
-    BottomNavigation()
+    BottomNavigation {}
 }
