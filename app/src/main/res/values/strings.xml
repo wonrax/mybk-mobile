@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BK STINFO</string>
-    <string name="title_activity_main">BK STINFO</string>
+    <string name="app_name">Mybk Mobile</string>
+    <string name="title_activity_main">Mybk Mobile</string>
     <string name="title_activity_login">LoginActivity</string>
 </resources>
