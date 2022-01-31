@@ -1,19 +1,27 @@
 package com.wonrax.mybk.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -21,6 +29,7 @@ import com.wonrax.mybk.Greeting
 import com.wonrax.mybk.ui.component.BottomNavigation
 import com.wonrax.mybk.ui.component.Screen
 import com.wonrax.mybk.ui.theme.MybkTheme
+import kotlinx.coroutines.delay
 
 @Composable
 fun MybkUI() {
@@ -29,16 +38,29 @@ fun MybkUI() {
         Scaffold(
             bottomBar = {
                 BottomNavigation(navController) {
-                    val navigateOptions = NavOptions.Builder().run {
-                        setPopUpTo(navController.currentDestination?.route, true)
-                        build()
+                    navController.navigate(it) {
+                        // Pop up to the start destination of the graph to
+                        // avoid building up a large stack of destinations
+                        // on the back stack as users select items
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+
+                        // Avoid multiple copies of the same destination when
+                        // reselecting the same item
+                        launchSingleTop = true
+
+                        // Restore state when reselecting a previously selected item
+                        restoreState = true
                     }
-                    navController.navigate(it, navigateOptions)
                 }
             }
         ) {
             Surface(
-                modifier = Modifier.background(Color.LightGray).padding(16.dp).fillMaxSize(),
+                modifier = Modifier
+                    .background(Color.LightGray)
+                    .padding(16.dp)
+                    .fillMaxSize(),
                 color = Color.LightGray
             ) {
                 Navigation(navController)
@@ -58,12 +80,24 @@ fun Navigation(navController: NavHostController) {
         val profile = Screen.Profile
 
         composable(home.id) {
+            var loadingText by rememberSaveable { mutableStateOf("Đang lấy dữ liệu, chờ tí...") }
+
+            LaunchedEffect("hello") {
+                delay(2000)
+                loadingText = "What"
+            }
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator()
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    CircularProgressIndicator()
+                    Text(text = loadingText)
+                }
             }
         }
         composable(schedules.id) {
