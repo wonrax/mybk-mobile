@@ -45,6 +45,7 @@ fun MyAppIcon(
     )
 }
 
+// TODO include composable for each screen
 sealed class Screen(
     val id: String,
     val title: String,
