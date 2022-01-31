@@ -8,6 +8,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.wonrax.mybk.models.DeviceUser
 import com.wonrax.mybk.ui.MybkUI
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +31,7 @@ class MainActivity : ComponentActivity() {
             MybkUI()
         }
 
-//        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).launch {
 //            DeviceUser.signIn()
 //            val status = DeviceUser.getMybkToken()
 //            val token = DeviceUser.stinfoToken
@@ -44,6 +47,10 @@ class MainActivity : ComponentActivity() {
 //                body
 //            ).await()
 //
+//            val decoded = StringEscapeUtils.unescapeJava(scheduleResponse.body)
+//
+//            println("debug: $decoded")
+
 //            CoroutineScope(Dispatchers.Main).launch {
 //                if (status == MybkState.LOGGED_IN) {
 //                    setContent {
@@ -53,7 +60,7 @@ class MainActivity : ComponentActivity() {
 //                    }
 //                }
 //            }
-//        }
+        }
     }
 }
 

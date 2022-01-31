@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -26,7 +27,15 @@ fun MybkUI() {
     MybkTheme(false) {
         val navController = rememberNavController()
         Scaffold(
-            bottomBar = { BottomNavigation { navController.navigate(it) } }
+            bottomBar = {
+                BottomNavigation(navController) {
+                    val navigateOptions = NavOptions.Builder().run {
+                        setPopUpTo(navController.currentDestination?.route, true)
+                        build()
+                    }
+                    navController.navigate(it, navigateOptions)
+                }
+            }
         ) {
             Surface(
                 modifier = Modifier.background(Color.LightGray).padding(16.dp).fillMaxSize(),
@@ -44,6 +53,7 @@ fun Navigation(navController: NavHostController) {
 
         val home = Screen.Home
         val schedules = Screen.Schedules
+        val exams = Screen.Exams
         val transcript = Screen.Transcript
         val profile = Screen.Profile
 
@@ -58,6 +68,9 @@ fun Navigation(navController: NavHostController) {
         }
         composable(schedules.id) {
             Greeting(name = schedules.title)
+        }
+        composable(exams.id) {
+            Greeting(name = exams.title)
         }
         composable(transcript.id) {
             Greeting(name = transcript.title)
