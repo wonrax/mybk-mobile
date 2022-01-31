@@ -4,15 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.wonrax.mybk.models.DeviceUser
 import com.wonrax.mybk.ui.MybkUI
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.wonrax.mybk.viewmodels.SchedulesViewModel
 
 class MainActivity : ComponentActivity() {
+    private val schedulesViewModel: SchedulesViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Mybk_NoActionBar)
@@ -28,38 +28,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            MybkUI()
-        }
-
-        CoroutineScope(Dispatchers.IO).launch {
-//            DeviceUser.signIn()
-//            val status = DeviceUser.getMybkToken()
-//            val token = DeviceUser.stinfoToken
-//
-//            val body: RequestBody = FormBody.Builder().apply {
-//                if (token != null) {
-//                    add("_token", token)
-//                }
-//            }.build()
-//
-//            val scheduleResponse = Cookuest.post(
-//                "https://mybk.hcmut.edu.vn/stinfo/lichthi/ajax_lichhoc",
-//                body
-//            ).await()
-//
-//            val decoded = StringEscapeUtils.unescapeJava(scheduleResponse.body)
-//
-//            println("debug: $decoded")
-
-//            CoroutineScope(Dispatchers.Main).launch {
-//                if (status == MybkState.LOGGED_IN) {
-//                    setContent {
-//                        MybkUI {
-//                            Greeting(scheduleResponse.body)
-//                        }
-//                    }
-//                }
-//            }
+            MybkUI(schedulesViewModel)
         }
     }
 }

@@ -12,10 +12,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,10 +25,10 @@ import com.wonrax.mybk.Greeting
 import com.wonrax.mybk.ui.component.BottomNavigation
 import com.wonrax.mybk.ui.component.Screen
 import com.wonrax.mybk.ui.theme.MybkTheme
-import kotlinx.coroutines.delay
+import com.wonrax.mybk.viewmodels.SchedulesViewModel
 
 @Composable
-fun MybkUI() {
+fun MybkUI(schedulesViewModel: SchedulesViewModel) {
     MybkTheme(false) {
         val navController = rememberNavController()
         Scaffold(
@@ -63,14 +59,17 @@ fun MybkUI() {
                     .fillMaxSize(),
                 color = Color.LightGray
             ) {
-                Navigation(navController)
+                Navigation(navController, schedulesViewModel)
             }
         }
     }
 }
 
 @Composable
-fun Navigation(navController: NavHostController) {
+fun Navigation(
+    navController: NavHostController,
+    schedulesViewModel: SchedulesViewModel
+) {
     NavHost(navController = navController, startDestination = Screen.Home.id) {
 
         val home = Screen.Home
@@ -80,12 +79,11 @@ fun Navigation(navController: NavHostController) {
         val profile = Screen.Profile
 
         composable(home.id) {
-            var loadingText by rememberSaveable { mutableStateOf("Đang lấy dữ liệu, chờ tí...") }
-
             LaunchedEffect("hello") {
-                delay(2000)
-                loadingText = "What"
+                if (schedulesViewModel.isLoading.value)
+                    schedulesViewModel.update()
             }
+
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -95,8 +93,10 @@ fun Navigation(navController: NavHostController) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    CircularProgressIndicator()
-                    Text(text = loadingText)
+                    if (schedulesViewModel.isLoading.value) {
+                        CircularProgressIndicator()
+                        Text(text = "Loading...")
+                    } else Text(schedulesViewModel.response.value)
                 }
             }
         }
