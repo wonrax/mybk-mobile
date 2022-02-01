@@ -42,16 +42,16 @@ class SemesterSchedule {
 }
 
 class SchedulesViewModel : ViewModel() {
-    val response = mutableListOf<SemesterSchedule>()
+    val response = mutableStateOf<Array<SemesterSchedule>?>(null)
+
     val isLoading = mutableStateOf(true)
 
     init {
         update()
     }
 
-    private fun changeResponse(value: List<SemesterSchedule>) {
-        response.clear()
-        response.addAll(0, value)
+    private fun changeResponse(value: Array<SemesterSchedule>) {
+        response.value = value
     }
 
     private fun update() {
@@ -74,7 +74,7 @@ class SchedulesViewModel : ViewModel() {
             val deserializedResponse: Array<SemesterSchedule> = Gson().fromJson(scheduleResponse.body, Array<SemesterSchedule>::class.java)
 
             if (status == MybkState.LOGGED_IN) {
-                changeResponse(deserializedResponse.toList())
+                changeResponse(deserializedResponse)
                 isLoading.value = false
             }
         }

@@ -91,7 +91,7 @@ fun Navigation(
                         CircularProgressIndicator()
                         Text(text = "Loading...")
                     } else {
-                        schedulesViewModel.response.forEach { semester ->
+                        schedulesViewModel.response.value?.forEach { semester ->
                             semester.ten_hocky?.let { it1 -> Text(it1) }
                         }
                     }
