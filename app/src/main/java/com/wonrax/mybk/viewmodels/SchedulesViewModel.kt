@@ -2,6 +2,7 @@ package com.wonrax.mybk.viewmodels
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
 import com.wonrax.mybk.models.DeviceUser
 import com.wonrax.mybk.models.MybkState
 import com.wonrax.mybk.network.Cookuest
@@ -11,21 +12,49 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.FormBody
 import okhttp3.RequestBody
-import org.apache.commons.lang.StringEscapeUtils
+
+class CourseSchedule {
+    val giobd: String? = null
+    val giokt: String? = null
+    val hk_nh: String? = null
+    val ma_mh: String? = null
+    val ma_nhom: String? = null
+    val macoso: String? = null
+    val mssv: String? = null
+    val ngay_cap_nhat: String? = null
+    val nhomto: String? = null
+    val phong1: String? = null
+    val so_tin_chi: Int? = null
+    val tc_hp: Float? = null
+    val ten_hocky: String? = null
+    val ten_mh: String? = null
+    val thu1: Int? = null
+    val tiet_bd1: Int? = null
+    val tiet_kt1: Int? = null
+    val tuan_hoc: String? = null
+}
+
+class SemesterSchedule {
+    val hk_nh: String? = null
+    val ngay_cap_nhat: String? = null
+    val ten_hocky: String? = null
+    val tkb: Array<CourseSchedule>? = null
+}
 
 class SchedulesViewModel : ViewModel() {
-    val response = mutableStateOf("")
+    val response = mutableListOf<SemesterSchedule>()
     val isLoading = mutableStateOf(true)
 
     init {
-        // TODO first fetch here
+        update()
     }
 
-    private fun changeResponse(value: String) {
-        response.value = value
+    private fun changeResponse(value: List<SemesterSchedule>) {
+        response.clear()
+        response.addAll(0, value)
     }
 
-    fun update() {
+    private fun update() {
         CoroutineScope(Dispatchers.IO).launch {
             DeviceUser.signIn()
             val status = DeviceUser.getMybkToken()
@@ -42,15 +71,11 @@ class SchedulesViewModel : ViewModel() {
                 body
             ).await()
 
-            val decoded = StringEscapeUtils.unescapeJava(scheduleResponse.body)
+            val deserializedResponse: Array<SemesterSchedule> = Gson().fromJson(scheduleResponse.body, Array<SemesterSchedule>::class.java)
 
-            println("debug: $decoded")
-
-            CoroutineScope(Dispatchers.Main).launch {
-                if (status == MybkState.LOGGED_IN) {
-                    changeResponse(decoded)
-                    isLoading.value = false
-                }
+            if (status == MybkState.LOGGED_IN) {
+                changeResponse(deserializedResponse.toList())
+                isLoading.value = false
             }
         }
     }

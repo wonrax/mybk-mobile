@@ -11,7 +11,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -79,11 +78,6 @@ fun Navigation(
         val profile = Screen.Profile
 
         composable(home.id) {
-            LaunchedEffect("hello") {
-                if (schedulesViewModel.isLoading.value)
-                    schedulesViewModel.update()
-            }
-
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -96,7 +90,11 @@ fun Navigation(
                     if (schedulesViewModel.isLoading.value) {
                         CircularProgressIndicator()
                         Text(text = "Loading...")
-                    } else Text(schedulesViewModel.response.value)
+                    } else {
+                        schedulesViewModel.response.forEach { semester ->
+                            semester.ten_hocky?.let { it1 -> Text(it1) }
+                        }
+                    }
                 }
             }
         }
