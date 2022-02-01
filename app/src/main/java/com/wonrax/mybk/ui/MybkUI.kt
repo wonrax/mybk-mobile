@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -13,7 +14,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -22,7 +22,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.wonrax.mybk.Greeting
 import com.wonrax.mybk.ui.component.BottomNavigation
+import com.wonrax.mybk.ui.component.ScheduleCard
 import com.wonrax.mybk.ui.component.Screen
+import com.wonrax.mybk.ui.theme.MybkColors
 import com.wonrax.mybk.ui.theme.MybkTheme
 import com.wonrax.mybk.viewmodels.SchedulesViewModel
 
@@ -53,10 +55,10 @@ fun MybkUI(schedulesViewModel: SchedulesViewModel) {
         ) {
             Surface(
                 modifier = Modifier
-                    .background(Color.LightGray)
-                    .padding(16.dp)
+                    .background(MybkColors.Grey10)
+                    .padding(8.dp)
                     .fillMaxSize(),
-                color = Color.LightGray
+                color = MybkColors.Grey10 // TODO how to merge these two backgrounds
             ) {
                 Navigation(navController, schedulesViewModel)
             }
@@ -69,15 +71,15 @@ fun Navigation(
     navController: NavHostController,
     schedulesViewModel: SchedulesViewModel
 ) {
-    NavHost(navController = navController, startDestination = Screen.Home.id) {
+    NavHost(navController = navController, startDestination = Screen.Schedules.id) {
 
-        val home = Screen.Home
+//        val home = Screen.Home
         val schedules = Screen.Schedules
         val exams = Screen.Exams
         val transcript = Screen.Transcript
         val profile = Screen.Profile
 
-        composable(home.id) {
+        composable(schedules.id) {
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -91,15 +93,20 @@ fun Navigation(
                         CircularProgressIndicator()
                         Text(text = "Loading...")
                     } else {
-                        schedulesViewModel.response.value?.forEach { semester ->
-                            semester.ten_hocky?.let { it1 -> Text(it1) }
+                        LazyColumn(
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            schedulesViewModel.response.value?.forEach { semester ->
+                                semester.tkb?.forEach { schedule ->
+                                    item {
+                                        ScheduleCard(schedule)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
-        }
-        composable(schedules.id) {
-            Greeting(name = schedules.title)
         }
         composable(exams.id) {
             Greeting(name = exams.title)

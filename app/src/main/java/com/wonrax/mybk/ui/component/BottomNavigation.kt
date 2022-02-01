@@ -19,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,7 +50,7 @@ sealed class Screen(
     val title: String,
     val icon: Int,
 ) {
-    object Home : Screen("home", "Trang chủ", R.drawable.ic_home)
+//    object Home : Screen("home", "Trang chủ", R.drawable.ic_home)
     object Schedules : Screen("schedules", "Lịch học", R.drawable.ic_calendar)
     object Exams : Screen("exams", "Lịch thi", R.drawable.ic_calendar)
     object Transcript : Screen("transcript", "Bảng điểm", R.drawable.ic_document)
@@ -59,7 +58,11 @@ sealed class Screen(
 
     object Items {
         val list = listOf(
-            Home, Schedules, Exams, Transcript, Profile
+//            Home,
+            Schedules,
+            Exams,
+            Transcript,
+            Profile
         )
     }
 }
@@ -81,8 +84,6 @@ fun BottomNavigation(navController: NavHostController, onItemClick: (String) -> 
         items.forEach { screen ->
             val selected = screen.id == backStackEntry.value?.destination?.route
             val iconColor = if (selected) MaterialTheme.colors.primary else Color.LightGray
-
-            val screenWidth = LocalConfiguration.current.screenWidthDp
 
             Column(
                 modifier = Modifier
