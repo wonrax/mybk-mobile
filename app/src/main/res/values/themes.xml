@@ -13,6 +13,6 @@
     <style name="SplashScreen" parent="Theme.AppCompat.Light">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowBackground">@drawable/ic_launcher_background</item>
+        <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 </resources>
