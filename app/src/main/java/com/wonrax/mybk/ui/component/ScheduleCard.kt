@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,7 +27,14 @@ fun ScheduleCard(schedule: CourseSchedule) {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            schedule.ten_mh?.let { Text(it) }
+            schedule.ten_mh?.let {
+                Text(
+                    it,
+                    fontSize = FontSize.Large,
+                    fontWeight = FontWeight.Bold,
+                    color = MybkColors.Dark
+                )
+            }
             schedule.thu1?.let { Text("Thứ $it") }
             if (schedule.giobd != null && schedule.giokt != null) {
                 Text("${schedule.giobd} - ${schedule.giokt}")
