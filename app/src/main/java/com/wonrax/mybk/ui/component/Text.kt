@@ -27,7 +27,8 @@ fun Text(
     fontWeight: FontWeight = FontWeight.Regular,
     fontSize: FontSize = FontSize.Body,
     color: androidx.compose.ui.graphics.Color = Color.Dark,
-    textAlign: TextAlign? = null
+    textAlign: TextAlign? = null,
+    softWrap: Boolean = true
 ) {
 
     val fw = when (fontWeight) {
@@ -57,6 +58,7 @@ fun Text(
         modifier = modifier,
         color = color,
         letterSpacing = ls,
-        textAlign = ta
+        textAlign = ta,
+        softWrap = softWrap
     )
 }

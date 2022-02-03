@@ -51,7 +51,7 @@ fun BottomNavigation(navController: NavHostController, onItemClick: (String) -> 
                 verticalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    resourceId = screen.icon,
+                    icon = if (selected) screen.iconSelected else screen.icon,
                     tint = iconColor
                 )
                 AnimatedVisibility(visible = selected) {
@@ -59,7 +59,9 @@ fun BottomNavigation(navController: NavHostController, onItemClick: (String) -> 
                         screen.title,
                         fontSize = FontSize.Small,
                         color = iconColor,
-                        textAlign = TextAlign.Center
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        softWrap = false
                     )
                 }
             }
