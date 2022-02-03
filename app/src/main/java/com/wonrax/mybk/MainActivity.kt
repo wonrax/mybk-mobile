@@ -7,9 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import com.wonrax.mybk.models.DeviceUser
+import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.ui.MybkUI
-import com.wonrax.mybk.viewmodels.SchedulesViewModel
+import com.wonrax.mybk.viewmodel.SchedulesViewModel
 
 class MainActivity : ComponentActivity() {
     private val schedulesViewModel: SchedulesViewModel by viewModels()

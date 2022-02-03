@@ -23,8 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import com.wonrax.mybk.models.DeviceUser
-import com.wonrax.mybk.models.SSOState
+import com.wonrax.mybk.model.DeviceUser
+import com.wonrax.mybk.model.SSOState
 import com.wonrax.mybk.ui.theme.MybkTheme
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch

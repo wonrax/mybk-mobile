@@ -1,4 +1,4 @@
-package com.wonrax.mybk.models
+package com.wonrax.mybk.model
 
 import android.content.Context
 import android.content.SharedPreferences

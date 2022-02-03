@@ -1,4 +1,4 @@
-package com.wonrax.mybk.models
+package com.wonrax.mybk.model
 
 import com.wonrax.mybk.network.Cookuest
 import com.wonrax.mybk.network.Response

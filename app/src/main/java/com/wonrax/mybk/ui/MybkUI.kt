@@ -1,38 +1,18 @@
 package com.wonrax.mybk.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.wonrax.mybk.Greeting
 import com.wonrax.mybk.ui.component.BottomNavigation
-import com.wonrax.mybk.ui.component.FontSize
-import com.wonrax.mybk.ui.component.FontWeight
-import com.wonrax.mybk.ui.component.ScheduleCard
-import com.wonrax.mybk.ui.component.Screen
-import com.wonrax.mybk.ui.component.Text
+import com.wonrax.mybk.ui.component.Navigation
 import com.wonrax.mybk.ui.theme.Color
 import com.wonrax.mybk.ui.theme.MybkTheme
-import com.wonrax.mybk.viewmodels.SchedulesViewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.wonrax.mybk.viewmodel.SchedulesViewModel
 
 @Composable
 fun MybkUI(schedulesViewModel: SchedulesViewModel) {
@@ -67,71 +47,6 @@ fun MybkUI(schedulesViewModel: SchedulesViewModel) {
             ) {
                 Navigation(navController, schedulesViewModel)
             }
-        }
-    }
-}
-
-@Composable
-fun Navigation(
-    navController: NavHostController,
-    schedulesViewModel: SchedulesViewModel
-) {
-    NavHost(navController = navController, startDestination = Screen.Schedules.id) {
-
-//        val home = Screen.Home
-        val schedules = Screen.Schedules
-        val exams = Screen.Exams
-        val transcript = Screen.Transcript
-        val profile = Screen.Profile
-
-        composable(schedules.id) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    if (schedulesViewModel.isLoading.value) {
-                        // TODO make this a component
-                        CircularProgressIndicator(
-                            color = Color.Primary,
-                            strokeWidth = 1.5.dp
-                        )
-                        Text(text = "Đang tải dữ liệu, chờ xí...")
-                    } else {
-                        LazyColumn(
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            contentPadding = PaddingValues(12.dp, 64.dp)
-                        ) {
-                            item {
-                                Text("Giờ học", fontWeight = FontWeight.Bold, fontSize = FontSize.Heading)
-                                val w = SimpleDateFormat("w", Locale("vn")).format(java.util.Date())
-                                Text("Tuần $w", color = Color.Grey50)
-                                Spacer(modifier = Modifier.height(16.dp))
-                            }
-                            schedulesViewModel.response.value?.forEach { semester ->
-                                semester.tkb?.forEach { schedule ->
-                                    item {
-                                        ScheduleCard(schedule)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        composable(exams.id) {
-            Greeting(name = exams.title)
-        }
-        composable(transcript.id) {
-            Greeting(name = transcript.title)
-        }
-        composable(profile.id) {
-            Greeting(name = profile.title)
         }
     }
 }
