@@ -16,7 +16,9 @@ enum class Icons {
     TimeCircle,
     TimeCircleBold,
     Transcript,
-    TranscriptBold
+    TranscriptBold,
+    ArrowUp,
+    ArrowDown
 }
 
 val mapIconToResourceId: Map<Icons, Int> = mapOf(
@@ -29,6 +31,8 @@ val mapIconToResourceId: Map<Icons, Int> = mapOf(
     Icons.TimeCircleBold to R.drawable.ic_timecircle_bold,
     Icons.Transcript to R.drawable.ic_transcript,
     Icons.TranscriptBold to R.drawable.ic_transcript_bold,
+    Icons.ArrowDown to R.drawable.ic_arrowdown,
+    Icons.ArrowUp to R.drawable.ic_arrowup
 )
 
 @Composable
