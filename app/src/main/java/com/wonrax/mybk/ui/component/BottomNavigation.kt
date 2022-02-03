@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,42 +28,44 @@ fun BottomNavigation(navController: NavHostController, onItemClick: (String) -> 
     val items = Screen.Items.list
     val backStackEntry = navController.currentBackStackEntryAsState()
 
-    Row(
-        modifier = Modifier
-            .padding(0.dp)
-            .background(Color.Light)
-            .fillMaxWidth()
-            .height(56.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        items.forEach { screen ->
-            val selected = screen.id == backStackEntry.value?.destination?.route
-            val iconColor = if (selected) Color.Primary else Color.Grey50
+    Surface(elevation = 24.dp) {
+        Row(
+            modifier = Modifier
+                .padding(0.dp)
+                .background(Color.Light)
+                .fillMaxWidth()
+                .height(56.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            items.forEach { screen ->
+                val selected = screen.id == backStackEntry.value?.destination?.route
+                val iconColor = if (selected) Color.Primary else Color.Grey50
 
-            Column(
-                modifier = Modifier
-                    .padding(1.dp, 2.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .clickable { onItemClick(screen.id) }
-                    .fillMaxHeight()
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Icon(
-                    icon = if (selected) screen.iconSelected else screen.icon,
-                    tint = iconColor
-                )
-                AnimatedVisibility(visible = selected) {
-                    Text(
-                        screen.title,
-                        fontSize = FontSize.Small,
-                        color = iconColor,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
-                        softWrap = false
+                Column(
+                    modifier = Modifier
+                        .padding(1.dp, 2.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .clickable { onItemClick(screen.id) }
+                        .fillMaxHeight()
+                        .weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        icon = if (selected) screen.iconSelected else screen.icon,
+                        tint = iconColor
                     )
+                    AnimatedVisibility(visible = selected) {
+                        Text(
+                            screen.title,
+                            fontSize = FontSize.Small,
+                            color = iconColor,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            softWrap = false
+                        )
+                    }
                 }
             }
         }
