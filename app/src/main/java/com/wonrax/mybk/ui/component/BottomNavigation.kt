@@ -13,20 +13,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.wonrax.mybk.R
+import com.wonrax.mybk.ui.theme.Color
 
 // TODO refactor this file
 
@@ -34,7 +32,7 @@ import com.wonrax.mybk.R
 fun MyAppIcon(
     resourceId: Int,
     modifier: Modifier = Modifier,
-    tint: Color = MaterialTheme.colors.primary
+    tint: androidx.compose.ui.graphics.Color = MaterialTheme.colors.primary
 ) {
     Icon(
         painter = painterResource(id = resourceId),
@@ -51,9 +49,9 @@ sealed class Screen(
     val icon: Int,
 ) {
 //    object Home : Screen("home", "Trang chủ", R.drawable.ic_home)
-    object Schedules : Screen("schedules", "Lịch học", R.drawable.ic_calendar)
+    object Schedules : Screen("schedules", "Giờ học", R.drawable.ic_timecircle)
     object Exams : Screen("exams", "Lịch thi", R.drawable.ic_calendar)
-    object Transcript : Screen("transcript", "Bảng điểm", R.drawable.ic_document)
+    object Transcript : Screen("transcript", "Bảng điểm", R.drawable.ic_transcipt)
     object Profile : Screen("profile", "Cá nhân", R.drawable.ic_profile)
 
     object Items {
@@ -75,15 +73,15 @@ fun BottomNavigation(navController: NavHostController, onItemClick: (String) -> 
     Row(
         modifier = Modifier
             .padding(0.dp)
-            .background(MaterialTheme.colors.background)
+            .background(Color.Light)
             .fillMaxWidth()
-            .height(64.dp),
+            .height(56.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         items.forEach { screen ->
             val selected = screen.id == backStackEntry.value?.destination?.route
-            val iconColor = if (selected) MaterialTheme.colors.primary else Color.LightGray
+            val iconColor = if (selected) Color.Primary else Color.Grey50
 
             Column(
                 modifier = Modifier
@@ -102,7 +100,7 @@ fun BottomNavigation(navController: NavHostController, onItemClick: (String) -> 
                 AnimatedVisibility(visible = selected) {
                     Text(
                         screen.title,
-                        fontSize = 11.sp,
+                        fontSize = FontSize.Small,
                         color = iconColor,
                         textAlign = TextAlign.Center
                     )

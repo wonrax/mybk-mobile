@@ -9,7 +9,7 @@
         android:name="com.wonrax.mybk.App"
         android:allowBackup="true"
         android:fullBackupContent="true"
-        android:icon="@drawable/ic_mybk_mobile"
+        android:icon="@drawable/ic_mybk_logo"
         android:label="@string/app_name"
         android:supportsRtl="true">
         <activity

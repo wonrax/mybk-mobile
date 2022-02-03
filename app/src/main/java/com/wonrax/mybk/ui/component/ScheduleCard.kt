@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.wonrax.mybk.ui.theme.MybkColors
+import com.wonrax.mybk.ui.theme.Color
 import com.wonrax.mybk.viewmodels.CourseSchedule
 
 @Composable
@@ -20,7 +20,7 @@ fun ScheduleCard(schedule: CourseSchedule) {
     Surface(
         modifier = Modifier
             .clip(RoundedCornerShape(24.dp))
-            .background(MybkColors.Light)
+            .background(Color.Light)
             .padding(24.dp)
             .fillMaxWidth()
     ) {
@@ -32,7 +32,7 @@ fun ScheduleCard(schedule: CourseSchedule) {
                     it,
                     fontSize = FontSize.Large,
                     fontWeight = FontWeight.Bold,
-                    color = MybkColors.Dark
+                    color = Color.Dark
                 )
             }
             schedule.thu1?.let { Text("Thứ $it") }

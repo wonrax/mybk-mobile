@@ -4,7 +4,7 @@
     <item android:drawable="@android:color/white"/>
     <!--  Place your bitmap in the center  -->
     <item
-        android:drawable="@drawable/ic_mybk_mobile"
+        android:drawable="@drawable/ic_mybk_logo"
         android:gravity="center"
         />
 </layer-list>
