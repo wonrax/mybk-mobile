@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wonrax.mybk.ui.component.FontSize
-import com.wonrax.mybk.ui.component.FontWeight
 import com.wonrax.mybk.ui.component.ScheduleCard
 import com.wonrax.mybk.ui.component.Text
 import com.wonrax.mybk.ui.theme.Color
@@ -47,7 +46,7 @@ fun SchedulesScreen(schedulesViewModel: SchedulesViewModel) {
                     contentPadding = PaddingValues(12.dp, 64.dp)
                 ) {
                     item {
-                        Text("Giờ học", fontWeight = FontWeight.Bold, fontSize = FontSize.Heading)
+                        Text("Giờ học", fontSize = FontSize.Heading)
                         val w = SimpleDateFormat("w", Locale("vn")).format(Date())
                         Text("Tuần $w", color = Color.Grey50)
                         Spacer(modifier = Modifier.height(16.dp))

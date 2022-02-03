@@ -3,11 +3,14 @@ package com.wonrax.mybk.ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,7 +22,7 @@ import com.wonrax.mybk.ui.theme.Color
 fun ScheduleCard(schedule: CourseSchedule) {
     Surface(
         modifier = Modifier
-            .clip(RoundedCornerShape(24.dp))
+            .clip(RoundedCornerShape(32.dp))
             .background(Color.Light)
             .padding(24.dp)
             .fillMaxWidth()
@@ -35,13 +38,68 @@ fun ScheduleCard(schedule: CourseSchedule) {
                     color = Color.Dark
                 )
             }
-            schedule.thu1?.let { Text("Thứ $it") }
-            if (schedule.giobd != null && schedule.giokt != null) {
-                Text("${schedule.giobd} - ${schedule.giokt}")
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // Course start & end time
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(Icons.TimeCircle)
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        schedule.thu1?.let { Text("Thứ $it".uppercase(), fontWeight = FontWeight.Bold) }
+                        if (schedule.giobd != null && schedule.giokt != null) {
+                            Text("${schedule.giobd} - ${schedule.giokt}", color = Color.Primary)
+                        }
+                    }
+                }
+
+                // Course location
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(Icons.Location)
+                    Column {
+                        schedule.phong1?.let { Text(it, fontWeight = FontWeight.Bold) }
+                        schedule.macoso?.let { Text(it) }
+                    }
+                }
             }
-            schedule.phong1?.let { Text("Phòng $it") }
-            schedule.macoso?.let { Text("Cơ sở $it") }
-            schedule.tuan_hoc?.let { Text("Tuần học: $it") }
+
+            schedule.tuan_hoc?.let { it ->
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Tuần", fontWeight = FontWeight.Bold)
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        it.split("|").forEach { it1 ->
+                            if (it1 != "") {
+                                var activeWeek = true // Course is taught on this week
+                                val week = it1.toIntOrNull()
+                                if (week == null) activeWeek = false
+
+                                item {
+                                    Text(
+                                        if (activeWeek) String.format("%02d", week) else "--",
+                                        color = if (activeWeek) Color.Dark else Color.Grey30,
+                                        fontWeight = if (activeWeek) FontWeight.Bold else FontWeight.Regular
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -63,11 +121,12 @@ fun Preview() {
         so_tin_chi = 3,
         tc_hp = 3f,
         ten_hocky = "Học kỳ 2 Năm học 2021 - 2022",
-        ten_mh = "DE CUONG LUAN VAN",
+        ten_mh = "DE CUONG LUAN VAN TOT NGHIEP KHOA HOC MAY TINH",
         thu1 = 3,
         tiet_bd1 = 2,
         tiet_kt1 = 3,
         tuan_hoc = "01|02|03|--|--|06|07|08|09|--|--|--|--|14|15|16|17|18|"
+//        tuan_hoc = "--|"
     )
     ScheduleCard(schedule = mockCourse)
 }
