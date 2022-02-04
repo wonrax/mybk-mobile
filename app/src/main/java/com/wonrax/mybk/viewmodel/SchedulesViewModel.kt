@@ -25,6 +25,7 @@ class SchedulesViewModel : ViewModel() {
     val selectedSemester = mutableStateOf<SemesterSchedule?>(null)
 
     init {
+        println("debug: intit called")
         update()
     }
 
