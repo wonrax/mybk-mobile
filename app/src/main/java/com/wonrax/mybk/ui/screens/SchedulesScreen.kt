@@ -95,14 +95,23 @@ fun SchedulesScreen(schedulesViewModel: SchedulesViewModel) {
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
-                    item {
-                        dropDownMenu()
+                    if (schedulesViewModel.response.value != null) {
+                        item {
+                            dropDownMenu(
+                                items = schedulesViewModel.response.value!!,
+                                itemToStringRepresentation = { item -> item.ten_hocky },
+                                selectedItem = schedulesViewModel.response.value?.getOrNull(0),
+                                onSelectItem = {
+                                    // TODO bring this up to viewmodel
+                                    item ->
+                                    schedulesViewModel.selectedSemester.value = item
+                                }
+                            )
+                        }
                     }
-                    schedulesViewModel.response.value?.forEach { semester ->
-                        semester.tkb?.forEach { schedule ->
-                            item {
-                                ScheduleCard(schedule)
-                            }
+                    schedulesViewModel.selectedSemester.value?.tkb?.forEach { schedule ->
+                        item {
+                            ScheduleCard(schedule)
                         }
                     }
                 }
@@ -112,11 +121,17 @@ fun SchedulesScreen(schedulesViewModel: SchedulesViewModel) {
 }
 
 @Composable
-fun dropDownMenu() {
+fun <T> dropDownMenu(
+    items: Array<T>,
+    itemToStringRepresentation: (T) -> String?,
+    selectedItem: T? = null,
+    onSelectItem: ((T) -> Unit)? = null
+) {
 
     var expanded by remember { mutableStateOf(false) }
-    val suggestions = listOf("Kotlin", "Java", "Dart", "Python")
-    var selectedText by remember { mutableStateOf("Not selected") }
+//    val suggestions = listOf("Kotlin", "Java", "Dart", "Python")
+//    var selectedText by remember { mutableStateOf("Chưa chọn") }
+    var localSelectedItem by remember { mutableStateOf(selectedItem) }
 
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -134,10 +149,14 @@ fun dropDownMenu() {
                 .fillMaxWidth()
         ) {
             Row(
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(selectedText)
-                Icon(Icons.ArrowDown)
+                if (localSelectedItem != null)
+                    itemToStringRepresentation(localSelectedItem!!)?.let { Text(it, Modifier.weight(1f)) }
+                else
+                    Text("Chưa chọn")
+                Icon(Icons.ArrowDown, Modifier.padding(start = 8.dp))
             }
         }
         MaterialTheme(shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(24.dp))) {
@@ -147,12 +166,13 @@ fun dropDownMenu() {
                 modifier = Modifier
                     .width(with(LocalDensity.current) { textfieldSize.width.toDp() }),
             ) {
-                suggestions.forEach { label ->
+                items.forEach { item ->
                     DropdownMenuItem(onClick = {
-                        selectedText = label
+                        localSelectedItem = item
                         expanded = false
+                        if (onSelectItem != null) onSelectItem(item)
                     }) {
-                        Text(text = label)
+                        itemToStringRepresentation(item)?.let { Text(it) }
                     }
                 }
             }
