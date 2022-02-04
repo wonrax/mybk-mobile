@@ -56,8 +56,7 @@ fun SchedulesScreen(schedulesViewModel: SchedulesViewModel) {
                             )
 
                             // TODO make this a function
-                            /* Build a calendar suitable to extract ISO8601 week numbers
-                             * (see http://en.wikipedia.org/wiki/ISO_8601_week_number) */
+                            // TODO make this a state so it doesn't get updated every recomposition
                             /* Build a calendar suitable to extract ISO8601 week numbers
                              * (see http://en.wikipedia.org/wiki/ISO_8601_week_number) */
                             val calendar: Calendar = Calendar.getInstance()

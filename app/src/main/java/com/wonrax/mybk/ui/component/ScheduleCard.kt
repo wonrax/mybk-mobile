@@ -77,7 +77,7 @@ fun ScheduleCard(schedule: CourseSchedule) {
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Tuần", fontWeight = FontWeight.Bold)
+                    Text("Tuần")
                     LazyRow(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -92,7 +92,6 @@ fun ScheduleCard(schedule: CourseSchedule) {
                                     Text(
                                         if (activeWeek) String.format("%02d", week) else "--",
                                         color = if (activeWeek) Color.Dark else Color.Grey30,
-                                        fontWeight = if (activeWeek) FontWeight.Bold else FontWeight.Regular
                                     )
                                 }
                             }
