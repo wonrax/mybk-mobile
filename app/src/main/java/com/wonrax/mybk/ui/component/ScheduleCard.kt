@@ -79,7 +79,7 @@ fun ScheduleCard(schedule: CourseSchedule) {
                 ) {
                     Text("Tuần")
                     LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         it.split("|").forEach { it1 ->
