@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.wonrax.mybk.Greeting
 import com.wonrax.mybk.ui.Screen
+import com.wonrax.mybk.ui.screens.ProfileScreen
 import com.wonrax.mybk.ui.screens.SchedulesScreen
 import com.wonrax.mybk.viewmodel.SchedulesViewModel
 
@@ -32,7 +33,7 @@ fun Navigation(
             Greeting(name = transcript.title)
         }
         composable(profile.id) {
-            Greeting(name = profile.title)
+            ProfileScreen()
         }
     }
 }

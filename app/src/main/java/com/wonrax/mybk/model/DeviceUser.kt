@@ -1,12 +1,15 @@
 package com.wonrax.mybk.model
 
 import com.wonrax.mybk.network.Cookuest
+import com.wonrax.mybk.network.OkHttpClientSingleton
 import com.wonrax.mybk.network.Response
 import com.wonrax.mybk.network.await
 import com.wonrax.mybk.network.utils.HtmlUtils
 import com.wonrax.mybk.network.utils.HttpUtils
 import okhttp3.FormBody
 import okhttp3.RequestBody
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 
 /**
  * Single Sign-on URL of HCMUT's Central Authentication Service (CAS)
@@ -44,8 +47,10 @@ private const val HTML_LOGIN_SUCCESS = "<h2>Log In Successful</h2>"
 private const val HTML_WRONG_CREDENTIAL =
     "The credentials you provided cannot be determined to be authentic"
 
-private const val SHARE_PREFS_USERNAME_KEY = "username"
-private const val SHARE_PREFS_PASSWORD_KEY = "password"
+private const val SHARED_PREFS_USERNAME_KEY = "username"
+private const val SHARED_PREFS_PASSWORD_KEY = "password"
+private const val SHARED_PREFS_FULLNAME_KEY = "fullname"
+private const val SHARED_PREFS_FACULTY_KEY = "studentid"
 
 enum class SSOState {
     /** Initial state */
@@ -83,11 +88,17 @@ object DeviceUser {
 
     var password: String? = null
 
+    var fullName: String? = null
+
+    var faculty: String? = null
+
     var stinfoToken: String? = null
 
     fun init() {
-        username = EncryptedStorage.get(SHARE_PREFS_USERNAME_KEY)
-        password = EncryptedStorage.get(SHARE_PREFS_PASSWORD_KEY)
+        username = EncryptedStorage.get(SHARED_PREFS_USERNAME_KEY)
+        password = EncryptedStorage.get(SHARED_PREFS_PASSWORD_KEY)
+        fullName = EncryptedStorage.get(SHARED_PREFS_FULLNAME_KEY)
+        faculty = EncryptedStorage.get(SHARED_PREFS_FACULTY_KEY)
     }
 
     /**
@@ -164,8 +175,8 @@ object DeviceUser {
         val ssoResponse = Cookuest.get(SSO_MYBK_REDIRECT_URL).await()
 
         // Normally, OkHttp will follow the redirect automatically, but newer
-        // android sdks doesn't permit HTTP traffic, so we've got to do the manual way:
-        // converting the HTTP URLs to HTTPS URLs and then redirect.
+        // android API versions doesn't permit HTTP traffic, so we've got to do the manual way:
+        // convert the HTTP URLs to HTTPS URLs and then redirect.
         // This takes more work but also more secure (I suppose).
         return if (ssoResponse.code == 302) {
             val redirectTicketURL: String =
@@ -188,11 +199,21 @@ object DeviceUser {
             attr = "content"
         )
 
+        getProfileInfo(response.body)
+
         return if (token != null) {
             stinfoToken = token
             MybkState.LOGGED_IN
         } else
             MybkState.UNKNOWN
+    }
+
+    private fun getProfileInfo(responseBody: String) {
+        val doc: Document = Jsoup.parse(responseBody)
+        val profileBlock = doc.select("div[class=top-avatar2]")[0].children()
+        val fullName = profileBlock.select("div")[0].text()
+        val faculty = profileBlock.select("p")[0].text()
+        updateProfileStore(fullName, faculty)
     }
 
     /**
@@ -226,13 +247,36 @@ object DeviceUser {
         }
     }
 
+    fun signOut() {
+        username = null
+        password = null
+        faculty = null
+        fullName = null
+        updateCredentialsStore(null, null)
+        updateProfileStore(null, null)
+        OkHttpClientSingleton.cookieJar.clear()
+    }
+
     /**
      * Update credential in both memory and SharedPreferences
      */
-    private fun updateCredentialsStore(username: String?, password: String?) {
+    private fun updateCredentialsStore(
+        username: String?,
+        password: String?,
+    ) {
         this.username = username
         this.password = password
-        EncryptedStorage.set(SHARE_PREFS_USERNAME_KEY, username)
-        EncryptedStorage.set(SHARE_PREFS_PASSWORD_KEY, password)
+        EncryptedStorage.set(SHARED_PREFS_USERNAME_KEY, username)
+        EncryptedStorage.set(SHARED_PREFS_PASSWORD_KEY, password)
+    }
+
+    private fun updateProfileStore(
+        fullName: String?,
+        faculty: String?
+    ) {
+        this.fullName = fullName
+        this.faculty = faculty
+        EncryptedStorage.set(SHARED_PREFS_FACULTY_KEY, faculty)
+        EncryptedStorage.set(SHARED_PREFS_FULLNAME_KEY, DeviceUser.fullName)
     }
 }

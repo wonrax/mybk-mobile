@@ -9,4 +9,5 @@ object Color {
     val Grey50 = Color(0xFFA3A3A3)
     val Dark = Color(0xFF11425E)
     val Light = Color(0xFFFFFFFF)
+    val Error = Color(0xFFED4242)
 }

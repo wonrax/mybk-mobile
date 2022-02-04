@@ -9,13 +9,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wonrax.mybk.ui.component.DropdownMenu
 import com.wonrax.mybk.ui.component.FontSize
+import com.wonrax.mybk.ui.component.LoadingIcon
 import com.wonrax.mybk.ui.component.ScheduleCard
 import com.wonrax.mybk.ui.component.Text
 import com.wonrax.mybk.ui.theme.Color
@@ -36,10 +36,7 @@ fun SchedulesScreen(schedulesViewModel: SchedulesViewModel) {
         ) {
             if (schedulesViewModel.isLoading.value) {
                 // TODO make this a component
-                CircularProgressIndicator(
-                    color = Color.Primary,
-                    strokeWidth = 2.dp
-                )
+                LoadingIcon()
                 Text(text = "Đang tải dữ liệu, chờ tí...")
             } else {
                 LazyColumn(
