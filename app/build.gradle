@@ -99,7 +99,7 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.14.3'
 
     // Swipe refresh
-    implementation 'com.google.accompanist:accompanist-swiperefresh:0.15.0'
+    implementation 'com.google.accompanist:accompanist-swiperefresh:0.22.1-rc'
 
 }
 
