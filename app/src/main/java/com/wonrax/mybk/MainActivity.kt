@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.model.SSOState
 import com.wonrax.mybk.ui.MybkUI
+import com.wonrax.mybk.ui.screens.LoadingScreen
 import com.wonrax.mybk.viewmodel.SchedulesViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,7 @@ class MainActivity : ComponentActivity() {
     private val schedulesViewModel: SchedulesViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Mybk_NoActionBar)
 
         if (DeviceUser.username == null || DeviceUser.password == null) {
 
@@ -29,7 +31,10 @@ class MainActivity : ComponentActivity() {
             // in another activity
             return
         } else {
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
+                setContent {
+                    LoadingScreen()
+                }
                 // Try sign in
                 val ssoStatus = DeviceUser.signIn()
                 if (ssoStatus != SSOState.LOGGED_IN) {
@@ -37,7 +42,6 @@ class MainActivity : ComponentActivity() {
                     finish()
                 }
                 DeviceUser.getMybkToken()
-                setTheme(R.style.Mybk_NoActionBar)
                 setContent {
                     MybkUI(schedulesViewModel)
                 }
