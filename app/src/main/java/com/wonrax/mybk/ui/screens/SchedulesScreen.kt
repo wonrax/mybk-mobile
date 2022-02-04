@@ -137,9 +137,7 @@ fun dropDownMenu() {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(selectedText)
-
-                // TODO animate this if possible
-                if (expanded) Icon(Icons.ArrowUp) else Icon(Icons.ArrowDown)
+                Icon(Icons.ArrowDown)
             }
         }
         MaterialTheme(shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(24.dp))) {
