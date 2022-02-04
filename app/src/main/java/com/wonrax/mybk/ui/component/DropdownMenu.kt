@@ -39,7 +39,6 @@ fun <T> DropdownMenu(
     var expanded by remember { mutableStateOf(false) }
 //    val suggestions = listOf("Kotlin", "Java", "Dart", "Python")
 //    var selectedText by remember { mutableStateOf("Chưa chọn") }
-    var localSelectedItem by remember { mutableStateOf(selectedItem) }
 
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -60,8 +59,8 @@ fun <T> DropdownMenu(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                if (localSelectedItem != null)
-                    itemToStringRepresentation(localSelectedItem!!)?.let { Text(it, Modifier.weight(1f)) }
+                if (selectedItem != null)
+                    itemToStringRepresentation(selectedItem)?.let { Text(it, Modifier.weight(1f)) }
                 else
                     Text("Chưa chọn")
                 Icon(Icons.ArrowDown, Modifier.padding(start = 8.dp))
@@ -76,7 +75,6 @@ fun <T> DropdownMenu(
             ) {
                 items.forEach { item ->
                     DropdownMenuItem(onClick = {
-                        localSelectedItem = item
                         expanded = false
                         if (onSelectItem != null) onSelectItem(item)
                     }) {

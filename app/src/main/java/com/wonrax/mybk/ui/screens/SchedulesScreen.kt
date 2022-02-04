@@ -13,6 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.wonrax.mybk.ui.component.DropdownMenu
 import com.wonrax.mybk.ui.component.FontSize
 import com.wonrax.mybk.ui.component.LoadingIcon
@@ -39,55 +41,60 @@ fun SchedulesScreen(schedulesViewModel: SchedulesViewModel) {
                 LoadingIcon()
                 Text(text = "Đang tải dữ liệu, chờ tí...")
             } else {
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(12.dp, 72.dp)
+                SwipeRefresh(
+                    state = rememberSwipeRefreshState(schedulesViewModel.isRefreshing.value),
+                    onRefresh = { schedulesViewModel.update() },
                 ) {
-                    item {
-                        Column(
-                            modifier = Modifier.padding(12.dp, 0.dp)
-                        ) {
-                            Text(
-                                "Giờ học",
-                                fontSize = FontSize.Heading,
-                            )
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        contentPadding = PaddingValues(12.dp, 72.dp)
+                    ) {
+                        item {
+                            Column(
+                                modifier = Modifier.padding(12.dp, 0.dp)
+                            ) {
+                                Text(
+                                    "Giờ học",
+                                    fontSize = FontSize.Heading,
+                                )
 
-                            // TODO make this a function
-                            // TODO make this a state so it doesn't get updated every recomposition
-                            /* Build a calendar suitable to extract ISO8601 week numbers
+                                // TODO make this a function
+                                // TODO make this a state so it doesn't get updated every recomposition
+                                /* Build a calendar suitable to extract ISO8601 week numbers
                              * (see http://en.wikipedia.org/wiki/ISO_8601_week_number) */
-                            val calendar: Calendar = Calendar.getInstance()
-                            calendar.minimalDaysInFirstWeek = 4
-                            calendar.firstDayOfWeek = Calendar.MONDAY
+                                val calendar: Calendar = Calendar.getInstance()
+                                calendar.minimalDaysInFirstWeek = 4
+                                calendar.firstDayOfWeek = Calendar.MONDAY
 
-                            /* Set date */
-                            calendar.time = Date()
+                                /* Set date */
+                                calendar.time = Date()
 
-                            /* Get ISO8601 week number */
-                            val w = calendar.get(Calendar.WEEK_OF_YEAR)
+                                /* Get ISO8601 week number */
+                                val w = calendar.get(Calendar.WEEK_OF_YEAR)
 
-                            Text("Tuần $w", color = Color.Grey50)
+                                Text("Tuần $w", color = Color.Grey50)
+                            }
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
 
-                    if (schedulesViewModel.response.value != null) {
-                        item {
-                            DropdownMenu(
-                                items = schedulesViewModel.response.value!!,
-                                itemToStringRepresentation = { item -> item.ten_hocky },
-                                selectedItem = schedulesViewModel.response.value?.getOrNull(0),
-                                onSelectItem = {
-                                    // TODO bring this up to viewmodel
-                                    item ->
-                                    schedulesViewModel.selectedSemester.value = item
-                                }
-                            )
+                        if (schedulesViewModel.response.value != null) {
+                            item {
+                                DropdownMenu(
+                                    items = schedulesViewModel.response.value!!,
+                                    itemToStringRepresentation = { item -> item.ten_hocky },
+                                    selectedItem = schedulesViewModel.selectedSemester.value,
+                                    onSelectItem = {
+                                        // TODO bring this up to viewmodel
+                                        item ->
+                                        schedulesViewModel.selectedSemester.value = item
+                                    }
+                                )
+                            }
                         }
-                    }
-                    schedulesViewModel.selectedSemester.value?.tkb?.forEach { schedule ->
-                        item {
-                            ScheduleCard(schedule)
+                        schedulesViewModel.selectedSemester.value?.tkb?.forEach { schedule ->
+                            item {
+                                ScheduleCard(schedule)
+                            }
                         }
                     }
                 }

@@ -19,7 +19,6 @@ class MainActivity : ComponentActivity() {
     private val schedulesViewModel: SchedulesViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Mybk_NoActionBar)
 
         if (DeviceUser.username == null || DeviceUser.password == null) {
 
@@ -30,17 +29,19 @@ class MainActivity : ComponentActivity() {
             // in another activity
             return
         } else {
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.Main).launch {
                 // Try sign in
                 val ssoStatus = DeviceUser.signIn()
                 if (ssoStatus != SSOState.LOGGED_IN) {
                     startActivity(Intent(applicationContext, LoginActivity::class.java))
                     finish()
                 }
+                DeviceUser.getMybkToken()
+                setTheme(R.style.Mybk_NoActionBar)
+                setContent {
+                    MybkUI(schedulesViewModel)
+                }
             }
-        }
-        setContent {
-            MybkUI(schedulesViewModel)
         }
     }
 }

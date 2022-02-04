@@ -4,9 +4,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.wonrax.mybk.model.DeviceUser
-import com.wonrax.mybk.model.MybkState
 import com.wonrax.mybk.model.schedule.SemesterSchedule
 import com.wonrax.mybk.network.Cookuest
+import com.wonrax.mybk.network.Response
 import com.wonrax.mybk.network.await
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +20,8 @@ class SchedulesViewModel : ViewModel() {
 
     val isLoading = mutableStateOf(true)
 
+    val isRefreshing = mutableStateOf(false)
+
     val selectedSemester = mutableStateOf<SemesterSchedule?>(null)
 
     init {
@@ -30,30 +32,51 @@ class SchedulesViewModel : ViewModel() {
         response.value = value
     }
 
-    private fun update() {
+    fun update() {
+        if (!isLoading.value) isRefreshing.value = true
         CoroutineScope(Dispatchers.IO).launch {
-            val status = DeviceUser.getMybkToken()
-            val token = DeviceUser.stinfoToken
+            var token = DeviceUser.stinfoToken
 
-            if (status == MybkState.LOGGED_IN) {
-                val body: RequestBody = FormBody.Builder().apply {
-                    if (token != null) {
-                        add("_token", token)
-                    }
-                }.build()
+            if (token == null) {
+                DeviceUser.getMybkToken()
+                token = DeviceUser.stinfoToken
+            }
 
-                val scheduleResponse = Cookuest.post(
-                    "https://mybk.hcmut.edu.vn/stinfo/lichthi/ajax_lichhoc",
-                    body
-                ).await()
-                val deserializedResponse: Array<SemesterSchedule> = Gson().fromJson(scheduleResponse.body, Array<SemesterSchedule>::class.java)
+            var scheduleResponse = token?.let { requestSchedule(it) }
+
+            if (scheduleResponse != null) {
+                if (scheduleResponse.code == 302) {
+                    DeviceUser.signIn()
+                    DeviceUser.getMybkToken()
+                    token = DeviceUser.stinfoToken
+                    scheduleResponse = token?.let { requestSchedule(it) }
+                }
+            }
+
+            if (scheduleResponse != null) {
+                val deserializedResponse: Array<SemesterSchedule> =
+                    Gson().fromJson(scheduleResponse.body, Array<SemesterSchedule>::class.java)
 
                 changeResponse(deserializedResponse)
+
                 if (deserializedResponse.isNotEmpty())
                     selectedSemester.value = deserializedResponse[0]
+
                 isLoading.value = false
+                isRefreshing.value = false
             }
         }
+    }
+
+    private suspend fun requestSchedule(token: String): Response {
+        val body: RequestBody = FormBody.Builder().apply {
+            add("_token", token)
+        }.build()
+
+        return Cookuest.post(
+            "https://mybk.hcmut.edu.vn/stinfo/lichthi/ajax_lichhoc",
+            body
+        ).await()
     }
 
     private fun mockUpdate() {
