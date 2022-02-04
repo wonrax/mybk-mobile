@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
@@ -26,12 +25,7 @@ import com.wonrax.mybk.ui.theme.Color
 @Composable
 fun ProfileScreen() {
     val context = LocalContext.current as Activity
-    Surface(
-        modifier = Modifier
-            .background(Color.Grey10)
-            .fillMaxSize(),
-        color = Color.Grey10
-    ) {
+    ScreenLayout {
         Column(
             modifier = Modifier.padding(12.dp, 72.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
