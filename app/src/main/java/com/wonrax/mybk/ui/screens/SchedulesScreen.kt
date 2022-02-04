@@ -1,41 +1,21 @@
 package com.wonrax.mybk.ui.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.toSize
+import com.wonrax.mybk.ui.component.DropdownMenu
 import com.wonrax.mybk.ui.component.FontSize
-import com.wonrax.mybk.ui.component.Icon
-import com.wonrax.mybk.ui.component.Icons
 import com.wonrax.mybk.ui.component.ScheduleCard
 import com.wonrax.mybk.ui.component.Text
 import com.wonrax.mybk.ui.theme.Color
@@ -97,7 +77,7 @@ fun SchedulesScreen(schedulesViewModel: SchedulesViewModel) {
 
                     if (schedulesViewModel.response.value != null) {
                         item {
-                            dropDownMenu(
+                            DropdownMenu(
                                 items = schedulesViewModel.response.value!!,
                                 itemToStringRepresentation = { item -> item.ten_hocky },
                                 selectedItem = schedulesViewModel.response.value?.getOrNull(0),
@@ -113,66 +93,6 @@ fun SchedulesScreen(schedulesViewModel: SchedulesViewModel) {
                         item {
                             ScheduleCard(schedule)
                         }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun <T> dropDownMenu(
-    items: Array<T>,
-    itemToStringRepresentation: (T) -> String?,
-    selectedItem: T? = null,
-    onSelectItem: ((T) -> Unit)? = null
-) {
-
-    var expanded by remember { mutableStateOf(false) }
-//    val suggestions = listOf("Kotlin", "Java", "Dart", "Python")
-//    var selectedText by remember { mutableStateOf("Chưa chọn") }
-    var localSelectedItem by remember { mutableStateOf(selectedItem) }
-
-    var textfieldSize by remember { mutableStateOf(Size.Zero) }
-
-    Column {
-        Surface(
-            modifier = Modifier
-                .onGloballyPositioned { coordinates ->
-                    // This value is used to assign to the DropDown the same width
-                    textfieldSize = coordinates.size.toSize()
-                }
-                .clip(RoundedCornerShape(32.dp))
-                .clickable { expanded = !expanded }
-                .background(Color.Light)
-                .padding(24.dp, 12.dp)
-                .fillMaxWidth()
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                if (localSelectedItem != null)
-                    itemToStringRepresentation(localSelectedItem!!)?.let { Text(it, Modifier.weight(1f)) }
-                else
-                    Text("Chưa chọn")
-                Icon(Icons.ArrowDown, Modifier.padding(start = 8.dp))
-            }
-        }
-        MaterialTheme(shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(24.dp))) {
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier
-                    .width(with(LocalDensity.current) { textfieldSize.width.toDp() }),
-            ) {
-                items.forEach { item ->
-                    DropdownMenuItem(onClick = {
-                        localSelectedItem = item
-                        expanded = false
-                        if (onSelectItem != null) onSelectItem(item)
-                    }) {
-                        itemToStringRepresentation(item)?.let { Text(it) }
                     }
                 }
             }
