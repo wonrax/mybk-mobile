@@ -84,14 +84,11 @@ fun ScheduleCard(schedule: CourseSchedule) {
                     ) {
                         it.split("|").forEach { it1 ->
                             if (it1 != "") {
-                                var activeWeek = true // Course is taught on this week
                                 val week = it1.toIntOrNull()
-                                if (week == null) activeWeek = false
-
                                 item {
                                     Text(
-                                        if (activeWeek) String.format("%02d", week) else "--",
-                                        color = if (activeWeek) Color.Dark else Color.Grey30,
+                                        if (week != null) String.format("%02d", week) else "--",
+                                        color = if (week != null) Color.Dark else Color.Grey30,
                                     )
                                 }
                             }
