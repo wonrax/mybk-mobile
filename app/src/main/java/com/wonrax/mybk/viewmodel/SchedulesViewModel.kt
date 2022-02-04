@@ -32,24 +32,22 @@ class SchedulesViewModel : ViewModel() {
 
     private fun update() {
         CoroutineScope(Dispatchers.IO).launch {
-            DeviceUser.signIn()
             val status = DeviceUser.getMybkToken()
             val token = DeviceUser.stinfoToken
 
-            val body: RequestBody = FormBody.Builder().apply {
-                if (token != null) {
-                    add("_token", token)
-                }
-            }.build()
-
-            val scheduleResponse = Cookuest.post(
-                "https://mybk.hcmut.edu.vn/stinfo/lichthi/ajax_lichhoc",
-                body
-            ).await()
-
-            val deserializedResponse: Array<SemesterSchedule> = Gson().fromJson(scheduleResponse.body, Array<SemesterSchedule>::class.java)
-
             if (status == MybkState.LOGGED_IN) {
+                val body: RequestBody = FormBody.Builder().apply {
+                    if (token != null) {
+                        add("_token", token)
+                    }
+                }.build()
+
+                val scheduleResponse = Cookuest.post(
+                    "https://mybk.hcmut.edu.vn/stinfo/lichthi/ajax_lichhoc",
+                    body
+                ).await()
+                val deserializedResponse: Array<SemesterSchedule> = Gson().fromJson(scheduleResponse.body, Array<SemesterSchedule>::class.java)
+
                 changeResponse(deserializedResponse)
                 if (deserializedResponse.isNotEmpty())
                     selectedSemester.value = deserializedResponse[0]
