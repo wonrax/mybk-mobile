@@ -2,6 +2,7 @@ package com.wonrax.mybk.viewmodel
 
 import android.app.Activity
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
@@ -10,10 +11,10 @@ import androidx.lifecycle.ViewModelStoreOwner
 import com.wonrax.mybk.LoginActivity
 import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.model.SSOState
-import com.wonrax.mybk.repository.SchedulesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 
 class MainActivityViewModel : ViewModel() {
     var isInitiated = false
@@ -32,18 +33,28 @@ class MainActivityViewModel : ViewModel() {
 
         CoroutineScope(Dispatchers.IO).launch {
             // Try sign in
-            val ssoStatus = DeviceUser.signIn()
-            if (ssoStatus != SSOState.LOGGED_IN) {
-                startActivity(context, Intent(context, LoginActivity::class.java), null)
-                context.finish()
-                return@launch
+            try {
+                val ssoStatus = DeviceUser.signIn()
+                if (ssoStatus != SSOState.LOGGED_IN) {
+                    startActivity(context, Intent(context, LoginActivity::class.java), null)
+                    context.finish()
+                    return@launch
+                }
+                DeviceUser.getMybkToken()
+            } catch (e: UnknownHostException) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(
+                        context,
+                        "Không thể kết nối, đang hiển thị dữ liệu cũ.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
-            DeviceUser.getMybkToken()
             isLoading.value = false
 
             // Init screen viewmodels here
             schedulesViewModel = ViewModelProvider(context as ViewModelStoreOwner)[SchedulesViewModel::class.java]
-            schedulesViewModel!!.constructor(SchedulesRepository(context))
+            schedulesViewModel!!.constructor(context)
         }
     }
 }

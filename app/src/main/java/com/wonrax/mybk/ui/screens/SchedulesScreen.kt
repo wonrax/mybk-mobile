@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,8 +37,9 @@ fun SchedulesScreen(schedulesViewModel: SchedulesViewModel) {
                 onRefresh = { schedulesViewModel.update() },
             ) {
                 LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(12.dp, 72.dp)
+                    contentPadding = PaddingValues(8.dp, 72.dp)
                 ) {
                     item {
                         Column(

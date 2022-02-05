@@ -20,7 +20,11 @@ class SchedulesRepository(val context: Context) {
     var data = mutableStateOf<Array<SemesterSchedule>?>(null)
 
     fun getLocal(): Boolean {
-        data.value = deserialize(localRead())
+        try {
+            data.value = deserialize(localRead())
+        } catch (e: Exception) {
+            return false
+        }
         return true
     }
 
