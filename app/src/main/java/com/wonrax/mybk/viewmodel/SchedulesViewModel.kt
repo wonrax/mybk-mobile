@@ -14,6 +14,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.FormBody
 import okhttp3.RequestBody
+import kotlin.reflect.KSuspendFunction1
 
 class SchedulesViewModel : ViewModel() {
     val response = mutableStateOf<Array<SemesterSchedule>?>(null)
@@ -35,23 +36,8 @@ class SchedulesViewModel : ViewModel() {
     fun update() {
         if (!isLoading.value) isRefreshing.value = true
         CoroutineScope(Dispatchers.IO).launch {
-            var token = DeviceUser.stinfoToken
 
-            if (token == null) {
-                DeviceUser.getMybkToken()
-                token = DeviceUser.stinfoToken
-            }
-
-            var scheduleResponse = token?.let { requestSchedule(it) }
-
-            if (scheduleResponse != null) {
-                if (scheduleResponse.code == 302) {
-                    DeviceUser.signIn()
-                    DeviceUser.getMybkToken()
-                    token = DeviceUser.stinfoToken
-                    scheduleResponse = token?.let { requestSchedule(it) }
-                }
-            }
+            val scheduleResponse = tryRequest(::requestSchedule)
 
             if (scheduleResponse != null) {
                 val deserializedResponse: Array<SemesterSchedule> =
@@ -77,6 +63,31 @@ class SchedulesViewModel : ViewModel() {
             "https://mybk.hcmut.edu.vn/stinfo/lichthi/ajax_lichhoc",
             body
         ).await()
+    }
+
+    /**
+     * Try the passed in request function, retry if the token is expired
+     */
+    private suspend fun tryRequest(request: KSuspendFunction1<String, Response>): Response? {
+        var token = DeviceUser.stinfoToken
+
+        if (token == null) {
+            DeviceUser.getMybkToken()
+            token = DeviceUser.stinfoToken
+        }
+
+        var scheduleResponse = token?.let { request(it) }
+
+        if (scheduleResponse != null) {
+            if (scheduleResponse.code == 302) { // Token expired
+                DeviceUser.signIn()
+                DeviceUser.getMybkToken()
+                token = DeviceUser.stinfoToken
+                scheduleResponse = token?.let { request(it) }
+            }
+        }
+
+        return scheduleResponse
     }
 
     private fun mockUpdate() {
