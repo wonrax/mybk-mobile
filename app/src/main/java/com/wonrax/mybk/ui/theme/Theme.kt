@@ -39,6 +39,8 @@ fun MybkTheme(
 //    }
 
     MaterialTheme(
-        content = content
+        content = content,
+        typography = Typography,
+        shapes = Shapes
     )
 }

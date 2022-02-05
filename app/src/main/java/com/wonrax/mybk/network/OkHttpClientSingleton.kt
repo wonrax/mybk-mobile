@@ -10,6 +10,7 @@ import com.wonrax.mybk.BuildConfig
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import java.util.concurrent.TimeUnit
 
 /**
  * Needs to be a singleton in order to share a cookie jar, which is needed for MyBK authentication
@@ -41,6 +42,9 @@ object OkHttpClientSingleton {
             httpClient = OkHttpClient.Builder()
                 .cookieJar(cookieJar as PersistentCookieJar)
                 .apply {
+                    connectTimeout(10, TimeUnit.SECONDS)
+                    writeTimeout(10, TimeUnit.SECONDS)
+                    readTimeout(30, TimeUnit.SECONDS)
                     // Network inspection
                     if (BuildConfig.DEBUG) {
                         addNetworkInterceptor(StethoInterceptor())

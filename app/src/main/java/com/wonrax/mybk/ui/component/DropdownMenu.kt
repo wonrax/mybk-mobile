@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -66,20 +65,18 @@ fun <T> DropdownMenu(
                 Icon(Icons.ArrowDown, Modifier.padding(start = 8.dp))
             }
         }
-        MaterialTheme(shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(24.dp))) {
-            MaterialDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier
-                    .width(with(LocalDensity.current) { textfieldSize.width.toDp() }),
-            ) {
-                items.forEach { item ->
-                    DropdownMenuItem(onClick = {
-                        expanded = false
-                        if (onSelectItem != null) onSelectItem(item)
-                    }) {
-                        itemToStringRepresentation(item)?.let { Text(it) }
-                    }
+        MaterialDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current) { textfieldSize.width.toDp() }),
+        ) {
+            items.forEach { item ->
+                DropdownMenuItem(onClick = {
+                    expanded = false
+                    if (onSelectItem != null) onSelectItem(item)
+                }) {
+                    itemToStringRepresentation(item)?.let { Text(it) }
                 }
             }
         }

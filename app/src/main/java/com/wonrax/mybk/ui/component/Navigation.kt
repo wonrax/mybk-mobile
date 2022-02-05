@@ -8,12 +8,12 @@ import com.wonrax.mybk.Greeting
 import com.wonrax.mybk.ui.Screen
 import com.wonrax.mybk.ui.screens.ProfileScreen
 import com.wonrax.mybk.ui.screens.SchedulesScreen
-import com.wonrax.mybk.viewmodel.SchedulesViewModel
+import com.wonrax.mybk.viewmodel.MainActivityViewModel
 
 @Composable
 fun Navigation(
     navController: NavHostController,
-    schedulesViewModel: SchedulesViewModel
+    mainActivityViewModel: MainActivityViewModel
 ) {
     NavHost(navController = navController, startDestination = Screen.Schedules.id) {
 
@@ -24,7 +24,7 @@ fun Navigation(
         val profile = Screen.Profile
 
         composable(schedules.id) {
-            SchedulesScreen(schedulesViewModel)
+            SchedulesScreen(mainActivityViewModel.schedulesViewModel)
         }
         composable(exams.id) {
             Greeting(name = exams.title)

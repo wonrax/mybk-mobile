@@ -17,14 +17,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Mybk_NoActionBar)
 
-        if (!mainActivityViewModel.isInitiated)
-            mainActivityViewModel.constructor(this)
+        mainActivityViewModel.constructor(this)
 
         setContent {
             if (mainActivityViewModel.isLoading.value)
                 LoadingScreen()
             else
-                mainActivityViewModel.schedulesViewModel?.let { MybkUI(it) }
+                MybkUI(mainActivityViewModel)
         }
     }
 }

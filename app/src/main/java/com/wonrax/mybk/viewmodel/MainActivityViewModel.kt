@@ -2,7 +2,6 @@ package com.wonrax.mybk.viewmodel
 
 import android.app.Activity
 import android.content.Intent
-import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
@@ -16,13 +15,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
+class SnackBarState(
+    val isShowingSnackbar: Boolean,
+    val message: String? = null,
+    val onAction: (() -> Unit)? = null
+)
+
 class MainActivityViewModel : ViewModel() {
-    var isInitiated = false
+    private var isInitiated = false
     val isLoading = mutableStateOf(true)
-    var schedulesViewModel: SchedulesViewModel? = null
+    lateinit var schedulesViewModel: SchedulesViewModel
+    var snackBarState = mutableStateOf(SnackBarState(false))
 
     fun constructor(context: Activity) {
-
+        if (isInitiated) return
         isInitiated = true
 
         if (DeviceUser.username == null || DeviceUser.password == null) {
@@ -42,19 +48,20 @@ class MainActivityViewModel : ViewModel() {
                 }
                 DeviceUser.getMybkToken()
             } catch (e: UnknownHostException) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    Toast.makeText(
-                        context,
-                        "Không thể kết nối, đang hiển thị dữ liệu cũ.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+                snackBarState.value = SnackBarState(
+                    true,
+                    "Không thể kết nối. Đang hiển thị dữ liệu cũ."
+                ) { snackBarState.value = SnackBarState(false) }
             }
-            isLoading.value = false
-
             // Init screen viewmodels here
             schedulesViewModel = ViewModelProvider(context as ViewModelStoreOwner)[SchedulesViewModel::class.java]
-            schedulesViewModel!!.constructor(context)
+            schedulesViewModel.constructor(context, snackBarState)
+
+            isLoading.value = false
         }
+    }
+
+    fun dismissSnackBar() {
+        snackBarState.value = SnackBarState(false)
     }
 }
