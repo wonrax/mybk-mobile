@@ -17,7 +17,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Mybk_NoActionBar)
 
-        mainActivityViewModel.constructor(this)
+        if (!mainActivityViewModel.isInitiated)
+            mainActivityViewModel.constructor(this)
 
         setContent {
             if (mainActivityViewModel.isLoading.value)

@@ -15,11 +15,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel : ViewModel() {
-
+    var isInitiated = false
     val isLoading = mutableStateOf(true)
     var schedulesViewModel: SchedulesViewModel? = null
 
     fun constructor(context: Activity) {
+
+        isInitiated = true
 
         if (DeviceUser.username == null || DeviceUser.password == null) {
             startActivity(context, Intent(context, LoginActivity::class.java), null)
