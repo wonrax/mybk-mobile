@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import com.wonrax.mybk.LoginActivity
 import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.model.SSOState
+import com.wonrax.mybk.repository.SchedulesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,6 +43,7 @@ class MainActivityViewModel : ViewModel() {
 
             // Init screen viewmodels here
             schedulesViewModel = ViewModelProvider(context as ViewModelStoreOwner)[SchedulesViewModel::class.java]
+            schedulesViewModel!!.constructor(SchedulesRepository(context))
         }
     }
 }

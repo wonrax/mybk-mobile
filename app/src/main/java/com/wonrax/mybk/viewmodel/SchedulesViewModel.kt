@@ -1,5 +1,6 @@
 package com.wonrax.mybk.viewmodel
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.wonrax.mybk.model.schedule.SemesterSchedule
@@ -9,8 +10,8 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class SchedulesViewModel : ViewModel() {
-    private val repository = SchedulesRepository()
-    val data = repository.data
+    private lateinit var repository: SchedulesRepository
+    lateinit var data: MutableState<Array<SemesterSchedule>?>
 
     val isLoading = mutableStateOf(true)
 
@@ -18,7 +19,14 @@ class SchedulesViewModel : ViewModel() {
 
     val selectedSemester = mutableStateOf<SemesterSchedule?>(null)
 
-    init {
+    fun constructor(repository: SchedulesRepository) {
+        this.repository = repository
+        data = this.repository.data
+        val isCached = this.repository.getLocal()
+        if (isCached) {
+            selectedSemester.value = data.value!![0]
+            isLoading.value = false
+        }
         update()
     }
 
