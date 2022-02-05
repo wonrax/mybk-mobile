@@ -68,10 +68,10 @@ fun SchedulesScreen(schedulesViewModel: SchedulesViewModel) {
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
-                    if (schedulesViewModel.response.value != null) {
+                    if (schedulesViewModel.data.value != null) {
                         item {
                             DropdownMenu(
-                                items = schedulesViewModel.response.value!!,
+                                items = schedulesViewModel.data.value!!,
                                 itemToStringRepresentation = { item -> item.ten_hocky },
                                 selectedItem = schedulesViewModel.selectedSemester.value,
                                 onSelectItem = {
