@@ -10,9 +10,9 @@ import com.wonrax.mybk.network.await
 import okhttp3.FormBody
 import okhttp3.RequestBody
 
-class SchedulesRepository(
+class ExamsRepository(
     override val context: Context,
-    override val storageFileName: String = "mybk_schedules.txt"
+    override val storageFileName: String = "mybk_exams.txt"
 ) : BaseRepository<SemesterSchedule> {
 
     override var data = mutableStateOf<Array<SemesterSchedule>?>(null)
@@ -27,7 +27,7 @@ class SchedulesRepository(
         }.build()
 
         return Cookuest.post(
-            "https://mybk.hcmut.edu.vn/stinfo/lichthi/ajax_lichhoc",
+            "https://mybk.hcmut.edu.vn/stinfo/lichthi/ajax_lichthi",
             body
         ).await()
     }

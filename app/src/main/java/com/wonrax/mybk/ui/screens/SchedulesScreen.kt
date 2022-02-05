@@ -74,7 +74,7 @@ fun SchedulesScreen(schedulesViewModel: SchedulesViewModel) {
                         item {
                             DropdownMenu(
                                 items = schedulesViewModel.data.value!!,
-                                itemToStringRepresentation = { item -> item.ten_hocky },
+                                itemToStringRepresentation = { item -> item.ten_hocky }, // TODO Shorten this string
                                 selectedItem = schedulesViewModel.selectedSemester.value,
                                 onSelectItem = {
                                     // TODO bring this up to viewmodel
