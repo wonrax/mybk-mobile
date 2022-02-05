@@ -6,7 +6,7 @@
   <path
       android:pathData="M21.9998,12.0005C21.9998,17.1095 17.8588,21.2505 12.7498,21.2505C7.6408,21.2505 3.4998,17.1095 3.4998,12.0005C3.4998,6.8915 7.6408,2.7505 12.7498,2.7505C17.8588,2.7505 21.9998,6.8915 21.9998,12.0005Z"
       android:strokeLineJoin="round"
-      android:strokeWidth="2"
+      android:strokeWidth="1.5"
       android:fillColor="#00000000"
       android:fillType="evenOdd"
       android:strokeColor="#11425E"
@@ -14,7 +14,7 @@
   <path
       android:pathData="M16.1814,14.9429L12.4114,12.6939V7.8469"
       android:strokeLineJoin="round"
-      android:strokeWidth="2"
+      android:strokeWidth="1.5"
       android:fillColor="#00000000"
       android:strokeColor="#11425E"
       android:strokeLineCap="round"/>
