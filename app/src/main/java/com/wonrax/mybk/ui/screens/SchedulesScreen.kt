@@ -14,6 +14,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.wonrax.mybk.ui.component.DropdownMenu
 import com.wonrax.mybk.ui.component.FontSize
+import com.wonrax.mybk.ui.component.FontWeight
 import com.wonrax.mybk.ui.component.ScheduleCard
 import com.wonrax.mybk.ui.component.Text
 import com.wonrax.mybk.ui.theme.Color
@@ -44,6 +45,7 @@ fun SchedulesScreen(schedulesViewModel: SchedulesViewModel) {
                         ) {
                             Text(
                                 "Giờ học",
+                                fontWeight = FontWeight.Medium,
                                 fontSize = FontSize.Heading,
                             )
 

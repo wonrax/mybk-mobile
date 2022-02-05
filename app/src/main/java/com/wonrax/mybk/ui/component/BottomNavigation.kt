@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.wonrax.mybk.ui.Screen
@@ -61,9 +62,10 @@ fun BottomNavigation(navController: NavHostController, onItemClick: (String) -> 
                             screen.title,
                             fontSize = FontSize.Small,
                             color = iconColor,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.Medium,
                             textAlign = TextAlign.Center,
-                            softWrap = false
+                            softWrap = false,
+                            letterSpacing = (-0.5).sp
                         )
                     }
                 }

@@ -28,5 +28,6 @@ import com.wonrax.mybk.R
 
 val Inter = FontFamily(
     Font(R.font.inter_regular),
-    Font(R.font.inter_bold, FontWeight.Bold)
+    Font(R.font.inter_bold, FontWeight.Bold),
+    Font(R.font.inter_medium, FontWeight.Medium)
 )
