@@ -1,4 +1,4 @@
-package com.wonrax.mybk.ui.screens
+package com.wonrax.mybk.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

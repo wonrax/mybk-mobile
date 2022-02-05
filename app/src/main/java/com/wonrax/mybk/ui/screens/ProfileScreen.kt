@@ -19,6 +19,7 @@ import com.wonrax.mybk.LoginActivity
 import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.ui.component.FontSize
 import com.wonrax.mybk.ui.component.FontWeight
+import com.wonrax.mybk.ui.component.ScreenLayout
 import com.wonrax.mybk.ui.component.Text
 import com.wonrax.mybk.ui.theme.Color
 
