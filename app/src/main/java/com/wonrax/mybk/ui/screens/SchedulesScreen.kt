@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.wonrax.mybk.ui.component.DropdownMenu
@@ -20,6 +23,8 @@ import java.util.Date
 
 @Composable
 fun SchedulesScreen(mybkViewModel: MybkViewModel) {
+    val weekOfYear by remember { mutableStateOf(getWeekOfYear()) }
+
     MainScreenLayout(
         isLoading = mybkViewModel.isLoading.value,
         isRefreshing = mybkViewModel.isRefreshing.value,
@@ -35,21 +40,7 @@ fun SchedulesScreen(mybkViewModel: MybkViewModel) {
                     fontSize = FontSize.Heading,
                 )
 
-                // TODO make this a function
-                // TODO make this a state so it doesn't get updated every recomposition
-                                /* Build a calendar suitable to extract ISO8601 week numbers
-                             * (see http://en.wikipedia.org/wiki/ISO_8601_week_number) */
-                val calendar: Calendar = Calendar.getInstance()
-                calendar.minimalDaysInFirstWeek = 4
-                calendar.firstDayOfWeek = Calendar.MONDAY
-
-                /* Set date */
-                calendar.time = Date()
-
-                /* Get ISO8601 week number */
-                val w = calendar.get(Calendar.WEEK_OF_YEAR)
-
-                Text("Tuần $w", color = Color.Grey50)
+                Text("Tuần $weekOfYear", color = Color.Grey50)
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -74,4 +65,18 @@ fun SchedulesScreen(mybkViewModel: MybkViewModel) {
             }
         }
     }
+}
+
+fun getWeekOfYear(): Int {
+    /* Build a calendar suitable to extract ISO8601 week numbers
+     * (see http://en.wikipedia.org/wiki/ISO_8601_week_number) */
+    val calendar: Calendar = Calendar.getInstance()
+    calendar.minimalDaysInFirstWeek = 4
+    calendar.firstDayOfWeek = Calendar.MONDAY
+
+    /* Set date */
+    calendar.time = Date()
+
+    /* Get ISO8601 week number */
+    return calendar.get(Calendar.WEEK_OF_YEAR)
 }
