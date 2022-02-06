@@ -50,6 +50,7 @@ class MybkViewModel : ViewModel() {
 
         if (isExamsCached && isSchedulesCached) {
             selectedScheduleSemester.value = schedulesData.value!![0]
+            selectedExamSemester.value = examsData.value!![0]
             isLoading.value = false
         }
 
