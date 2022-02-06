@@ -30,13 +30,27 @@ fun ScheduleCard(schedule: CourseSchedule) {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            schedule.ten_mh?.let {
-                Text(
-                    it,
-                    fontSize = FontSize.Large,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Dark
-                )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                schedule.ten_mh?.let {
+                    Text(
+                        it,
+                        fontSize = FontSize.Large,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Dark
+                    )
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    schedule.ma_mh?.let {
+                        Text(
+                            it,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    schedule.nhomto?.let { Text(it) }
+                    schedule.so_tin_chi?.let { Text("${it}TC") }
+                }
             }
 
             Column(
@@ -108,14 +122,14 @@ fun Preview() {
         giobd = "7:00",
         giokt = "8:50",
 //        hk_nh = "20212",
-//        ma_mh = "CO69420",
+        ma_mh = "CO69420",
 //        ma_nhom = "L01",
         macoso = "BK-CS1",
 //        mssv = "1812069",
 //        ngay_cap_nhat = "2022-01-25T18:56:24.000+0000",
-//        nhomto = "L01",
+        nhomto = "L01",
         phong1 = "HANGOUT_MEET",
-//        so_tin_chi = 3,
+        so_tin_chi = 3,
 //        tc_hp = 3f,
 //        ten_hocky = "Học kỳ 2 Năm học 2021 - 2022",
         ten_mh = "DE CUONG LUAN VAN TOT NGHIEP KHOA HOC MAY TINH",

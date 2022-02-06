@@ -210,11 +210,15 @@ object DeviceUser {
     }
 
     private fun getProfileInfo(responseBody: String) {
-        val doc: Document = Jsoup.parse(responseBody)
-        val profileBlock = doc.select("div[class=top-avatar2]")[0].children()
-        val fullName = profileBlock.select("div")[0].text()
-        val faculty = profileBlock.select("p")[0].text()
-        updateProfileStore(fullName, faculty)
+        try {
+            val doc: Document = Jsoup.parse(responseBody)
+            val profileBlock = doc.select("div[class=top-avatar2]")[0].children()
+            val fullName = profileBlock.select("div")[0].text()
+            val faculty = profileBlock.select("p")[0].text()
+            updateProfileStore(fullName, faculty)
+        } catch (e: Exception) {
+            println(e)
+        }
     }
 
     /**
