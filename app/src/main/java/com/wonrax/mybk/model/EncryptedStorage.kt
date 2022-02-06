@@ -19,6 +19,10 @@ object EncryptedStorage {
                 return
             }
 
+            // TODO consider remove the Android KeyStore since it is known to be buggy
+            // Read: https://github.com/google/tink/issues/504
+            // Read: https://github.com/google/tink/issues/413
+
             val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
             val mainKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
 

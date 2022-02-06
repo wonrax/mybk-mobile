@@ -83,6 +83,7 @@ enum class MybkState {
     UNKNOWN
 }
 
+// TODO Consider making this a class to avoid concurrent (coroutines) problems
 object DeviceUser {
     var username: String? = null
 
