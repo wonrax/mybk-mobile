@@ -23,10 +23,15 @@ class ExamsRepository(
 
     override fun deserialize(data: String): Array<SemesterExam> {
         val gson = Gson()
-        val list: MutableList<SemesterExam> = mutableListOf()
+        val semesters: MutableList<SemesterExam> = mutableListOf()
+
+        /* Because the response contains unknown fields,
+        we'll need to convert them into an Json array */
         try {
-            val examsJson: JsonObject = JsonParser.parseString(data.replace("\n", "")).asJsonObject
-            for ((key, value) in examsJson.entrySet()) {
+            val examsJson: JsonObject = JsonParser.parseString(data).asJsonObject
+            /* The "lichthi" field is sometimes an Json array and sometimes an Json object.
+            So I have to manually convert object "lichthi" to array "lichthi" */
+            for ((_, value) in examsJson.entrySet()) {
                 val v = value as JsonObject
                 if (v["lichthi"].isJsonObject) {
                     val courseExams: MutableList<JsonElement> = mutableListOf()
@@ -36,13 +41,14 @@ class ExamsRepository(
                     v.remove("lichthi")
                     v.add("lichthi", gson.toJsonTree(courseExams).asJsonArray)
                 }
+
                 val obj: SemesterExam = gson.fromJson(v, SemesterExam::class.java)
-                list.add(obj)
+                semesters.add(obj)
             }
         } catch (e: Exception) {
             throw JsonSyntaxException("Wrong data schemes.")
         }
-        return list.toTypedArray()
+        return semesters.toTypedArray()
     }
 
     override suspend fun requestData(token: String): Response {
