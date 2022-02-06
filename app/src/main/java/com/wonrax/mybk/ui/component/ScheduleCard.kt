@@ -1,18 +1,11 @@
 package com.wonrax.mybk.ui.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wonrax.mybk.model.schedule.CourseSchedule
@@ -20,92 +13,82 @@ import com.wonrax.mybk.ui.theme.Color
 
 @Composable
 fun ScheduleCard(schedule: CourseSchedule) {
-    Surface(
-        modifier = Modifier
-            .clip(RoundedCornerShape(32.dp))
-            .background(Color.Light)
-            .padding(24.dp)
-            .fillMaxWidth()
-    ) {
+    CardLayout {
         Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                schedule.ten_mh?.let {
+            schedule.ten_mh?.let {
+                Text(
+                    it,
+                    fontSize = FontSize.Large,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Dark
+                )
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                schedule.ma_mh?.let {
                     Text(
                         it,
-                        fontSize = FontSize.Large,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Dark
+                        fontWeight = FontWeight.Bold
                     )
                 }
-                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    schedule.ma_mh?.let {
-                        Text(
-                            it,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    schedule.nhomto?.let { Text(it) }
-                    schedule.so_tin_chi?.let { Text("${it}TC") }
-                }
+                schedule.nhomto?.let { Text(it) }
+                schedule.so_tin_chi?.let { Text("${it}TC") }
             }
+        }
 
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // Course start & end time
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                // Course start & end time
+                Icon(Icons.TimeCircle)
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.TimeCircle)
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        schedule.thu1?.let { Text("Thứ $it".uppercase(), fontWeight = FontWeight.Bold) }
-                        if (schedule.giobd != null && schedule.giokt != null) {
-                            Text("${schedule.giobd} - ${schedule.giokt}", color = Color.Primary)
-                        }
-                    }
-                }
-
-                // Course location
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(Icons.Location)
-                    Column {
-                        schedule.phong1?.let { Text(it, fontWeight = FontWeight.Bold) }
-                        schedule.macoso?.let { Text(it) }
+                    schedule.thu1?.let { Text("Thứ $it".uppercase(), fontWeight = FontWeight.Bold) }
+                    if (schedule.giobd != null && schedule.giokt != null) {
+                        Text("${schedule.giobd} - ${schedule.giokt}", color = Color.Primary)
                     }
                 }
             }
 
-            schedule.tuan_hoc?.let { it ->
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+            // Course location
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(Icons.Location)
+                Column {
+                    schedule.phong1?.let { Text(it, fontWeight = FontWeight.Bold) }
+                    schedule.macoso?.let { Text(it) }
+                }
+            }
+        }
+
+        schedule.tuan_hoc?.let { it ->
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Tuần", fontWeight = FontWeight.Medium)
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Tuần", fontWeight = FontWeight.Medium)
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        it.split("|").forEach { it1 ->
-                            if (it1 != "") {
-                                val week = it1.toIntOrNull()
-                                item {
-                                    Text(
-                                        if (week != null) String.format("%02d", week) else "--",
-                                        color = if (week != null) Color.Dark else Color.Grey30,
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                }
+                    it.split("|").forEach { it1 ->
+                        if (it1 != "") {
+                            val week = it1.toIntOrNull()
+                            item {
+                                Text(
+                                    if (week != null) String.format("%02d", week) else "--",
+                                    color = if (week != null) Color.Dark else Color.Grey30,
+                                    fontWeight = FontWeight.Medium
+                                )
                             }
                         }
                     }

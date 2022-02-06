@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.wonrax.mybk.ui.component.DropdownMenu
+import com.wonrax.mybk.ui.component.ExamCard
 import com.wonrax.mybk.ui.component.FontSize
 import com.wonrax.mybk.ui.component.FontWeight
 import com.wonrax.mybk.ui.component.MainScreenLayout
@@ -30,9 +32,24 @@ fun ExamsScreen(mybkViewModel: MybkViewModel) {
             }
         }
 
-        mybkViewModel.examsData.value?.forEach {
+        if (mybkViewModel.examsData.value != null) {
             item {
-                it.ten_hocky?.let { it1 -> Text(it1) }
+                DropdownMenu(
+                    items = mybkViewModel.examsData.value!!,
+                    itemToStringRepresentation = { item -> item.ten_hocky }, // TODO Shorten this string
+                    selectedItem = mybkViewModel.selectedExamSemester.value,
+                    onSelectItem = {
+                        // TODO bring this up to viewmodel
+                        item ->
+                        mybkViewModel.selectedExamSemester.value = item
+                    }
+                )
+            }
+        }
+
+        mybkViewModel.selectedExamSemester.value?.lichthi?.forEach {
+            item {
+                ExamCard(courseExam = it)
             }
         }
     }
