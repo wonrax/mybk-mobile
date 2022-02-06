@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.wonrax.mybk.Greeting
 import com.wonrax.mybk.ui.Screen
 import com.wonrax.mybk.ui.screens.ExamsScreen
+import com.wonrax.mybk.ui.screens.GradesScreen
 import com.wonrax.mybk.ui.screens.ProfileScreen
 import com.wonrax.mybk.ui.screens.SchedulesScreen
 import com.wonrax.mybk.viewmodel.MainActivityViewModel
@@ -31,7 +31,7 @@ fun Navigation(
             ExamsScreen(mainActivityViewModel.mybkViewModel)
         }
         composable(transcript.id) {
-            Greeting(name = transcript.title)
+            GradesScreen(mainActivityViewModel.mybkViewModel)
         }
         composable(profile.id) {
             ProfileScreen()
