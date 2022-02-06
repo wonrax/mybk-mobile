@@ -14,16 +14,16 @@ import com.wonrax.mybk.ui.component.MainScreenLayout
 import com.wonrax.mybk.ui.component.ScheduleCard
 import com.wonrax.mybk.ui.component.Text
 import com.wonrax.mybk.ui.theme.Color
-import com.wonrax.mybk.viewmodel.SchedulesViewModel
+import com.wonrax.mybk.viewmodel.MybkViewModel
 import java.util.Calendar
 import java.util.Date
 
 @Composable
-fun SchedulesScreen(schedulesViewModel: SchedulesViewModel) {
+fun SchedulesScreen(mybkViewModel: MybkViewModel) {
     MainScreenLayout(
-        isLoading = schedulesViewModel.isLoading.value,
-        isRefreshing = schedulesViewModel.isRefreshing.value,
-        onRefresh = { schedulesViewModel.update() }
+        isLoading = mybkViewModel.isLoading.value,
+        isRefreshing = mybkViewModel.isRefreshing.value,
+        onRefresh = { mybkViewModel.update() }
     ) {
         item {
             Column(
@@ -54,21 +54,21 @@ fun SchedulesScreen(schedulesViewModel: SchedulesViewModel) {
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        if (schedulesViewModel.data.value != null) {
+        if (mybkViewModel.schedulesData.value != null) {
             item {
                 DropdownMenu(
-                    items = schedulesViewModel.data.value!!,
+                    items = mybkViewModel.schedulesData.value!!,
                     itemToStringRepresentation = { item -> item.ten_hocky }, // TODO Shorten this string
-                    selectedItem = schedulesViewModel.selectedSemester.value,
+                    selectedItem = mybkViewModel.selectedScheduleSemester.value,
                     onSelectItem = {
                         // TODO bring this up to viewmodel
                         item ->
-                        schedulesViewModel.selectedSemester.value = item
+                        mybkViewModel.selectedScheduleSemester.value = item
                     }
                 )
             }
         }
-        schedulesViewModel.selectedSemester.value?.tkb?.forEach { schedule ->
+        mybkViewModel.selectedScheduleSemester.value?.tkb?.forEach { schedule ->
             item {
                 ScheduleCard(schedule)
             }

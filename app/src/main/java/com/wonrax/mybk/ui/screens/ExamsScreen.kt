@@ -9,14 +9,14 @@ import com.wonrax.mybk.ui.component.FontSize
 import com.wonrax.mybk.ui.component.FontWeight
 import com.wonrax.mybk.ui.component.MainScreenLayout
 import com.wonrax.mybk.ui.component.Text
-import com.wonrax.mybk.viewmodel.SchedulesViewModel
+import com.wonrax.mybk.viewmodel.MybkViewModel
 
 @Composable
-fun ExamsScreen(examsViewModel: SchedulesViewModel) {
+fun ExamsScreen(mybkViewModel: MybkViewModel) {
     MainScreenLayout(
-        isLoading = examsViewModel.isLoading.value,
-        isRefreshing = examsViewModel.isRefreshing.value,
-        onRefresh = { examsViewModel.update() }
+        isLoading = mybkViewModel.isLoading.value,
+        isRefreshing = mybkViewModel.isRefreshing.value,
+        onRefresh = { mybkViewModel.update() }
     ) {
         item {
             Column(
@@ -27,6 +27,12 @@ fun ExamsScreen(examsViewModel: SchedulesViewModel) {
                     fontWeight = FontWeight.Medium,
                     fontSize = FontSize.Heading,
                 )
+            }
+        }
+
+        mybkViewModel.examsData.value?.forEach {
+            item {
+                it.ten_hocky?.let { it1 -> Text(it1) }
             }
         }
     }

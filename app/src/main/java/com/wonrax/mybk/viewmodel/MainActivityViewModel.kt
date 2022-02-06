@@ -24,7 +24,7 @@ class SnackBarState(
 class MainActivityViewModel : ViewModel() {
     private var isInitiated = false
     val isLoading = mutableStateOf(true)
-    lateinit var schedulesViewModel: SchedulesViewModel
+    lateinit var mybkViewModel: MybkViewModel
     var snackBarState = mutableStateOf(SnackBarState(false))
 
     fun constructor(context: Activity) {
@@ -54,8 +54,8 @@ class MainActivityViewModel : ViewModel() {
                 ) { snackBarState.value = SnackBarState(false) }
             }
             // Init screen viewmodels here
-            schedulesViewModel = ViewModelProvider(context as ViewModelStoreOwner)[SchedulesViewModel::class.java]
-            schedulesViewModel.constructor(context, snackBarState)
+            mybkViewModel = ViewModelProvider(context as ViewModelStoreOwner)[MybkViewModel::class.java]
+            mybkViewModel.constructor(context, snackBarState)
 
             isLoading.value = false
         }
