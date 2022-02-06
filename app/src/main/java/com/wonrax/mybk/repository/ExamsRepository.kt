@@ -56,7 +56,7 @@ class ExamsRepository(
             add("_token", token)
         }.build()
 
-        return Cookuest.post(
+        return Cookuest().post(
             "https://mybk.hcmut.edu.vn/stinfo/lichthi/ajax_lichthi",
             body
         ).await()

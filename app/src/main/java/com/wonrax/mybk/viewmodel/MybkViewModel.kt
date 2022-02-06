@@ -9,8 +9,11 @@ import com.wonrax.mybk.model.exam.SemesterExam
 import com.wonrax.mybk.model.schedule.SemesterSchedule
 import com.wonrax.mybk.repository.ExamsRepository
 import com.wonrax.mybk.repository.SchedulesRepository
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
@@ -41,40 +44,55 @@ class MybkViewModel : ViewModel() {
         schedulesData = schedulesRepository.data
         examsData = examsRepository.data
 
+        // Get cached data
         val isSchedulesCached = this.schedulesRepository.getLocal()
-        val isExamsCached = this.schedulesRepository.getLocal()
+        val isExamsCached = this.examsRepository.getLocal()
 
         if (isExamsCached && isSchedulesCached) {
             selectedScheduleSemester.value = schedulesData.value!![0]
             isLoading.value = false
         }
+
+        // Get latest update from remote
         update()
     }
 
     fun update() {
         if (!isLoading.value) isRefreshing.value = true
 
-        CoroutineScope(IO).launch {
-            try {
-                // TODO make this concurrent
-                schedulesRepository.getRemote()
-                examsRepository.getRemote()
-                if (schedulesData.value != null) {
-                    selectedScheduleSemester.value = schedulesData.value!![0]
-                }
-                if (examsData.value != null) {
-                    selectedExamSemester.value = examsData.value!![0]
-                }
-            } catch (e: UnknownHostException) {
+        val handler = CoroutineExceptionHandler { _, exception ->
+            isLoading.value = false
+            isRefreshing.value = false
+            if (exception is UnknownHostException) {
                 // DO SOMETHING WHEN THERES NO INTERNET CONNECTION
-            } catch (e: JsonSyntaxException) {
+            } else if (exception is JsonSyntaxException) {
                 snackBarState.value = SnackBarState(
                     true,
                     "Lỗi xử lý dữ liệu: Dữ liệu trả về không đúng định dạng."
                 )
-            } catch (e: Exception) {
-                snackBarState.value = SnackBarState(true, e.message)
+            } else {
+                snackBarState.value = SnackBarState(true, exception.message)
             }
+        }
+
+        CoroutineScope(Dispatchers.IO).launch(handler) {
+            val l = listOf(
+                async {
+                    schedulesRepository.getRemote()
+                    if (schedulesData.value != null) {
+                        selectedScheduleSemester.value = schedulesData.value!![0]
+                    }
+                },
+                async {
+                    examsRepository.getRemote()
+                    if (examsData.value != null) {
+                        selectedExamSemester.value = examsData.value!![0]
+                    }
+                }
+            )
+
+            l.awaitAll()
+
             isLoading.value = false
             isRefreshing.value = false
         }

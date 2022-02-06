@@ -16,7 +16,7 @@ interface BaseRepository<D> {
 
     fun getLocal(): Boolean {
         try {
-            data.value = deserialize(localRead())
+            this.data.value = deserialize(localRead())
         } catch (e: Exception) {
             return false
         }
@@ -27,15 +27,15 @@ interface BaseRepository<D> {
         val scheduleResponse = tryRequest(this::requestData)
 
         if (scheduleResponse != null) {
-            val deserializedResponse = deserialize(scheduleResponse.body)
-            data.value = deserializedResponse
-            localStore(scheduleResponse.body)
+            val deserializedResponse = this.deserialize(scheduleResponse.body)
+            this.data.value = deserializedResponse
+            this.localStore(scheduleResponse.body)
         }
     }
 
     fun deserialize(data: String): Array<D>?
 
-    private suspend fun tryRequest(request: KSuspendFunction1<String, Response>): Response? {
+    suspend fun tryRequest(request: KSuspendFunction1<String, Response>): Response? {
         var token = DeviceUser.stinfoToken
 
         if (token == null) {
@@ -60,13 +60,13 @@ interface BaseRepository<D> {
 
     suspend fun requestData(token: String): Response
 
-    private fun localStore(data: String) {
-        val file = File(context.filesDir, storageFileName)
+    fun localStore(data: String) {
+        val file = File(this.context.filesDir, this.storageFileName)
         file.writeText(data)
     }
 
     private fun localRead(): String {
-        val file = File(context.filesDir, storageFileName)
+        val file = File(this.context.filesDir, this.storageFileName)
         return file.readText()
     }
 }

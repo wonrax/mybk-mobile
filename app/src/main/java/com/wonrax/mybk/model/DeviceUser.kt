@@ -111,7 +111,7 @@ object DeviceUser {
         username: String,
         password: String
     ): SSOState {
-        val ssoResponse = Cookuest.get(SSO_URL).await()
+        val ssoResponse = Cookuest().get(SSO_URL).await()
         val checkLoggedIn = checkSSOLoginStatus(ssoResponse)
 
         return when (checkLoggedIn.loginStatus) {
@@ -124,7 +124,7 @@ object DeviceUser {
                     add("username", username)
                     add("password", password)
                 }.build()
-                val ssoWithCredentialResponse = Cookuest.post(
+                val ssoWithCredentialResponse = Cookuest().post(
                     SSO_URL,
                     requestBody = body
                 ).await()
@@ -172,7 +172,7 @@ object DeviceUser {
      * Get mybk access token by calling SSO login URL with mybk redirect parameter.
      */
     suspend fun getMybkToken(): MybkState {
-        val ssoResponse = Cookuest.get(SSO_MYBK_REDIRECT_URL).await()
+        val ssoResponse = Cookuest().get(SSO_MYBK_REDIRECT_URL).await()
 
         // Normally, OkHttp will follow the redirect automatically, but newer
         // android API versions doesn't permit HTTP traffic, so we've got to do the manual way:
@@ -182,7 +182,7 @@ object DeviceUser {
             val redirectTicketURL: String =
                 ssoResponse.headers["Location"] ?: ""
             // Verify ticket
-            Cookuest.get(HttpUtils.httpToHttpsURL(redirectTicketURL)).await()
+            Cookuest().get(HttpUtils.httpToHttpsURL(redirectTicketURL)).await()
             getStinfoToken()
         } else { // Invalid cookies, require SSO re-login
             MybkState.SSO_REQUIRED
@@ -190,7 +190,7 @@ object DeviceUser {
     }
 
     private suspend fun getStinfoToken(): MybkState {
-        val response = Cookuest.get(STINFO_URL).await()
+        val response = Cookuest().get(STINFO_URL).await()
 
         val token = HtmlUtils.getHtmlElementValue(
             input = response.body,
