@@ -60,9 +60,10 @@ interface BaseRepository<D> {
 
     suspend fun requestData(token: String): Response
 
-    fun localStore(data: String) {
+    fun localStore(data: String?) {
         val file = File(this.context.filesDir, this.storageFileName)
-        file.writeText(data)
+        if (data == null) file.delete()
+        else file.writeText(data)
     }
 
     private fun localRead(): String {

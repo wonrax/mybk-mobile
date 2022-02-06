@@ -49,7 +49,7 @@ fun ProfileScreen() {
                 modifier = Modifier
                     .clip(RoundedCornerShape(16.dp))
                     .clickable {
-                        DeviceUser.signOut()
+                        DeviceUser.signOut(context)
                         startActivity(context, Intent(context, LoginActivity::class.java), null)
                         context.finish()
                     }
