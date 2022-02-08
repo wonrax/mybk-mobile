@@ -30,7 +30,7 @@ fun GradeCard(courseGrade: CourseGrade) {
                     )
                 }
                 courseGrade.nhomto?.let { Text(it) }
-                courseGrade.so_tin_chi?.let { Text(it) }
+                courseGrade.so_tin_chi?.let { Text("${it}TC") }
             }
         }
 
@@ -38,18 +38,26 @@ fun GradeCard(courseGrade: CourseGrade) {
             GradeSection(title = "Điểm thành phần") { Text(it, fontWeight = FontWeight.Medium) }
         }
 
-        courseGrade.diem_thi?.let {
-            GradeSection(title = "Điểm thi") { Text(it, fontWeight = FontWeight.Medium) }
-        }
+        Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+            courseGrade.diem_thi?.let {
+                GradeSection(title = "Điểm thi") {
+                    Text(
+                        it,
+                        fontSize = FontSize.Large,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
 
-        courseGrade.diem_tong_ket?.let {
-            GradeSection(title = "Điểm tổng kết") {
-                Text(
-                    it,
-                    fontSize = FontSize.Large,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Primary
-                )
+            courseGrade.diem_tong_ket?.let {
+                GradeSection(title = "Điểm tổng kết") {
+                    Text(
+                        it,
+                        fontSize = FontSize.Large,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Primary
+                    )
+                }
             }
         }
     }
