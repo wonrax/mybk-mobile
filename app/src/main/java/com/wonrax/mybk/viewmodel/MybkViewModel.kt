@@ -103,7 +103,7 @@ class MybkViewModel : ViewModel() {
                 },
                 async {
                     gradesRepository.getRemote()
-                    if (examsData.value != null) {
+                    if (gradesData.value != null) {
                         selectedGradeSemester.value = gradesData.value!![0]
                     }
                 }
