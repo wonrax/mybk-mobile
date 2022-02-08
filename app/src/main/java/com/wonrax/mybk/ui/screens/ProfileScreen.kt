@@ -87,7 +87,7 @@ fun ProfileScreen() {
                     Text("Về Mybk Mobile", fontSize = FontSize.Large, fontWeight = FontWeight.Medium)
                     Text("Phiên bản 0.9.1-a", color = Color.Grey50)
                     // TODO real url to policy
-                    TextLink(context, "Điều khoản sử dụng", "https://github.com/wonrax/mybk-mobile")
+                    TextLink(context, "Điều khoản sử dụng", "https://github.com/wonrax/mybk-mobile/blob/main/APP-POLICIES.md")
                     TextLink(context, "Mybk Mobile trên GitHub", "https://github.com/wonrax/mybk-mobile")
                 }
             }
