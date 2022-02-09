@@ -31,7 +31,7 @@ class MybkViewModel : ViewModel() {
 
     val isLoading = mutableStateOf(true)
 
-    val isRefreshing = mutableStateOf(false)
+    val isRefreshing = mutableStateOf(true)
 
     // The selected semester to view on the screen
     val selectedScheduleSemester = mutableStateOf<SemesterSchedule?>(null)
@@ -64,9 +64,6 @@ class MybkViewModel : ViewModel() {
             selectedGradeSemester.value = gradesData.value!![0]
             isLoading.value = false
         }
-
-        // Get latest update from remote
-        update()
     }
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->

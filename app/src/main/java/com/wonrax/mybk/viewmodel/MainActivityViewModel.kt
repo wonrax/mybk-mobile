@@ -23,7 +23,6 @@ class SnackBarState(
 
 class MainActivityViewModel : ViewModel() {
     private var isInitiated = false
-    val isLoading = mutableStateOf(true)
     lateinit var mybkViewModel: MybkViewModel
     var snackBarState = mutableStateOf(SnackBarState(false))
 
@@ -36,6 +35,10 @@ class MainActivityViewModel : ViewModel() {
             context.finish()
             return
         }
+
+        // Init screen viewmodels here
+        mybkViewModel = ViewModelProvider(context as ViewModelStoreOwner)[MybkViewModel::class.java]
+        mybkViewModel.constructor(context, snackBarState)
 
         CoroutineScope(Dispatchers.IO).launch {
             // Try sign in
@@ -58,11 +61,8 @@ class MainActivityViewModel : ViewModel() {
                     e.message
                 )
             }
-            // Init screen viewmodels here
-            mybkViewModel = ViewModelProvider(context as ViewModelStoreOwner)[MybkViewModel::class.java]
-            mybkViewModel.constructor(context, snackBarState)
 
-            isLoading.value = false
+            mybkViewModel.update()
         }
     }
 
