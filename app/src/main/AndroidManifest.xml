@@ -16,7 +16,8 @@
         <activity
             android:name="com.wonrax.mybk.LoginActivity"
             android:exported="false"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name="com.wonrax.mybk.MainActivity"
             android:exported="true"

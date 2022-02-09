@@ -1,12 +1,9 @@
 package com.wonrax.mybk.ui.screens
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,18 +15,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import com.wonrax.mybk.APP_VERSION
 import com.wonrax.mybk.LoginActivity
+import com.wonrax.mybk.POLICIES_URL
+import com.wonrax.mybk.WEBSITE_URL
 import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.ui.component.FontSize
 import com.wonrax.mybk.ui.component.FontWeight
 import com.wonrax.mybk.ui.component.ScreenLayout
 import com.wonrax.mybk.ui.component.Text
+import com.wonrax.mybk.ui.component.TextLink
 import com.wonrax.mybk.ui.theme.Color
 
 @Composable
@@ -85,33 +85,12 @@ fun ProfileScreen() {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text("Về Mybk Mobile", fontSize = FontSize.Large, fontWeight = FontWeight.Medium)
-                    Text("Phiên bản 0.9.1-a", color = Color.Grey50)
+                    Text("Phiên bản $APP_VERSION", color = Color.Grey50)
                     // TODO real url to policy
-                    TextLink(context, "Điều khoản sử dụng", "https://github.com/wonrax/mybk-mobile/blob/main/APP-POLICIES.md")
-                    TextLink(context, "Mybk Mobile trên GitHub", "https://github.com/wonrax/mybk-mobile")
+                    TextLink(context, "Điều khoản sử dụng", POLICIES_URL)
+                    TextLink(context, "Mybk Mobile trên GitHub", WEBSITE_URL)
                 }
             }
         }
-    }
-}
-
-fun openBrowser(context: Context, url: String) {
-    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    context.startActivity(browserIntent)
-}
-
-@Composable
-fun TextLink(context: Context, title: String, url: String) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(4.dp))
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            ) {
-                openBrowser(context, url)
-            }
-    ) {
-        Text(title, fontWeight = FontWeight.Medium, color = Color.Primary)
     }
 }
