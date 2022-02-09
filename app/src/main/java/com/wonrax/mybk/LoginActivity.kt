@@ -9,7 +9,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,10 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,17 +33,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.model.SSOState
 import com.wonrax.mybk.ui.component.FontSize
 import com.wonrax.mybk.ui.component.FontWeight
-import com.wonrax.mybk.ui.component.Icon
-import com.wonrax.mybk.ui.component.Icons
 import com.wonrax.mybk.ui.component.ScreenLayout
 import com.wonrax.mybk.ui.component.Text
+import com.wonrax.mybk.ui.component.TextField
 import com.wonrax.mybk.ui.component.TextLink
 import com.wonrax.mybk.ui.theme.Color
 import com.wonrax.mybk.ui.theme.MybkTheme
@@ -196,57 +188,4 @@ fun LoginScreen() {
             }
         }
     }
-}
-
-@Composable
-fun TextField(
-    placeHolder: String,
-    value: String,
-    modifier: Modifier = Modifier,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    imeAction: ImeAction = ImeAction.Default,
-    password: Boolean = false,
-    onValueChange: (String) -> Unit
-) {
-    val mod = modifier.fillMaxWidth()
-    var showPassword by remember { mutableStateOf(false) }
-    val visualTransformation =
-        if (password) {
-            if (!showPassword)
-                PasswordVisualTransformation()
-            else VisualTransformation.None
-        } else VisualTransformation.None
-
-    OutlinedTextField(
-        modifier = mod,
-        value = value,
-        onValueChange = { onValueChange(it) },
-        placeholder = { Text(placeHolder, color = Color.Grey50) },
-        shape = RoundedCornerShape(24.dp),
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(imeAction = imeAction),
-        keyboardActions = keyboardActions,
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color.Light,
-            cursorColor = Color.Primary,
-            disabledLabelColor = Color.Grey30,
-            focusedIndicatorColor = Color.Primary,
-            unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-            unfocusedLabelColor = androidx.compose.ui.graphics.Color.Transparent
-        ),
-        visualTransformation = visualTransformation,
-        trailingIcon = {
-            if (password)
-                Icon(
-                    Icons.EyeOff,
-                    modifier = Modifier
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false),
-                        ) {
-                            showPassword = !showPassword
-                        }
-                )
-        }
-    )
 }
