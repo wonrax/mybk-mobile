@@ -13,6 +13,7 @@ import com.wonrax.mybk.model.SSOState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 class SnackBarState(
@@ -51,6 +52,11 @@ class MainActivityViewModel : ViewModel() {
                 }
                 DeviceUser.getMybkToken()
             } catch (e: UnknownHostException) {
+                snackBarState.value = SnackBarState(
+                    true,
+                    "Không thể kết nối. Đang hiển thị dữ liệu cũ."
+                )
+            } catch (e: SocketTimeoutException) {
                 snackBarState.value = SnackBarState(
                     true,
                     "Không thể kết nối. Đang hiển thị dữ liệu cũ."

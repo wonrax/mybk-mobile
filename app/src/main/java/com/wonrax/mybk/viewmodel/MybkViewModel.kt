@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 class MybkViewModel : ViewModel() {
@@ -71,6 +72,11 @@ class MybkViewModel : ViewModel() {
         isRefreshing.value = false
         if (exception is UnknownHostException) {
             // DO SOMETHING WHEN THERES NO INTERNET CONNECTION
+        } else if (exception is SocketTimeoutException) {
+            snackBarState.value = SnackBarState(
+                true,
+                "Không thể kết nối. Đang hiển thị dữ liệu cũ."
+            )
         } else if (exception is JsonSyntaxException) {
             snackBarState.value = SnackBarState(
                 true,
