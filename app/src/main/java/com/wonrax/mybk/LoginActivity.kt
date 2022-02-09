@@ -54,6 +54,7 @@ import com.wonrax.mybk.ui.theme.Color
 import com.wonrax.mybk.ui.theme.MybkTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,30 +85,38 @@ fun LoginScreen() {
 
     val onLogin = {
         composableScope.launch(Dispatchers.IO) {
-            isLoading = true
-            val loginStatus = DeviceUser.signIn(username, password)
+            try {
+                isLoading = true
+                val loginStatus = DeviceUser.signIn(username, password)
 
-            if (loginStatus == SSOState.LOGGED_IN) {
-                context.startActivity(
-                    Intent(
-                        context,
-                        MainActivity::class.java
+                if (loginStatus == SSOState.LOGGED_IN) {
+                    context.startActivity(
+                        Intent(
+                            context,
+                            MainActivity::class.java
+                        )
                     )
-                )
 
-                context.finish()
-                return@launch
-            }
-
-            isLoading = false
-            displayLoginStatus =
-                when (loginStatus) {
-                    SSOState.WRONG_PASSWORD -> "Sai tên đăng nhập hoặc mật khẩu."
-                    SSOState.UNKNOWN -> "Lỗi bất ngờ, vui lòng thử lại sau."
-                    SSOState.TOO_MANY_TRIES ->
-                        "Bạn đã bị hệ thống chặn tạm thời vì vượt quá số lần thử. Vui lòng đợi ít nhất 3 phút trước khi thử lại."
-                    else -> displayLoginStatus
+                    context.finish()
+                    return@launch
                 }
+
+                isLoading = false
+                displayLoginStatus =
+                    when (loginStatus) {
+                        SSOState.WRONG_PASSWORD -> "Sai tên đăng nhập hoặc mật khẩu."
+                        SSOState.UNKNOWN -> "Lỗi bất ngờ, vui lòng thử lại sau."
+                        SSOState.TOO_MANY_TRIES ->
+                            "Bạn đã bị hệ thống chặn tạm thời vì vượt quá số lần thử. Vui lòng đợi ít nhất 3 phút trước khi thử lại."
+                        else -> displayLoginStatus
+                    }
+            } catch (e: UnknownHostException) {
+                displayLoginStatus = "Không thể kết nối, vui lòng kiểm tra đường truyền."
+            } catch (e: Exception) {
+                displayLoginStatus = "Lỗi: ${e.message}"
+            } finally {
+                isLoading = false
+            }
         }
     }
 
