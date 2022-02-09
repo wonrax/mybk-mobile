@@ -51,7 +51,12 @@ class MainActivityViewModel : ViewModel() {
                 snackBarState.value = SnackBarState(
                     true,
                     "Không thể kết nối. Đang hiển thị dữ liệu cũ."
-                ) { snackBarState.value = SnackBarState(false) }
+                )
+            } catch (e: Exception) {
+                snackBarState.value = SnackBarState(
+                    true,
+                    e.message
+                )
             }
             // Init screen viewmodels here
             mybkViewModel = ViewModelProvider(context as ViewModelStoreOwner)[MybkViewModel::class.java]
