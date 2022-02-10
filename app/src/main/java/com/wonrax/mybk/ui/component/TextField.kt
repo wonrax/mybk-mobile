@@ -32,7 +32,7 @@ fun TextField(
     password: Boolean = false,
     onValueChange: (String) -> Unit
 ) {
-    val mod = modifier.fillMaxWidth()
+    val mod by remember { mutableStateOf(modifier.fillMaxWidth()) }
     var showPassword by remember { mutableStateOf(false) }
     val visualTransformation =
         if (password) {
@@ -55,12 +55,15 @@ fun TextField(
         ),
         keyboardActions = keyboardActions,
         colors = TextFieldDefaults.textFieldColors(
+            textColor = Color.Dark,
             backgroundColor = Color.Light,
             cursorColor = Color.Primary,
             disabledLabelColor = Color.Grey30,
             focusedIndicatorColor = Color.Primary,
             unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-            unfocusedLabelColor = androidx.compose.ui.graphics.Color.Transparent
+            unfocusedLabelColor = androidx.compose.ui.graphics.Color.Transparent,
+            placeholderColor = Color.Grey30,
+            trailingIconColor = Color.Dark
         ),
         visualTransformation = visualTransformation,
         trailingIcon = {

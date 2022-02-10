@@ -54,7 +54,7 @@ fun SchedulesScreen(mybkViewModel: MybkViewModel) {
             item {
                 DropdownMenu(
                     items = mybkViewModel.schedulesData.value!!,
-                    itemToStringRepresentation = { item -> item.ten_hocky }, // TODO Shorten this string
+                    itemToStringRepresentation = { item -> item.ten_hocky },
                     selectedItem = mybkViewModel.selectedScheduleSemester.value,
                     onSelectItem = {
                         // TODO bring this up to viewmodel
