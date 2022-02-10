@@ -86,7 +86,6 @@ fun ProfileScreen() {
                 ) {
                     Text("Về Mybk Mobile", fontSize = FontSize.Large, fontWeight = FontWeight.Medium)
                     Text("Phiên bản $APP_VERSION", color = Color.Grey50)
-                    // TODO real url to policy
                     TextLink(context, "Điều khoản sử dụng", POLICIES_URL)
                     TextLink(context, "Mybk Mobile trên GitHub", WEBSITE_URL)
                 }

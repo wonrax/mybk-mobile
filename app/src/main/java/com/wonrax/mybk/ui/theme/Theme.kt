@@ -2,6 +2,7 @@ package com.wonrax.mybk.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 // private val DarkColorPalette = darkColors(
@@ -41,6 +42,7 @@ fun MybkTheme(
     MaterialTheme(
         content = content,
         typography = Typography,
-        shapes = Shapes
+        shapes = Shapes,
+        colors = lightColors(primary = Color.Primary)
     )
 }

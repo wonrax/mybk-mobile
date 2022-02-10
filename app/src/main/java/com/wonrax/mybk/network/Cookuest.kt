@@ -73,7 +73,6 @@ class Cookuest {
         addHeader("Accept", "*/*")
     }
 
-    // TODO Write docs
     fun post(
         url: String,
         requestBody: RequestBody,
@@ -85,7 +84,6 @@ class Cookuest {
         return httpClient.newCall(request)
     }
 
-    // TODO Write docs
     fun get(
         url: String
     ): Call {

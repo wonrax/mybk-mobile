@@ -49,7 +49,7 @@ fun Icon(
         mapIconToResourceId[icon]?.let { painterResource(id = it) }?.let {
             MaterialIcon(
                 painter = it,
-                contentDescription = "icon", // TODO meaningful description
+                contentDescription = "app icon",
                 modifier = modifier,
                 tint = tint
             )
