@@ -19,8 +19,8 @@ android {
         applicationId "com.wonrax.mybk"
         minSdk 24
         targetSdk 31
-        versionCode 202202072
-        versionName "0.9.1-a"
+        versionCode 202202101
+        versionName "1.0.0-rc"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -59,8 +59,6 @@ android {
 }
 
 dependencies {
-    def lifecycle_version = "2.5.0-alpha01"
-
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
 
