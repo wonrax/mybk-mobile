@@ -5,7 +5,7 @@ plugins {
 }
 
 ext {
-    compose_version = '1.1.0'
+    compose_version = '1.1.1'
 }
 
 android {
@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId "com.wonrax.mybk"
-        minSdk 24
+        minSdk 25
         targetSdk 31
         versionCode 202202101
         versionName "1.0.0-rc"
