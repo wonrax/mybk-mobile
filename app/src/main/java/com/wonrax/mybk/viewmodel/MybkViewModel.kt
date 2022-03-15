@@ -1,10 +1,9 @@
 package com.wonrax.mybk.viewmodel
 
-import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import com.google.gson.JsonSyntaxException
+import com.wonrax.mybk.model.SnackbarManager
 import com.wonrax.mybk.model.exam.SemesterExam
 import com.wonrax.mybk.model.grade.SemesterGrade
 import com.wonrax.mybk.model.schedule.SemesterSchedule
@@ -20,15 +19,16 @@ import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-class MybkViewModel : ViewModel() {
+class MybkViewModel(
+    private val schedulesRepository: SchedulesRepository,
+    private val examsRepository: ExamsRepository,
+    private val gradesRepository: GradesRepository,
+    private val snackbarManager: SnackbarManager
+) {
 
-    private lateinit var schedulesRepository: SchedulesRepository
-    private lateinit var examsRepository: ExamsRepository
-    private lateinit var gradesRepository: GradesRepository
-
-    lateinit var schedulesData: MutableState<Array<SemesterSchedule>?>
-    lateinit var examsData: MutableState<Array<SemesterExam>?>
-    lateinit var gradesData: MutableState<Array<SemesterGrade>?>
+    val schedulesData: MutableState<Array<SemesterSchedule>?> = schedulesRepository.data
+    val examsData: MutableState<Array<SemesterExam>?> = examsRepository.data
+    val gradesData: MutableState<Array<SemesterGrade>?> = gradesRepository.data
 
     val isLoading = mutableStateOf(true)
 
@@ -39,21 +39,7 @@ class MybkViewModel : ViewModel() {
     val selectedExamSemester = mutableStateOf<SemesterExam?>(null)
     val selectedGradeSemester = mutableStateOf<SemesterGrade?>(null)
 
-    private lateinit var snackBarState: MutableState<SnackBarState>
-
-    fun constructor(context: Context, snackBarState: MutableState<SnackBarState>) {
-
-        schedulesRepository = SchedulesRepository(context)
-        examsRepository = ExamsRepository(context)
-        gradesRepository = GradesRepository(context)
-
-        this.snackBarState = snackBarState
-
-        // Get repository's data references
-        schedulesData = schedulesRepository.data
-        examsData = examsRepository.data
-        gradesData = gradesRepository.data
-
+    init {
         // Get cached data
         val isSchedulesCached = this.schedulesRepository.getLocal()
         val isExamsCached = this.examsRepository.getLocal()
@@ -70,20 +56,19 @@ class MybkViewModel : ViewModel() {
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
         isLoading.value = false
         isRefreshing.value = false
-        if (exception is UnknownHostException) {
-            // DO SOMETHING WHEN THERES NO INTERNET CONNECTION
-        } else if (exception is SocketTimeoutException) {
-            snackBarState.value = SnackBarState(
-                true,
-                "Không thể kết nối. Đang hiển thị dữ liệu cũ."
-            )
-        } else if (exception is JsonSyntaxException) {
-            snackBarState.value = SnackBarState(
-                true,
-                "Lỗi xử lý dữ liệu: Dữ liệu trả về không đúng định dạng."
-            )
-        } else {
-            snackBarState.value = SnackBarState(true, exception.message)
+        when (exception) {
+            is UnknownHostException -> {
+                snackbarManager.showMessage("Không thể kết nối. Đang hiển thị dữ liệu cũ.")
+            }
+            is SocketTimeoutException -> {
+                snackbarManager.showMessage("Không thể kết nối. Đang hiển thị dữ liệu cũ.")
+            }
+            is JsonSyntaxException -> {
+                snackbarManager.showMessage("Lỗi xử lý dữ liệu: Dữ liệu trả về không đúng định dạng.")
+            }
+            else -> {
+                snackbarManager.showMessage(exception.localizedMessage ?: "Lỗi không xác định")
+            }
         }
     }
 

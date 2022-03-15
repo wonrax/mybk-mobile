@@ -1,6 +1,5 @@
 package com.wonrax.mybk.repository
 
-import android.content.Context
 import androidx.compose.runtime.MutableState
 import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.network.Response
@@ -9,7 +8,9 @@ import kotlin.reflect.KSuspendFunction1
 
 interface BaseRepository<D> {
     var data: MutableState<Array<D>?>
-    val context: Context
+
+    // Root path for local storage
+    val filesDir: File
 
     // The file name to cache data to local storage
     val storageFileName: String
@@ -61,13 +62,13 @@ interface BaseRepository<D> {
     suspend fun requestData(token: String): Response
 
     fun localStore(data: String?) {
-        val file = File(this.context.filesDir, this.storageFileName)
+        val file = File(this.filesDir, this.storageFileName)
         if (data == null) file.delete()
         else file.writeText(data)
     }
 
     private fun localRead(): String {
-        val file = File(this.context.filesDir, this.storageFileName)
+        val file = File(this.filesDir, this.storageFileName)
         return file.readText()
     }
 }

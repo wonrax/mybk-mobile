@@ -1,6 +1,5 @@
 package com.wonrax.mybk.repository
 
-import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import com.google.gson.Gson
 import com.wonrax.mybk.model.schedule.SemesterSchedule
@@ -9,9 +8,10 @@ import com.wonrax.mybk.network.Response
 import com.wonrax.mybk.network.await
 import okhttp3.FormBody
 import okhttp3.RequestBody
+import java.io.File
 
 class SchedulesRepository(
-    override val context: Context,
+    override val filesDir: File,
     override val storageFileName: String = "mybk_schedules.txt"
 ) : BaseRepository<SemesterSchedule> {
 

@@ -2,30 +2,45 @@ package com.wonrax.mybk.viewmodel
 
 import android.app.Activity
 import android.content.Intent
-import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import com.wonrax.mybk.LoginActivity
 import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.model.SSOState
+import com.wonrax.mybk.model.SnackbarManager
+import com.wonrax.mybk.repository.ExamsRepository
+import com.wonrax.mybk.repository.GradesRepository
+import com.wonrax.mybk.repository.SchedulesRepository
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-class SnackBarState(
-    val isShowingSnackbar: Boolean,
-    val message: String? = null,
-    val onAction: (() -> Unit)? = null
-)
-
 class MainActivityViewModel : ViewModel() {
     private var isInitiated = false
     lateinit var mybkViewModel: MybkViewModel
-    var snackBarState = mutableStateOf(SnackBarState(false))
+    private val snackbarManager = SnackbarManager
+
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
+        CoroutineScope(Dispatchers.Main).launch {
+            mybkViewModel.isLoading.value = false
+            mybkViewModel.isRefreshing.value = false
+            when (exception) {
+                is UnknownHostException -> {
+                    snackbarManager.showMessage("Không thể kết nối. Đang hiển thị dữ liệu cũ.")
+                    snackbarManager.showMessage("Queued")
+                }
+                is SocketTimeoutException -> {
+                    snackbarManager.showMessage("Không thể kết nối. Đang hiển thị dữ liệu cũ.")
+                }
+                else -> {
+                    snackbarManager.showMessage(exception.localizedMessage ?: "Lỗi không xác định")
+                }
+            }
+        }
+    }
 
     fun constructor(context: Activity) {
         if (isInitiated) return
@@ -38,41 +53,26 @@ class MainActivityViewModel : ViewModel() {
         }
 
         // Init screen viewmodels here
-        mybkViewModel = ViewModelProvider(context as ViewModelStoreOwner)[MybkViewModel::class.java]
-        mybkViewModel.constructor(context, snackBarState)
+        mybkViewModel = MybkViewModel(
+            SchedulesRepository(context.filesDir),
+            ExamsRepository(context.filesDir),
+            GradesRepository(context.filesDir),
+            SnackbarManager
+        )
 
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).launch(coroutineExceptionHandler) {
             // Try sign in
-            try {
-                val ssoStatus = DeviceUser.signIn()
-                if (ssoStatus != SSOState.LOGGED_IN) {
-                    startActivity(context, Intent(context, LoginActivity::class.java), null)
-                    context.finish()
-                    return@launch
-                }
-                DeviceUser.getMybkToken()
-            } catch (e: UnknownHostException) {
-                snackBarState.value = SnackBarState(
-                    true,
-                    "Không thể kết nối. Đang hiển thị dữ liệu cũ."
-                )
-            } catch (e: SocketTimeoutException) {
-                snackBarState.value = SnackBarState(
-                    true,
-                    "Không thể kết nối. Đang hiển thị dữ liệu cũ."
-                )
-            } catch (e: Exception) {
-                snackBarState.value = SnackBarState(
-                    true,
-                    e.message
-                )
+            val ssoStatus = DeviceUser.signIn()
+
+            // TODO handle too many tries, unknown cases etc.
+            if (ssoStatus != SSOState.LOGGED_IN) {
+                startActivity(context, Intent(context, LoginActivity::class.java), null)
+                context.finish()
+                return@launch
             }
+            DeviceUser.getMybkToken()
 
             mybkViewModel.update()
         }
-    }
-
-    fun dismissSnackBar() {
-        snackBarState.value = SnackBarState(false)
     }
 }

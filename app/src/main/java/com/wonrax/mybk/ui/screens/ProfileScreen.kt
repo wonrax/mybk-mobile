@@ -64,6 +64,7 @@ fun ProfileScreen() {
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
                         .clickable {
+                            // TODO move this to viewmodel
                             DeviceUser.signOut(context)
                             ContextCompat.startActivity(
                                 context,

@@ -266,9 +266,10 @@ object DeviceUser {
         OkHttpClientSingleton.cookieJar.clear()
 
         // Invalidate local storage
-        GradesRepository(context).localStore(null)
-        ExamsRepository(context).localStore(null)
-        SchedulesRepository(context).localStore(null)
+        // TODO fix this band aid
+        GradesRepository(context.filesDir).localStore(null)
+        ExamsRepository(context.filesDir).localStore(null)
+        SchedulesRepository(context.filesDir).localStore(null)
     }
 
     /**
