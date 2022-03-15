@@ -36,8 +36,6 @@ fun <T> DropdownMenu(
 ) {
 
     var expanded by remember { mutableStateOf(false) }
-//    val suggestions = listOf("Kotlin", "Java", "Dart", "Python")
-//    var selectedText by remember { mutableStateOf("Chưa chọn") }
 
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
 
