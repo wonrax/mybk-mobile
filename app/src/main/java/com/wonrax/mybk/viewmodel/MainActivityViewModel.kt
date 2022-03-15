@@ -30,7 +30,6 @@ class MainActivityViewModel : ViewModel() {
             when (exception) {
                 is UnknownHostException -> {
                     snackbarManager.showMessage("Không thể kết nối. Đang hiển thị dữ liệu cũ.")
-                    snackbarManager.showMessage("Queued")
                 }
                 is SocketTimeoutException -> {
                     snackbarManager.showMessage("Không thể kết nối. Đang hiển thị dữ liệu cũ.")
