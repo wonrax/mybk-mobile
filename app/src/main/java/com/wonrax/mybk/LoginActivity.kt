@@ -99,7 +99,7 @@ fun LoginScreen() {
                         SSOState.WRONG_PASSWORD -> "Sai tên đăng nhập hoặc mật khẩu."
                         SSOState.UNKNOWN -> "Lỗi bất ngờ, vui lòng thử lại sau."
                         SSOState.TOO_MANY_TRIES ->
-                            "Bạn đã bị hệ thống chặn tạm thời vì vượt quá số lần thử. Vui lòng đợi ít nhất 3 phút trước khi thử lại."
+                            "Bạn đã bị hệ thống chặn tạm thời vì vượt quá số lần thử. Vui lòng đợi ít nhất 1 phút trước khi thử lại."
                         else -> displayLoginStatus
                     }
             } catch (e: UnknownHostException) {

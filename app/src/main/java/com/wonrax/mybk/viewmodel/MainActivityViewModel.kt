@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
@@ -60,18 +61,32 @@ class MainActivityViewModel : ViewModel() {
         )
 
         CoroutineScope(Dispatchers.IO).launch(coroutineExceptionHandler) {
-            // Try sign in
-            val ssoStatus = DeviceUser.signIn()
-
-            // TODO handle too many tries, unknown cases etc.
-            if (ssoStatus != SSOState.LOGGED_IN) {
-                startActivity(context, Intent(context, LoginActivity::class.java), null)
-                context.finish()
-                return@launch
+            when (DeviceUser.signIn()) {
+                SSOState.LOGGED_IN -> {
+                    DeviceUser.getMybkToken()
+                    mybkViewModel.update()
+                }
+                SSOState.TOO_MANY_TRIES -> {
+                    withContext(Dispatchers.Main) {
+                        snackbarManager.showMessage("Bạn đang tạm thời bị chặn. Vui lòng đợi ít nhất 1 phút trước khi thử lại.")
+                    }
+                    mybkViewModel.isLoading.value = false
+                    mybkViewModel.isRefreshing.value = false
+                }
+                SSOState.UNKNOWN -> {
+                    withContext(Dispatchers.Main) {
+                        snackbarManager.showMessage("Không thể đăng nhập vào tài khoản. Đang hiển thị dữ liệu cũ.")
+                    }
+                    mybkViewModel.isLoading.value = false
+                    mybkViewModel.isRefreshing.value = false
+                }
+                else -> {
+                    DeviceUser.signOut(context)
+                    startActivity(context, Intent(context, LoginActivity::class.java), null)
+                    context.finish()
+                    return@launch
+                }
             }
-            DeviceUser.getMybkToken()
-
-            mybkViewModel.update()
         }
     }
 }

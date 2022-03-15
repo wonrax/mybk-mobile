@@ -64,6 +64,7 @@ fun Text(
         color = color,
         letterSpacing = ls,
         textAlign = ta,
+        lineHeight = fs * 1.35,
         softWrap = softWrap
     )
 }
