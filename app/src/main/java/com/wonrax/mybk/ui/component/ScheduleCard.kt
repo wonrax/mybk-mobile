@@ -1,20 +1,33 @@
 package com.wonrax.mybk.ui.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wonrax.mybk.model.schedule.CourseSchedule
 import com.wonrax.mybk.ui.theme.Color
 
 @Composable
-fun ScheduleCard(schedule: CourseSchedule) {
+fun ScheduleCard(schedule: CourseSchedule, onCourseClick: (semester: String, courseId: String) -> Unit) {
     CardLayout {
         Column(
+            modifier = Modifier.clickable {
+                // TODO fix this mess
+                schedule.macoso?.let {
+                    schedule.ma_mh?.let { it1 ->
+                        onCourseClick(
+                            it,
+                            it1
+                        )
+                    }
+                }
+            },
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             schedule.ten_mh?.let {
@@ -122,5 +135,5 @@ fun Preview() {
         tuan_hoc = "01|02|03|--|--|06|07|08|09|--|--|--|--|14|15|16|17|18|"
 //        tuan_hoc = "--|"
     )
-    ScheduleCard(schedule = mockCourse)
+    ScheduleCard(schedule = mockCourse) { _, _ -> }
 }

@@ -19,15 +19,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.wonrax.mybk.ui.Screen
 import com.wonrax.mybk.ui.theme.Color
 
 @Composable
-fun BottomNavigation(navController: NavHostController, onItemClick: (String) -> Unit) {
+fun BottomNavigation(navController: NavHostController) {
     val items = Screen.Items.list
     val backStackEntry = navController.currentBackStackEntryAsState()
+
+    val onItemClick = { route: String ->
+        navController.navigate(route) {
+            // Pop up to the start destination of the graph to
+            // avoid building up a large stack of destinations
+            // on the back stack as users select items
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+
+            // Avoid multiple copies of the same destination when
+            // reselecting the same item
+            launchSingleTop = true
+
+            // Restore state when reselecting a previously selected item
+            restoreState = true
+        }
+    }
 
     Surface(elevation = 24.dp) {
         Row(
@@ -40,7 +59,7 @@ fun BottomNavigation(navController: NavHostController, onItemClick: (String) -> 
             verticalAlignment = Alignment.CenterVertically,
         ) {
             items.forEach { screen ->
-                val selected = screen.id == backStackEntry.value?.destination?.route
+                val selected = screen.route == backStackEntry.value?.destination?.route
                 val iconColor = if (selected) Color.Primary else Color.Grey50
 
                 Column(
@@ -48,7 +67,7 @@ fun BottomNavigation(navController: NavHostController, onItemClick: (String) -> 
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = rememberRipple(bounded = false),
-                        ) { onItemClick(screen.id) }
+                        ) { onItemClick(screen.route) }
                         .fillMaxHeight()
                         .weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally,

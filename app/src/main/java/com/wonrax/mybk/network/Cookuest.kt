@@ -24,7 +24,7 @@ import com.wonrax.mybk.network.Response as CustomResponse
  *
  * @return Result of request or throw exception
  */
-public suspend fun Call.await(recordStack: Boolean = false): CustomResponse {
+suspend fun Call.await(recordStack: Boolean = false): CustomResponse {
     val callStack = if (recordStack) {
         IOException().apply {
             // Remove unnecessary lines from stacktrace

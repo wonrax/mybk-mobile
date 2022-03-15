@@ -1,5 +1,9 @@
 package com.wonrax.mybk.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,10 +21,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.wonrax.mybk.model.SnackbarManager
 import com.wonrax.mybk.ui.component.BottomNavigation
 import com.wonrax.mybk.ui.component.FontWeight
@@ -57,15 +62,22 @@ class MybkAppState(
             }
         }
     }
+
+    private val bottomBarRoutes = Screen.Items.list.map { it.route }
+
+    val shouldShowBottomBar: Boolean
+        @Composable get() = navController
+            .currentBackStackEntryAsState().value?.destination?.route in bottomBarRoutes
 }
 
 /**
  * Remembers and creates an instance of [MybkAppState]
  */
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun rememberMybkAppState(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController = rememberAnimatedNavController(),
     snackbarManager: SnackbarManager = SnackbarManager,
 ) =
     remember(scaffoldState, navController, snackbarManager) {
@@ -82,7 +94,13 @@ fun MybkUI(mainActivityViewModel: MainActivityViewModel) {
         Scaffold(
             scaffoldState = appState.scaffoldState,
             snackbarHost = { CustomSnackbarHost(it) },
-            bottomBar = { CustomBottomNavigation(navController) }
+            bottomBar = {
+                AnimatedVisibility(
+                    appState.shouldShowBottomBar,
+                    enter = slideIn { IntOffset(0, 200) },
+                    exit = slideOut { IntOffset(0, 200) }
+                ) { BottomNavigation(navController) }
+            }
         ) {
             Box(
                 modifier = Modifier
@@ -121,26 +139,5 @@ fun CustomSnackbarHost(snackbarHostState: SnackbarHostState) {
                 }
             }
         )
-    }
-}
-
-@Composable
-fun CustomBottomNavigation(navController: NavHostController) {
-    BottomNavigation(navController) {
-        navController.navigate(it) {
-            // Pop up to the start destination of the graph to
-            // avoid building up a large stack of destinations
-            // on the back stack as users select items
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
-
-            // Avoid multiple copies of the same destination when
-            // reselecting the same item
-            launchSingleTop = true
-
-            // Restore state when reselecting a previously selected item
-            restoreState = true
-        }
     }
 }

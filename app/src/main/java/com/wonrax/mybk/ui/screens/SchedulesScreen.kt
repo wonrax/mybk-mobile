@@ -25,7 +25,10 @@ import java.util.Calendar
 import java.util.Date
 
 @Composable
-fun SchedulesScreen(mybkViewModel: MybkViewModel) {
+fun SchedulesScreen(
+    mybkViewModel: MybkViewModel,
+    onCourseClick: (semester: String, courseId: String) -> Unit
+) {
     val weekOfYear by remember { mutableStateOf(getWeekOfYear()) }
 
     MainScreenLayout(
@@ -66,7 +69,7 @@ fun SchedulesScreen(mybkViewModel: MybkViewModel) {
         }
         mybkViewModel.selectedScheduleSemester.value?.tkb?.forEach { schedule ->
             item {
-                ScheduleCard(schedule)
+                ScheduleCard(schedule, onCourseClick)
             }
         }
     }
