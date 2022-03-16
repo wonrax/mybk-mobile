@@ -5,8 +5,6 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,14 +35,19 @@ fun Navigation(
             composable(
                 Screen.Schedules.route,
                 enterTransition = {
-                    println("debug initial state: ${initialState.destination.route}")
                     if (initialState.destination.route?.contains("courseDetail") == true)
-                        fadeIn()
+                        slideIntoContainer(
+                            AnimatedContentScope.SlideDirection.Right,
+                            animationSpec = tween(150)
+                        )
                     else EnterTransition.None
                 },
                 exitTransition = {
                     if (targetState.destination.route?.contains("courseDetail") == true)
-                        fadeOut()
+                        slideOutOfContainer(
+                            AnimatedContentScope.SlideDirection.Left,
+                            animationSpec = tween(150)
+                        )
                     else ExitTransition.None
                 }
             ) {
@@ -54,8 +57,7 @@ fun Navigation(
                     systemUIController.setStatusBarColor(Color.Grey10, darkIcons = true)
                 }
 
-                SchedulesScreen(mainActivityViewModel.mybkViewModel) {
-                    semester, courseId ->
+                SchedulesScreen(mainActivityViewModel.mybkViewModel) { semester, courseId ->
                     navController.navigate("courseDetail/$semester/$courseId")
                 }
             }
@@ -103,7 +105,8 @@ fun Navigation(
                     .background(Color.Light)
                     .fillMaxSize()
             ) {
-                backStackEntry.arguments?.getString("courseId")?.let { Text(it, color = Color.Dark) }
+                backStackEntry.arguments?.getString("courseId")
+                    ?.let { Text(it, color = Color.Dark) }
             }
         }
     }
