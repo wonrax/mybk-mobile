@@ -26,6 +26,7 @@ class MybkViewModel(
     private val snackbarManager: SnackbarManager
 ) {
 
+    // TODO make these read only states
     val schedulesData: MutableState<Array<SemesterSchedule>?> = schedulesRepository.data
     val examsData: MutableState<Array<SemesterExam>?> = examsRepository.data
     val gradesData: MutableState<Array<SemesterGrade>?> = gradesRepository.data

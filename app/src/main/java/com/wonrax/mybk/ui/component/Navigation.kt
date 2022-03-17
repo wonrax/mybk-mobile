@@ -21,6 +21,7 @@ import com.wonrax.mybk.ui.screens.ExamsScreen
 import com.wonrax.mybk.ui.screens.GradesScreen
 import com.wonrax.mybk.ui.screens.ProfileScreen
 import com.wonrax.mybk.ui.screens.SchedulesScreen
+import com.wonrax.mybk.ui.screens.TitleBarScreen
 import com.wonrax.mybk.ui.theme.Color
 import com.wonrax.mybk.viewmodel.MainActivityViewModel
 
@@ -30,8 +31,8 @@ fun Navigation(
     navController: NavHostController,
     mainActivityViewModel: MainActivityViewModel
 ) {
-    AnimatedNavHost(navController = navController, startDestination = "main") {
-        navigation(startDestination = Screen.Schedules.route, route = "main") {
+    AnimatedNavHost(navController = navController, startDestination = "home") {
+        navigation(startDestination = Screen.Schedules.route, route = "home") {
             composable(
                 Screen.Schedules.route,
                 enterTransition = {
@@ -96,17 +97,19 @@ fun Navigation(
                 )
             },
         ) { backStackEntry ->
-            val systemUIController = rememberSystemUiController()
-            LaunchedEffect(true) {
-                systemUIController.setStatusBarColor(Color.Light, darkIcons = true)
-            }
             Box(
                 Modifier
                     .background(Color.Light)
                     .fillMaxSize()
             ) {
                 backStackEntry.arguments?.getString("courseId")
-                    ?.let { Text(it, color = Color.Dark) }
+                    ?.let {
+                        TitleBarScreen(title = it, navController::popBackStack) {
+                            for (i in 1..50) {
+                                Text("Hehe", fontSize = FontSize.Large)
+                            }
+                        }
+                    }
             }
         }
     }
