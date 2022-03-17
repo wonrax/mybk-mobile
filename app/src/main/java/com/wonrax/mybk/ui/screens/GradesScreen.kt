@@ -1,6 +1,5 @@
 package com.wonrax.mybk.ui.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.wonrax.mybk.ui.component.Divider
 import com.wonrax.mybk.ui.component.DropdownMenu
 import com.wonrax.mybk.ui.component.FontSize
 import com.wonrax.mybk.ui.component.FontWeight
@@ -128,14 +128,4 @@ fun SemesterSummaryRow(title: String, value: String) {
         Text(title, fontWeight = FontWeight.Medium)
         Text(value, fontWeight = FontWeight.Medium, color = Color.Primary)
     }
-}
-
-@Composable
-fun Divider() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Grey30)
-            .height(1.dp)
-    )
 }
