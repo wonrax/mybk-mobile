@@ -19,7 +19,7 @@ fun ScheduleCard(schedule: CourseSchedule, onCourseClick: (semester: String, cou
         Column(
             modifier = Modifier.clickable {
                 // TODO fix this mess
-                schedule.macoso?.let {
+                schedule.hk_nh?.let {
                     schedule.ma_mh?.let { it1 ->
                         onCourseClick(
                             it,

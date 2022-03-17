@@ -3,7 +3,7 @@ package com.wonrax.mybk.model.schedule
 class CourseSchedule(
     val giobd: String? = null,
     val giokt: String? = null,
-//    val hk_nh: String? = null,
+    val hk_nh: String? = null,
     val ma_mh: String? = null,
 //    val ma_nhom: String? = null,
     val macoso: String? = null,

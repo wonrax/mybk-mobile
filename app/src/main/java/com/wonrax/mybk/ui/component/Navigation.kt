@@ -5,23 +5,22 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.wonrax.mybk.model.schedule.CourseSchedule
 import com.wonrax.mybk.ui.Screen
+import com.wonrax.mybk.ui.screens.CourseDetailScreen
 import com.wonrax.mybk.ui.screens.ExamsScreen
 import com.wonrax.mybk.ui.screens.GradesScreen
 import com.wonrax.mybk.ui.screens.ProfileScreen
 import com.wonrax.mybk.ui.screens.SchedulesScreen
-import com.wonrax.mybk.ui.screens.TitleBarScreen
 import com.wonrax.mybk.ui.theme.Color
 import com.wonrax.mybk.viewmodel.MainActivityViewModel
 
@@ -97,20 +96,19 @@ fun Navigation(
                 )
             },
         ) { backStackEntry ->
-            Box(
-                Modifier
-                    .background(Color.Light)
-                    .fillMaxSize()
-            ) {
-                backStackEntry.arguments?.getString("courseId")
-                    ?.let {
-                        TitleBarScreen(title = it, navController::popBackStack) {
-                            for (i in 1..50) {
-                                Text("Hehe", fontSize = FontSize.Large)
-                            }
-                        }
-                    }
+            val courseSchedule = remember { mutableStateOf<CourseSchedule?>(null) }
+            LaunchedEffect(key1 = true) {
+                val courseId = backStackEntry.arguments?.getString("courseId")
+                val semester = backStackEntry.arguments?.getString("semester")
+
+                courseSchedule.value = mainActivityViewModel.mybkViewModel.schedulesData.value
+                    ?.firstOrNull { it.hk_nh == semester }
+                    ?.tkb?.firstOrNull { it.ma_mh == courseId }
+
+                println("$semester $courseId")
+                println("${courseSchedule.value?.hk_nh}")
             }
+            CourseDetailScreen(courseSchedule = courseSchedule.value, navController::popBackStack)
         }
     }
 }

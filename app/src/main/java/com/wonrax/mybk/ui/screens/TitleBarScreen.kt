@@ -37,12 +37,12 @@ fun TitleBarScreen(
 
     Column() {
         Surface(
-            Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            color = Color.Light
+            Modifier.fillMaxWidth(),
+            color = Color.Light,
+            elevation = 8.dp
         ) {
             Row(
+                Modifier.padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
