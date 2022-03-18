@@ -84,7 +84,7 @@ fun BottomNavigation(navController: NavHostController) {
                         fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.Center,
                         softWrap = false,
-                        letterSpacing = (-0.5).sp
+                        letterSpacing = (-0.2).sp
                     )
                 }
             }

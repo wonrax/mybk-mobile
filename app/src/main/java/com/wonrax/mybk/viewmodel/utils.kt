@@ -10,8 +10,7 @@ fun formatDateToDisplay(
 ): String? {
     var displayDate: String? = null
     try {
-        var date: Date? = null
-        date = SimpleDateFormat(
+        var date: Date? = SimpleDateFormat(
             dateFormat,
             Locale.ENGLISH
         ).parse(dateString)

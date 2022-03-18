@@ -47,7 +47,6 @@ fun CourseDetailScreen(courseSchedule: CourseSchedule?, upAction: (() -> Unit)?)
                 CourseDetail(
                     courseSchedule.giobd,
                     courseSchedule.giokt,
-                    courseSchedule.hk_nh,
                     courseSchedule.ma_mh,
                     courseSchedule.ma_nhom,
                     courseSchedule.macoso,
@@ -84,7 +83,6 @@ val fields = listOf(
 fun CourseDetail(
     giobd: String?,
     giokt: String?,
-    hk_nh: String?,
     ma_mh: String?,
     ma_nhom: String?,
     macoso: String?,
@@ -121,7 +119,7 @@ fun CourseDetail(
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(fields[i] + ":")
-                    Text(item as String, color = Color.Primary)
+                    Text(item, color = Color.Primary)
                 }
             }
 
