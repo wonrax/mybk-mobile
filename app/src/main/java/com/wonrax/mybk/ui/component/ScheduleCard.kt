@@ -1,13 +1,25 @@
 package com.wonrax.mybk.ui.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wonrax.mybk.model.schedule.CourseSchedule
@@ -89,25 +101,73 @@ fun ScheduleCard(schedule: CourseSchedule, onCourseClick: (semester: String, cou
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text("Tuần", fontWeight = FontWeight.Medium)
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    it.split("|").forEach { it1 ->
-                        if (it1 != "") {
-                            val week = it1.toIntOrNull()
-                            item {
-                                Text(
-                                    if (week != null) String.format("%02d", week) else "--",
-                                    color = if (week != null) Color.Dark else Color.Grey30,
-                                    fontWeight = FontWeight.Medium
-                                )
-                            }
+                AvailableWeeksScrollable(schedule.tuan_hoc, Color.Light)
+            }
+        }
+    }
+}
+
+@Composable
+fun AvailableWeeksScrollable(
+    tuan_hoc: String,
+    fadeColor: androidx.compose.ui.graphics.Color = Color.Light
+) {
+    Box(
+        contentAlignment = Alignment.CenterEnd
+    ) {
+        val weekScrollState = rememberScrollState()
+        Row(
+            Modifier.horizontalScroll(weekScrollState),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            tuan_hoc.split("|").forEach { it ->
+                if (it != "") {
+                    val week = it.toIntOrNull()
+                    if (week != null) {
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(Color.Primary10)
+                                .widthIn(min = 36.dp)
+                                .padding(6.dp, 4.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                String.format("%02d", week),
+                                color = Color.Primary,
+                                fontWeight = FontWeight.Medium
+                            )
                         }
+                    } else {
+                        Text(
+                            "--",
+                            color = Color.Grey30,
+                            fontWeight = FontWeight.Medium
+                        )
                     }
                 }
             }
+            // Compensate for the fading edge
+            Spacer(modifier = Modifier.width(24.dp))
         }
+
+        // Fading edge to indicate scrollable
+        Box(
+            Modifier
+                .size(36.dp)
+                .drawWithContent {
+                    val colors = listOf(fadeColor, Color.Transparent)
+                    drawContent()
+                    drawRect(
+                        brush = Brush.horizontalGradient(
+                            colors,
+                            startX = Float.POSITIVE_INFINITY,
+                            endX = 0f
+                        ),
+                    )
+                }
+        )
     }
 }
 

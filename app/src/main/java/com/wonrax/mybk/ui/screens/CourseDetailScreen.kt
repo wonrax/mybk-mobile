@@ -1,27 +1,16 @@
 package com.wonrax.mybk.ui.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import com.wonrax.mybk.model.schedule.CourseSchedule
+import com.wonrax.mybk.ui.component.AvailableWeeksScrollable
 import com.wonrax.mybk.ui.component.Divider
 import com.wonrax.mybk.ui.component.FontSize
 import com.wonrax.mybk.ui.component.FontWeight
@@ -137,69 +126,13 @@ fun CourseDetail(
             }
 
         if (tuan_hoc != null) {
-            val weekScrollState = rememberScrollState()
             Divider()
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text("Tuần:")
-                Box(
-                    contentAlignment = Alignment.CenterEnd
-                ) {
-                    Row(
-                        Modifier.horizontalScroll(weekScrollState),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        tuan_hoc.split("|").forEach { it ->
-                            if (it != "") {
-                                val week = it.toIntOrNull()
-                                if (week != null) {
-                                    Box(
-                                        modifier = Modifier
-                                            .clip(RoundedCornerShape(12.dp))
-                                            .background(Color.Primary10)
-                                            .widthIn(min = 36.dp)
-                                            .padding(6.dp, 4.dp),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(
-                                            String.format("%02d", week),
-                                            color = Color.Primary,
-                                            fontWeight = FontWeight.Medium
-                                        )
-                                    }
-                                } else {
-                                    Text(
-                                        "--",
-                                        color = Color.Grey30,
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                }
-                            }
-                        }
-                        // Compensate for the fading edge
-                        Spacer(modifier = Modifier.width(24.dp))
-                    }
-
-                    // Fading edge to indicate scrollable
-                    Box(
-                        Modifier
-                            .size(36.dp)
-                            .drawWithContent {
-                                val colors = listOf(Color.Grey10, Color.Transparent)
-                                drawContent()
-                                drawRect(
-                                    brush = Brush.horizontalGradient(
-                                        colors,
-                                        startX = Float.POSITIVE_INFINITY,
-                                        endX = 0f
-                                    ),
-                                )
-                            }
-                    )
-                }
+                AvailableWeeksScrollable(tuan_hoc, Color.Grey10)
             }
         }
     }
