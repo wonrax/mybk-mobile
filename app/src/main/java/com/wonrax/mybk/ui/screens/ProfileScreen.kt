@@ -15,14 +15,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.wonrax.mybk.APP_VERSION
 import com.wonrax.mybk.LoginActivity
-import com.wonrax.mybk.POLICIES_URL
 import com.wonrax.mybk.WEBSITE_URL
 import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.ui.component.FontSize
@@ -33,7 +34,14 @@ import com.wonrax.mybk.ui.component.TextLink
 import com.wonrax.mybk.ui.theme.Color
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navigateToPolicyScreen: () -> Unit) {
+
+    // Change status bar to grey when come back from other screens
+    val systemUIController = rememberSystemUiController()
+    LaunchedEffect(true) {
+        systemUIController.setStatusBarColor(Color.Grey10, darkIcons = true)
+    }
+
     val context = LocalContext.current as Activity
     ScreenLayout {
         LazyColumn(
@@ -87,7 +95,7 @@ fun ProfileScreen() {
                 ) {
                     Text("Về Mybk Mobile", fontSize = FontSize.Large, fontWeight = FontWeight.Medium)
                     Text("Phiên bản $APP_VERSION", color = Color.Grey50)
-                    TextLink(context, "Điều khoản sử dụng", POLICIES_URL)
+                    Text("Điều khoản sử dụng", Modifier.clickable { navigateToPolicyScreen() })
                     TextLink(context, "Mybk Mobile trên GitHub", WEBSITE_URL)
                 }
             }

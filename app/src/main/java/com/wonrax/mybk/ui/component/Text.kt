@@ -32,6 +32,7 @@ fun Text(
     textAlign: TextAlign? = null,
     softWrap: Boolean = true,
     letterSpacing: TextUnit? = null,
+    lineHeight: Double = 1.35
 ) {
 
     val fw = when (fontWeight) {
@@ -64,7 +65,7 @@ fun Text(
         color = color,
         letterSpacing = ls,
         textAlign = ta,
-        lineHeight = fs * 1.35,
+        lineHeight = fs * lineHeight,
         softWrap = softWrap
     )
 }

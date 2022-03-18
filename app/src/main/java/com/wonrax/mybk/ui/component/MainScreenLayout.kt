@@ -6,11 +6,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.wonrax.mybk.ui.screens.LoadingScreen
+import com.wonrax.mybk.ui.theme.Color
 
 @Composable
 fun MainScreenLayout(
@@ -19,6 +22,12 @@ fun MainScreenLayout(
     onRefresh: () -> Unit,
     content: LazyListScope.() -> Unit
 ) {
+    // Change status bar to grey when come back from other screens
+    val systemUIController = rememberSystemUiController()
+    LaunchedEffect(true) {
+        systemUIController.setStatusBarColor(Color.Grey10, darkIcons = true)
+    }
+
     if (isLoading) {
         LoadingScreen()
     } else {

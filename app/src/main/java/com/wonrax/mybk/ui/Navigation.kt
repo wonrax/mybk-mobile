@@ -14,14 +14,13 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.wonrax.mybk.model.schedule.CourseSchedule
 import com.wonrax.mybk.ui.screens.CourseDetailScreen
 import com.wonrax.mybk.ui.screens.ExamsScreen
 import com.wonrax.mybk.ui.screens.GradesScreen
+import com.wonrax.mybk.ui.screens.PolicyScreen
 import com.wonrax.mybk.ui.screens.ProfileScreen
 import com.wonrax.mybk.ui.screens.SchedulesScreen
-import com.wonrax.mybk.ui.theme.Color
 import com.wonrax.mybk.viewmodel.MainActivityViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -38,47 +37,33 @@ fun Navigation(
         navigation(startDestination = Screen.Schedules.route, route = "home") {
             composable(
                 Screen.Schedules.route,
-                enterTransition = {
-                    if (initialState.destination.route?.contains("courseDetail") == true)
-                        slideIn()
-                    else EnterTransition.None
-                },
-                exitTransition = {
-                    if (targetState.destination.route?.contains("courseDetail") == true)
-                        slideOut()
-                    else ExitTransition.None
-                }
+                enterTransition = { homeRouteEnterAnim() },
+                exitTransition = { homeRouteExitAnim() }
             ) {
-                // Change status bar back to grey when come back from course detail
-                val systemUIController = rememberSystemUiController()
-                LaunchedEffect(true) {
-                    systemUIController.setStatusBarColor(Color.Grey10, darkIcons = true)
-                }
-
                 SchedulesScreen(mainActivityViewModel.mybkViewModel) { semester, courseId ->
                     navController.navigate("courseDetail/$semester/$courseId")
                 }
             }
             composable(
                 Screen.Exams.route,
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None }
+                enterTransition = { homeRouteEnterAnim() },
+                exitTransition = { homeRouteExitAnim() }
             ) {
                 ExamsScreen(mainActivityViewModel.mybkViewModel)
             }
             composable(
                 Screen.Transcript.route,
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None }
+                enterTransition = { homeRouteEnterAnim() },
+                exitTransition = { homeRouteExitAnim() }
             ) {
                 GradesScreen(mainActivityViewModel.mybkViewModel)
             }
             composable(
                 Screen.Profile.route,
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None }
+                enterTransition = { homeRouteEnterAnim() },
+                exitTransition = { homeRouteExitAnim() }
             ) {
-                ProfileScreen()
+                ProfileScreen { navController.navigate("policy") }
             }
         }
 
@@ -87,8 +72,8 @@ fun Navigation(
         ###################################### */
         composable(
             "courseDetail/{semester}/{courseId}",
-            enterTransition = { slideIn() },
-            exitTransition = { slideOut() },
+            enterTransition = { slideInLeft() },
+            exitTransition = { slideOutRight() },
         ) { backStackEntry ->
             val courseSchedule = remember { mutableStateOf<CourseSchedule?>(null) }
             LaunchedEffect(key1 = true) {
@@ -98,25 +83,72 @@ fun Navigation(
                 courseSchedule.value = mainActivityViewModel.mybkViewModel.schedulesData.value
                     ?.firstOrNull { it.hk_nh == semester }
                     ?.tkb?.firstOrNull { it.ma_mh == courseId }
-
-                println("$semester $courseId")
-                println("${courseSchedule.value?.hk_nh}")
             }
             CourseDetailScreen(courseSchedule = courseSchedule.value, navController::popBackStack)
+        }
+
+        /* ###################################
+        ########### POLICY SCREEN ############
+        ###################################### */
+        composable(
+            "policy",
+            enterTransition = { slideInLeft() },
+            exitTransition = { slideOutRight() },
+        ) {
+            PolicyScreen(navController::popBackStack)
         }
     }
 }
 
+fun isHomeSubRoutes(route: String?): Boolean {
+    if (route in listOf(
+            Screen.Schedules.route,
+            Screen.Exams.route,
+            Screen.Transcript.route,
+            Screen.Profile.route
+        )
+    ) return true
+    return false
+}
+
 @OptIn(ExperimentalAnimationApi::class)
-fun AnimatedContentScope<NavBackStackEntry>.slideOut(): ExitTransition {
+fun AnimatedContentScope<NavBackStackEntry>.slideOutRight(): ExitTransition {
     return slideOutOfContainer(
         AnimatedContentScope.SlideDirection.Right, animationSpec = tween(150)
     )
 }
 
 @OptIn(ExperimentalAnimationApi::class)
-fun AnimatedContentScope<NavBackStackEntry>.slideIn(): EnterTransition {
+fun AnimatedContentScope<NavBackStackEntry>.slideOutLeft(): ExitTransition {
+    return slideOutOfContainer(
+        AnimatedContentScope.SlideDirection.Left, animationSpec = tween(150)
+    )
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+fun AnimatedContentScope<NavBackStackEntry>.slideInRight(): EnterTransition {
+    return slideIntoContainer(
+        AnimatedContentScope.SlideDirection.Right, animationSpec = tween(150)
+    )
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+fun AnimatedContentScope<NavBackStackEntry>.slideInLeft(): EnterTransition {
     return slideIntoContainer(
         AnimatedContentScope.SlideDirection.Left, animationSpec = tween(150)
     )
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+fun AnimatedContentScope<NavBackStackEntry>.homeRouteEnterAnim(): EnterTransition {
+    return if (isHomeSubRoutes(initialState.destination.route))
+        EnterTransition.None
+    else slideInRight()
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+fun AnimatedContentScope<NavBackStackEntry>.homeRouteExitAnim(): ExitTransition {
+    return if (isHomeSubRoutes(targetState.destination.route))
+        ExitTransition.None
+    else slideOutLeft()
 }
