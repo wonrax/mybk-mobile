@@ -29,7 +29,6 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.wonrax.mybk.model.SnackbarManager
 import com.wonrax.mybk.ui.component.BottomNavigation
 import com.wonrax.mybk.ui.component.FontWeight
-import com.wonrax.mybk.ui.component.Navigation
 import com.wonrax.mybk.ui.component.Text
 import com.wonrax.mybk.ui.theme.Color
 import com.wonrax.mybk.ui.theme.MybkTheme
