@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.wonrax.mybk.ui.component.DropdownMenu
 import com.wonrax.mybk.ui.component.FontSize
 import com.wonrax.mybk.ui.component.FontWeight
+import com.wonrax.mybk.ui.component.LastUpdated
 import com.wonrax.mybk.ui.component.MainScreenLayout
 import com.wonrax.mybk.ui.component.ScheduleCard
 import com.wonrax.mybk.ui.component.Text
@@ -38,7 +39,9 @@ fun SchedulesScreen(
     ) {
         item {
             Row(
-                modifier = Modifier.padding(12.dp, 0.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(12.dp, 0.dp)
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -67,6 +70,14 @@ fun SchedulesScreen(
                 )
             }
         }
+
+        item {
+            LastUpdated(
+                mybkViewModel.selectedScheduleSemester.value?.ngay_cap_nhat ?: "",
+                "yyyy-MM-dd HH:mm:ss"
+            )
+        }
+
         mybkViewModel.selectedScheduleSemester.value?.tkb?.forEach { schedule ->
             item {
                 ScheduleCard(schedule, onCourseClick)

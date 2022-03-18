@@ -1,7 +1,6 @@
 package com.wonrax.mybk.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +15,7 @@ import com.wonrax.mybk.ui.component.DropdownMenu
 import com.wonrax.mybk.ui.component.FontSize
 import com.wonrax.mybk.ui.component.FontWeight
 import com.wonrax.mybk.ui.component.GradeCard
+import com.wonrax.mybk.ui.component.LastUpdated
 import com.wonrax.mybk.ui.component.MainScreenLayout
 import com.wonrax.mybk.ui.component.Text
 import com.wonrax.mybk.ui.theme.Color
@@ -53,19 +53,20 @@ fun GradesScreen(mybkViewModel: MybkViewModel) {
                         mybkViewModel.selectedGradeSemester.value = item
                     }
                 )
-                Box(
-                    modifier = Modifier
-                        .padding(12.dp, 0.dp)
-                        .fillMaxWidth()
-                ) {
-                    SemesterSummary(
-                        so_tc = mybkViewModel.selectedGradeSemester.value?.so_tc,
-                        so_tctl_hk = mybkViewModel.selectedGradeSemester.value?.so_tctl_hk,
-                        diem_tb = mybkViewModel.selectedGradeSemester.value?.diem_tb,
-                        so_tctl = mybkViewModel.selectedGradeSemester.value?.so_tctl,
-                        diem_tbtl = mybkViewModel.selectedGradeSemester.value?.diem_tbtl
-                    )
-                }
+            }
+
+            item {
+                LastUpdated(
+                    mybkViewModel.selectedGradeSemester.value?.ngay_cap_nhat ?: "",
+                    "dd/MM/yyyy hh:mm:ss aa"
+                )
+                SemesterSummary(
+                    so_tc = mybkViewModel.selectedGradeSemester.value?.so_tc,
+                    so_tctl_hk = mybkViewModel.selectedGradeSemester.value?.so_tctl_hk,
+                    diem_tb = mybkViewModel.selectedGradeSemester.value?.diem_tb,
+                    so_tctl = mybkViewModel.selectedGradeSemester.value?.so_tctl,
+                    diem_tbtl = mybkViewModel.selectedGradeSemester.value?.diem_tbtl
+                )
             }
         }
 
@@ -97,7 +98,9 @@ fun SemesterSummary(
 
     if (!isEmpty) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp, 0.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
             Column(

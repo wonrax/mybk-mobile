@@ -11,6 +11,7 @@ import com.wonrax.mybk.ui.component.DropdownMenu
 import com.wonrax.mybk.ui.component.ExamCard
 import com.wonrax.mybk.ui.component.FontSize
 import com.wonrax.mybk.ui.component.FontWeight
+import com.wonrax.mybk.ui.component.LastUpdated
 import com.wonrax.mybk.ui.component.MainScreenLayout
 import com.wonrax.mybk.ui.component.Text
 import com.wonrax.mybk.viewmodel.MybkViewModel
@@ -48,6 +49,13 @@ fun ExamsScreen(mybkViewModel: MybkViewModel) {
                     }
                 )
             }
+        }
+
+        item {
+            LastUpdated(
+                mybkViewModel.selectedExamSemester.value?.ngay_cap_nhat ?: "",
+                "dd/MM/yyyy HH:mm:ss aa"
+            )
         }
 
         mybkViewModel.selectedExamSemester.value?.lichthi?.forEach {

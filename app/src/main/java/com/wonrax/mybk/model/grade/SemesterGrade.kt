@@ -10,7 +10,7 @@ class SemesterGrade(
 //    val dtb_chung_morong: String? = null,
 //    val hk_nh: String? = null,
 //    val kq_hbkk: null
-//    val ngay_cap_nhat: String? = null,
+    val ngay_cap_nhat: String? = null,
 //    val ngay_hbkk: null
 //    val ngay_th: String? = null,
     val so_tc: String? = null,
