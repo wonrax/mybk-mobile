@@ -66,6 +66,7 @@ fun Navigation(
                 exitTransition = { homeRouteExitAnim() }
             ) {
                 ProfileScreen(
+                    mainActivityViewModel,
                     { navController.navigate("policy") },
                     { navController.navigate("feedback") }
                 )

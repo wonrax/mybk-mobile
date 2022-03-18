@@ -105,7 +105,7 @@ fun LoginScreen() {
             } catch (e: UnknownHostException) {
                 displayLoginStatus = "Không thể kết nối, vui lòng kiểm tra đường truyền."
             } catch (e: Exception) {
-                displayLoginStatus = "Lỗi: ${e.message}"
+                displayLoginStatus = "Lỗi: ${e.localizedMessage}"
             } finally {
                 isLoading = false
             }

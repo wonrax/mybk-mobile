@@ -60,14 +60,14 @@ fun TextField(
             cursorColor = Color.Primary,
             disabledLabelColor = Color.Grey30,
             focusedIndicatorColor = Color.Primary,
-            unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-            unfocusedLabelColor = androidx.compose.ui.graphics.Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            unfocusedLabelColor = Color.Transparent,
             placeholderColor = Color.Grey30,
             trailingIconColor = Color.Dark
         ),
         visualTransformation = visualTransformation,
         trailingIcon = {
-            if (password)
+            if (password && value != "")
                 Icon(
                     Icons.EyeOff,
                     modifier = Modifier

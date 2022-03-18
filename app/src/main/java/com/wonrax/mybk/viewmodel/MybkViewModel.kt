@@ -23,7 +23,7 @@ class MybkViewModel(
     private val schedulesRepository: SchedulesRepository,
     private val examsRepository: ExamsRepository,
     private val gradesRepository: GradesRepository,
-    private val snackbarManager: SnackbarManager
+    private val snackbarManager: SnackbarManager,
 ) {
 
     // TODO make these read only states
@@ -103,5 +103,12 @@ class MybkViewModel(
             isLoading.value = false
             isRefreshing.value = false
         }
+    }
+
+    fun invalidateLocalStorage() {
+        // Delete all data on local storage
+        schedulesRepository.localStore(null)
+        examsRepository.localStore(null)
+        gradesRepository.localStore(null)
     }
 }

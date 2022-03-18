@@ -1,15 +1,10 @@
 package com.wonrax.mybk.model
 
-import android.content.Context
 import com.wonrax.mybk.network.Cookuest
-import com.wonrax.mybk.network.OkHttpClientSingleton
 import com.wonrax.mybk.network.Response
 import com.wonrax.mybk.network.await
 import com.wonrax.mybk.network.utils.HtmlUtils
 import com.wonrax.mybk.network.utils.HttpUtils
-import com.wonrax.mybk.repository.ExamsRepository
-import com.wonrax.mybk.repository.GradesRepository
-import com.wonrax.mybk.repository.SchedulesRepository
 import okhttp3.FormBody
 import okhttp3.RequestBody
 import org.jsoup.Jsoup
@@ -256,20 +251,13 @@ object DeviceUser {
         }
     }
 
-    fun signOut(context: Context) {
+    fun logOut() {
         username = null
         password = null
         faculty = null
         fullName = null
         updateCredentialsStore(null, null)
         updateProfileStore(null, null)
-        OkHttpClientSingleton.cookieJar.clear()
-
-        // Invalidate local storage
-        // TODO fix this band aid
-        GradesRepository(context.filesDir).localStore(null)
-        ExamsRepository(context.filesDir).localStore(null)
-        SchedulesRepository(context.filesDir).localStore(null)
     }
 
     /**

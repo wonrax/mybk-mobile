@@ -8,6 +8,7 @@ import com.wonrax.mybk.LoginActivity
 import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.model.SSOState
 import com.wonrax.mybk.model.SnackbarManager
+import com.wonrax.mybk.network.OkHttpClientSingleton
 import com.wonrax.mybk.repository.ExamsRepository
 import com.wonrax.mybk.repository.GradesRepository
 import com.wonrax.mybk.repository.SchedulesRepository
@@ -23,6 +24,7 @@ class MainActivityViewModel : ViewModel() {
     private var isInitiated = false
     lateinit var mybkViewModel: MybkViewModel
     private val snackbarManager = SnackbarManager
+    var logOut: (() -> Unit)? = null
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
         CoroutineScope(Dispatchers.Main).launch {
@@ -42,6 +44,23 @@ class MainActivityViewModel : ViewModel() {
         }
     }
 
+    private fun _logOut(context: Activity, mybkViewModel: MybkViewModel) {
+        // Delete cookies
+        OkHttpClientSingleton.cookieJar.clear()
+
+        // Invalidate local storage
+        mybkViewModel.invalidateLocalStorage()
+        DeviceUser.logOut()
+
+        // Start login page
+        startActivity(
+            context,
+            Intent(context, LoginActivity::class.java),
+            null
+        )
+        context.finish()
+    }
+
     fun constructor(context: Activity) {
         if (isInitiated) return
         isInitiated = true
@@ -59,6 +78,8 @@ class MainActivityViewModel : ViewModel() {
             GradesRepository(context.filesDir),
             SnackbarManager
         )
+
+        logOut = { _logOut(context, mybkViewModel) }
 
         CoroutineScope(Dispatchers.IO).launch(coroutineExceptionHandler) {
             when (DeviceUser.signIn()) {
@@ -81,9 +102,7 @@ class MainActivityViewModel : ViewModel() {
                     mybkViewModel.isRefreshing.value = false
                 }
                 else -> {
-                    DeviceUser.signOut(context)
-                    startActivity(context, Intent(context, LoginActivity::class.java), null)
-                    context.finish()
+                    _logOut(context, mybkViewModel)
                     return@launch
                 }
             }

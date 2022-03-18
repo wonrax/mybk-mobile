@@ -1,7 +1,6 @@
 package com.wonrax.mybk.ui.screens
 
 import android.app.Activity
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,10 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.wonrax.mybk.APP_VERSION
-import com.wonrax.mybk.LoginActivity
 import com.wonrax.mybk.WEBSITE_URL
 import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.ui.component.FontSize
@@ -35,10 +32,15 @@ import com.wonrax.mybk.ui.component.Icons
 import com.wonrax.mybk.ui.component.ScreenLayout
 import com.wonrax.mybk.ui.component.Text
 import com.wonrax.mybk.ui.theme.Color
+import com.wonrax.mybk.viewmodel.MainActivityViewModel
 import com.wonrax.mybk.viewmodel.openBrowser
 
 @Composable
-fun ProfileScreen(navigateToPolicyScreen: () -> Unit, navigateToFeedback: () -> Unit) {
+fun ProfileScreen(
+    mainActivityViewModel: MainActivityViewModel,
+    navigateToPolicyScreen: () -> Unit,
+    navigateToFeedback: () -> Unit
+) {
 
     // Change status bar to grey when come back from other screens
     val systemUIController = rememberSystemUiController()
@@ -97,17 +99,11 @@ fun ProfileScreen(navigateToPolicyScreen: () -> Unit, navigateToFeedback: () -> 
                     FullWidthButton(
                         text = "Đăng xuất",
                         icon = Icons.Logout,
-                        color = Color.Error
-                    ) {
-                        // TODO move this to viewmodel
-                        DeviceUser.signOut(context)
-                        ContextCompat.startActivity(
-                            context,
-                            Intent(context, LoginActivity::class.java),
-                            null
-                        )
-                        context.finish()
-                    }
+                        color = Color.Error,
+                        onClick = {
+                            mainActivityViewModel.logOut?.let { it() }
+                        }
+                    )
                     FullWidthButton(
                         text = "Phiên bản $APP_VERSION",
                         disabled = true
