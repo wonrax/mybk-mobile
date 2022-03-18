@@ -62,7 +62,8 @@ class MybkAppState(
         }
     }
 
-    private val bottomBarRoutes = Screen.Items.list.map { it.route }
+    // Also want to keep displaying bottom bar when dialog is opened
+    private val bottomBarRoutes = Screen.Items.list.map { it.route } + "feedback"
 
     val shouldShowBottomBar: Boolean
         @Composable get() = navController

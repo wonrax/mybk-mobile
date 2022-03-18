@@ -7,13 +7,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -28,13 +30,15 @@ import com.wonrax.mybk.WEBSITE_URL
 import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.ui.component.FontSize
 import com.wonrax.mybk.ui.component.FontWeight
+import com.wonrax.mybk.ui.component.Icon
+import com.wonrax.mybk.ui.component.Icons
 import com.wonrax.mybk.ui.component.ScreenLayout
 import com.wonrax.mybk.ui.component.Text
-import com.wonrax.mybk.ui.component.TextLink
 import com.wonrax.mybk.ui.theme.Color
+import com.wonrax.mybk.viewmodel.openBrowser
 
 @Composable
-fun ProfileScreen(navigateToPolicyScreen: () -> Unit) {
+fun ProfileScreen(navigateToPolicyScreen: () -> Unit, navigateToFeedback: () -> Unit) {
 
     // Change status bar to grey when come back from other screens
     val systemUIController = rememberSystemUiController()
@@ -44,12 +48,13 @@ fun ProfileScreen(navigateToPolicyScreen: () -> Unit) {
 
     val context = LocalContext.current as Activity
     ScreenLayout {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(8.dp, 72.dp)
-        ) {
-            item {
+        Box(Modifier.verticalScroll(rememberScrollState())) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(12.dp, 72.dp),
+                verticalArrangement = Arrangement.spacedBy(32.dp),
+            ) {
                 Column(
                     modifier = Modifier.padding(12.dp, 0.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -61,44 +66,87 @@ fun ProfileScreen(navigateToPolicyScreen: () -> Unit) {
                             fontWeight = FontWeight.Medium
                         )
                     }
-                    DeviceUser.username?.let { Text(it, fontWeight = FontWeight.Bold) }
-                    DeviceUser.faculty?.let { Text(it) }
-                }
-            }
-
-            item {
-                // TODO make this a button component
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(16.dp))
-                        .clickable {
-                            // TODO move this to viewmodel
-                            DeviceUser.signOut(context)
-                            ContextCompat.startActivity(
-                                context,
-                                Intent(context, LoginActivity::class.java),
-                                null
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        DeviceUser.username?.let {
+                            Text(
+                                it,
+                                fontWeight = FontWeight.Medium,
+                                color = Color.Primary
                             )
-                            context.finish()
                         }
-                        .background(Color.Light)
-                        .padding(24.dp, 12.dp)
-                ) {
-                    Text("Đăng xuất", fontWeight = FontWeight.Bold, color = Color.Error)
+                        DeviceUser.faculty?.let { Text(it, fontWeight = FontWeight.Medium) }
+                    }
                 }
-            }
-            item {
-                Spacer(modifier = Modifier.height(36.dp))
-                Column(
-                    modifier = Modifier.padding(12.dp, 0.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text("Về Mybk Mobile", fontSize = FontSize.Large, fontWeight = FontWeight.Medium)
-                    Text("Phiên bản $APP_VERSION", color = Color.Grey50)
-                    Text("Điều khoản sử dụng", Modifier.clickable { navigateToPolicyScreen() })
-                    TextLink(context, "Mybk Mobile trên GitHub", WEBSITE_URL)
+
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FullWidthButton(
+                        text = "Điều khoản sử dụng",
+                        icon = Icons.Info,
+                        onClick = navigateToPolicyScreen
+                    )
+                    FullWidthButton(
+                        text = "Mybk Mobile trên GitHub",
+                        icon = Icons.ExternalLink,
+                        onClick = { openBrowser(context, WEBSITE_URL) }
+                    )
+                    FullWidthButton(
+                        text = "Liên hệ / Phản hồi",
+                        icon = Icons.Message,
+                        onClick = navigateToFeedback
+                    )
+                    FullWidthButton(
+                        text = "Đăng xuất",
+                        icon = Icons.Logout,
+                        color = Color.Error
+                    ) {
+                        // TODO move this to viewmodel
+                        DeviceUser.signOut(context)
+                        ContextCompat.startActivity(
+                            context,
+                            Intent(context, LoginActivity::class.java),
+                            null
+                        )
+                        context.finish()
+                    }
+                    FullWidthButton(
+                        text = "Phiên bản $APP_VERSION",
+                        disabled = true
+                    )
                 }
+                // Pad the bottom navigation
+                Spacer(Modifier.height(36.dp))
             }
         }
+    }
+}
+
+@Composable
+fun FullWidthButton(
+    text: String,
+    icon: Icons? = null,
+    disabled: Boolean = false,
+    color: androidx.compose.ui.graphics.Color? = null,
+    onClick: (() -> Unit)? = null
+) {
+    var modifier = Modifier
+        .fillMaxWidth()
+        .clip(RoundedCornerShape(32.dp))
+    if (onClick != null) modifier = modifier.then(Modifier.clickable(onClick = onClick))
+
+    var contentColor = color ?: Color.Dark
+    if (disabled) contentColor = Color.Grey50
+
+    Row(
+        modifier.then(
+            Modifier
+                .background(if (!disabled) Color.Light else Color.Transparent)
+                .padding(24.dp, 16.dp)
+        ),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        if (icon != null) {
+            Icon(icon, tint = contentColor)
+        }
+        Text(text, fontWeight = FontWeight.Medium, color = contentColor)
     }
 }

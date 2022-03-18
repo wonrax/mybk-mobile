@@ -22,7 +22,11 @@ enum class Icons {
     Paper,
     PaperBold,
     Chart,
-    ChartBold
+    ChartBold,
+    Message,
+    Logout,
+    Info,
+    ExternalLink
 }
 
 val mapIconToResourceId: Map<Icons, Int> = mapOf(
@@ -41,6 +45,10 @@ val mapIconToResourceId: Map<Icons, Int> = mapOf(
     Icons.PaperBold to R.drawable.ic_paper_bold,
     Icons.Chart to R.drawable.ic_chart,
     Icons.ChartBold to R.drawable.ic_chart_bold,
+    Icons.Message to R.drawable.ic_message,
+    Icons.Info to R.drawable.ic_info,
+    Icons.Logout to R.drawable.ic_logout,
+    Icons.ExternalLink to R.drawable.ic_externallink
 )
 
 @Composable

@@ -2,7 +2,9 @@ package com.wonrax.mybk.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
@@ -42,6 +44,9 @@ fun MainScreenLayout(
                     contentPadding = PaddingValues(12.dp, 72.dp)
                 ) {
                     content()
+
+                    // Pad the bottom navigation
+                    item { Spacer(Modifier.height(36.dp)) }
                 }
             }
         }

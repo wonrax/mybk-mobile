@@ -11,12 +11,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.dialog
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
 import com.wonrax.mybk.model.schedule.CourseSchedule
 import com.wonrax.mybk.ui.screens.CourseDetailScreen
 import com.wonrax.mybk.ui.screens.ExamsScreen
+import com.wonrax.mybk.ui.screens.FeedbackDialog
 import com.wonrax.mybk.ui.screens.GradesScreen
 import com.wonrax.mybk.ui.screens.PolicyScreen
 import com.wonrax.mybk.ui.screens.ProfileScreen
@@ -63,7 +65,10 @@ fun Navigation(
                 enterTransition = { homeRouteEnterAnim() },
                 exitTransition = { homeRouteExitAnim() }
             ) {
-                ProfileScreen { navController.navigate("policy") }
+                ProfileScreen(
+                    { navController.navigate("policy") },
+                    { navController.navigate("feedback") }
+                )
             }
         }
 
@@ -96,6 +101,13 @@ fun Navigation(
             exitTransition = { slideOutRight() },
         ) {
             PolicyScreen(navController::popBackStack)
+        }
+
+        /* ###################################
+        ########## FEEDBACK DIALOG ###########
+        ###################################### */
+        dialog("feedback") {
+            FeedbackDialog(upAction = navController::popBackStack)
         }
     }
 }
