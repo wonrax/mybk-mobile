@@ -4,54 +4,42 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import com.wonrax.mybk.model.exam.CourseExam
-import com.wonrax.mybk.ui.theme.Color
 
 @Composable
 fun ExamCard(courseExam: CourseExam) {
-    CardLayout {
+    CourseCardLayout(
+        courseName = courseExam.ten_mh,
+        courseClassNumber = courseExam.nhomto,
+        courseId = courseExam.ma_mh,
+    ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            courseExam.ten_mh?.let {
-                Text(
-                    it,
-                    fontSize = FontSize.Large,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Dark
-                )
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                courseExam.ma_mh?.let {
-                    Text(
-                        it,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                courseExam.nhomto?.let { Text(it) }
-            }
+            ExamSchedule(
+                title = "Kiểm tra giữa kỳ",
+                date = courseExam.ngaykt,
+                time = courseExam.gio_kt,
+                location = courseExam.phong_ktra
+            )
+            ExamSchedule(
+                title = "Kiểm tra cuối kỳ",
+                date = courseExam.ngaythi,
+                time = courseExam.gio_thi,
+                location = courseExam.phong_thi
+            )
         }
-
-        ExamSchedule(
-            title = "Kiểm tra giữa kỳ",
-            date = courseExam.ngaykt,
-            time = courseExam.gio_kt,
-            location = courseExam.phong_ktra
-        )
-
-        ExamSchedule(
-            title = "Kiểm tra cuối kỳ",
-            date = courseExam.ngaythi,
-            time = courseExam.gio_thi,
-            location = courseExam.phong_thi
-        )
     }
 }
 
 @Composable
 fun IconedText(icon: Icons, text: String) {
-    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Icon(icon)
         Text(text, fontWeight = FontWeight.Medium)
     }

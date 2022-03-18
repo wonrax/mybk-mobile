@@ -1,7 +1,6 @@
 package com.wonrax.mybk.ui.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,81 +26,66 @@ import com.wonrax.mybk.ui.theme.Color
 
 @Composable
 fun ScheduleCard(schedule: CourseSchedule, onCourseClick: (semester: String, courseId: String) -> Unit) {
-    CardLayout {
-        Column(
-            modifier = Modifier.clickable {
-                // TODO fix this mess
-                schedule.hk_nh?.let {
-                    schedule.ma_mh?.let { it1 ->
-                        onCourseClick(
-                            it,
-                            it1
-                        )
-                    }
-                }
-            },
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            schedule.ten_mh?.let {
-                Text(
-                    it,
-                    fontSize = FontSize.Large,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Dark
-                )
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                schedule.ma_mh?.let {
-                    Text(
+    CourseCardLayout(
+        courseName = schedule.ten_mh,
+        courseId = schedule.ma_mh,
+        courseClassNumber = schedule.ma_nhom,
+        courseCredit = schedule.so_tin_chi,
+        onCourseClick = {
+            schedule.hk_nh?.let {
+                schedule.ma_mh?.let { it1 ->
+                    onCourseClick(
                         it,
-                        fontWeight = FontWeight.Bold
+                        it1
                     )
                 }
-                schedule.nhomto?.let { Text(it) }
-                schedule.so_tin_chi?.let { Text("${it}TC") }
             }
         }
-
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            // Course start & end time
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(Icons.TimeCircle)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                // Course start & end time
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    schedule.thu1?.let { Text("Thứ $it".uppercase(), fontWeight = FontWeight.Bold) }
-                    if (schedule.giobd != null && schedule.giokt != null) {
-                        Text("${schedule.giobd} - ${schedule.giokt}", color = Color.Primary)
+                    Icon(Icons.TimeCircle)
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        schedule.thu1?.let {
+                            Text(
+                                "Thứ $it".uppercase(),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        if (schedule.giobd != null && schedule.giokt != null) {
+                            Text("${schedule.giobd} - ${schedule.giokt}", color = Color.Primary)
+                        }
+                    }
+                }
+
+                // Course location
+                schedule.phong1?.let {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(Icons.Location)
+                        Text(schedule.phong1, fontWeight = FontWeight.Bold)
                     }
                 }
             }
 
-            // Course location
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(Icons.Location)
-                Column {
-                    schedule.phong1?.let { Text(it, fontWeight = FontWeight.Bold) }
-                    schedule.macoso?.let { Text(it) }
+            schedule.tuan_hoc?.let { it ->
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Tuần", fontWeight = FontWeight.Medium)
+                    AvailableWeeksScrollable(schedule.tuan_hoc, Color.Light)
                 }
-            }
-        }
-
-        schedule.tuan_hoc?.let { it ->
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("Tuần", fontWeight = FontWeight.Medium)
-                AvailableWeeksScrollable(schedule.tuan_hoc, Color.Light)
             }
         }
     }

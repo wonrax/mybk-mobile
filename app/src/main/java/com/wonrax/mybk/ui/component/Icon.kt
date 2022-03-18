@@ -20,6 +20,7 @@ enum class Icons {
     ArrowUp,
     ArrowDown,
     ArrowLeft,
+    ArrowRightS,
     EyeOff,
 }
 
@@ -36,7 +37,8 @@ val mapIconToResourceId: Map<Icons, Int> = mapOf(
     Icons.ArrowDown to R.drawable.ic_arrowdown,
     Icons.ArrowUp to R.drawable.ic_arrowup,
     Icons.EyeOff to R.drawable.ic_eyeoff,
-    Icons.ArrowLeft to R.drawable.ic_arrowleft
+    Icons.ArrowLeft to R.drawable.ic_arrowleft,
+    Icons.ArrowRightS to R.drawable.ic_arrowrights
 )
 
 @Composable

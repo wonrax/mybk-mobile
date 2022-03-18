@@ -25,7 +25,7 @@ class CourseGrade(
 //    so_tc: String? = null,
 //    so_tctl: String? = null,
 //    so_tctl_hk: String? = null,
-    val so_tin_chi: String? = null,
+    val so_tin_chi: Int? = null,
 //    sotc_dat_hocky: String? = null,
 //    sotien_hbkk: null
 //    ten_file: String? = null,

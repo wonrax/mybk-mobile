@@ -10,53 +10,40 @@ import com.wonrax.mybk.ui.theme.Color
 
 @Composable
 fun GradeCard(courseGrade: CourseGrade) {
-    CardLayout {
+    CourseCardLayout(
+        courseName = courseGrade.ten_mh,
+        courseId = courseGrade.ma_mh,
+        courseClassNumber = courseGrade.nhomto,
+        courseCredit = courseGrade.so_tin_chi
+    ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            courseGrade.ten_mh?.let {
-                Text(
-                    it,
-                    fontSize = FontSize.Large,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Dark
-                )
+
+            courseGrade.diem_thanhphan?.let {
+                GradeSection(title = "Điểm thành phần") { Text(it, fontWeight = FontWeight.Medium) }
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                courseGrade.ma_mh?.let {
-                    Text(
-                        it,
-                        fontWeight = FontWeight.Bold
-                    )
+
+            Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+                courseGrade.diem_thi?.let {
+                    GradeSection(title = "Điểm thi") {
+                        Text(
+                            it,
+                            fontSize = FontSize.Large,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
-                courseGrade.nhomto?.let { Text(it) }
-                courseGrade.so_tin_chi?.let { Text("${it}TC") }
-            }
-        }
 
-        courseGrade.diem_thanhphan?.let {
-            GradeSection(title = "Điểm thành phần") { Text(it, fontWeight = FontWeight.Medium) }
-        }
-
-        Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
-            courseGrade.diem_thi?.let {
-                GradeSection(title = "Điểm thi") {
-                    Text(
-                        it,
-                        fontSize = FontSize.Large,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-            }
-
-            courseGrade.diem_tong_ket?.let {
-                GradeSection(title = "Điểm tổng kết") {
-                    Text(
-                        it,
-                        fontSize = FontSize.Large,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Primary
-                    )
+                courseGrade.diem_tong_ket?.let {
+                    GradeSection(title = "Điểm tổng kết") {
+                        Text(
+                            it,
+                            fontSize = FontSize.Large,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Primary
+                        )
+                    }
                 }
             }
         }

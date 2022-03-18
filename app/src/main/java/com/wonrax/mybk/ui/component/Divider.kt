@@ -6,15 +6,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.wonrax.mybk.ui.theme.Color
 
 @Composable
-fun Divider() {
+fun Divider(
+    color: androidx.compose.ui.graphics.Color = Color.Grey30,
+    width: Dp = 1.dp
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.Grey30)
-            .height(1.dp)
+            .background(color)
+            .height(width)
     )
 }
