@@ -12,7 +12,7 @@ import com.wonrax.mybk.ui.theme.Color
 
 @Composable
 fun Divider(
-    color: androidx.compose.ui.graphics.Color = Color.Grey30,
+    color: androidx.compose.ui.graphics.Color = Color.Grey20,
     width: Dp = 1.dp
 ) {
     Box(
