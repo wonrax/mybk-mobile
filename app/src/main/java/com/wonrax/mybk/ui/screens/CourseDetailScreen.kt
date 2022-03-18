@@ -29,7 +29,7 @@ fun CourseDetailScreen(courseSchedule: CourseSchedule?, upAction: (() -> Unit)?)
         ) {
             if (courseSchedule != null) {
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text(
                             text = "Môn học".uppercase(Locale.getDefault()),
                             fontSize = FontSize.Body,
