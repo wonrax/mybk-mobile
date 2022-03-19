@@ -158,7 +158,7 @@ fun Preview() {
 //        tc_hp = 3f,
 //        ten_hocky = "Học kỳ 2 Năm học 2021 - 2022",
         ten_mh = "DE CUONG LUAN VAN TOT NGHIEP KHOA HOC MAY TINH",
-        thu1 = 3,
+        thu1 = "3",
 //        tiet_bd1 = 2,
 //        tiet_kt1 = 3,
         tuan_hoc = "01|02|03|--|--|06|07|08|09|--|--|--|--|14|15|16|17|18|"

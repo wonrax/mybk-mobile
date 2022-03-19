@@ -39,15 +39,12 @@ fun GradesScreen(mybkViewModel: MybkViewModel) {
         onRefresh = { mybkViewModel.update() }
     ) {
         item {
-            Column(
+            Text(
+                "Bảng điểm",
+                fontWeight = FontWeight.Medium,
+                fontSize = FontSize.Heading,
                 modifier = Modifier.padding(12.dp, 0.dp)
-            ) {
-                Text(
-                    "Bảng điểm",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = FontSize.Heading,
-                )
-            }
+            )
             Spacer(modifier = Modifier.height(16.dp))
         }
 

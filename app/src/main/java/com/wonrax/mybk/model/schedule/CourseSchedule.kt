@@ -15,7 +15,7 @@ class CourseSchedule(
     val tc_hp: Float? = null,
     val ten_hocky: String? = null,
     val ten_mh: String? = null,
-    val thu1: Int? = null,
+    val thu1: String? = null,
     val tiet_bd1: Int? = null,
     val tiet_kt1: Int? = null,
     val tuan_hoc: String? = null

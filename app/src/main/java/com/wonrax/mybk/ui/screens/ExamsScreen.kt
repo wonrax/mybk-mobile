@@ -1,6 +1,5 @@
 package com.wonrax.mybk.ui.screens
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,15 +23,12 @@ fun ExamsScreen(mybkViewModel: MybkViewModel) {
         onRefresh = { mybkViewModel.update() }
     ) {
         item {
-            Column(
+            Text(
+                "Lịch thi",
+                fontWeight = FontWeight.Medium,
+                fontSize = FontSize.Heading,
                 modifier = Modifier.padding(12.dp, 0.dp)
-            ) {
-                Text(
-                    "Lịch thi",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = FontSize.Heading,
-                )
-            }
+            )
             Spacer(modifier = Modifier.height(16.dp))
         }
 

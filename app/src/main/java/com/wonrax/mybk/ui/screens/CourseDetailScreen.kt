@@ -90,7 +90,7 @@ fun CourseDetail(
     so_tin_chi: Int?,
     tc_hp: Float?,
     ten_hocky: String?,
-    thu1: Int?,
+    thu1: String?,
     tiet_bd1: Int?,
     tiet_kt1: Int?,
     tuan_hoc: String?
@@ -104,7 +104,7 @@ fun CourseDetail(
         listOfNotNull(
             ma_mh,
             tietHoc,
-            thu1.toString(),
+            thu1,
             gioHoc,
             macoso,
             phong1,

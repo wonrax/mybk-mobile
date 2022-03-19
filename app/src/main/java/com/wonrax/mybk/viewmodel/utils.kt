@@ -17,18 +17,20 @@ fun formatDateToDisplay(
             dateFormat,
             Locale.ENGLISH
         ).parse(dateString)
-        if (date != null) {
-            displayDate = SimpleDateFormat(
-                "dd-MM-yyyy HH:mm",
-                Locale.getDefault()
-            ).format(date)
-        }
+        if (date != null) displayDate = dateToString(date)
     } catch (e: Exception) {
         // Ignore
         e.printStackTrace()
     }
 
     return displayDate
+}
+
+fun dateToString(date: Date): String {
+    return SimpleDateFormat(
+        "dd-MM-yyyy HH:mm",
+        Locale.getDefault()
+    ).format(date)
 }
 
 fun openBrowser(context: Context, url: String) {
