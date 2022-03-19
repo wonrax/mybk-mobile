@@ -51,7 +51,8 @@ class MainActivityViewModel : ViewModel() {
 
         // Invalidate local storage
         mybkViewModel.invalidateLocalStorage()
-        DeviceUser.logOut()
+        DeviceUser.clear()
+        UserSettings.clear()
 
         // Start login page
         startActivity(

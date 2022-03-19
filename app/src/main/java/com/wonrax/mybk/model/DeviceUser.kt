@@ -249,7 +249,7 @@ object DeviceUser {
         }
     }
 
-    fun logOut() {
+    fun clear() {
         username = null
         password = null
         faculty = null
@@ -278,6 +278,6 @@ object DeviceUser {
         this.fullName = fullName
         this.faculty = faculty
         EncryptedStorage.set(SHARED_PREFS_FACULTY_KEY, faculty)
-        EncryptedStorage.set(SHARED_PREFS_FULLNAME_KEY, DeviceUser.fullName)
+        EncryptedStorage.set(SHARED_PREFS_FULLNAME_KEY, fullName)
     }
 }

@@ -26,4 +26,9 @@ object UserSettings {
             }
         }
     }
+
+    fun clear() {
+        // Revert back to default value
+        updateWhenStartUp.update { true }
+    }
 }
