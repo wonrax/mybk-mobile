@@ -49,4 +49,19 @@ object EncryptedStorage {
             } else putString(key, value)
         }
     }
+
+    // TODO get in batch
+    fun getBoolean(key: String): Boolean? {
+        if (!sharedPrefs.contains(key)) return null
+        return sharedPrefs.getBoolean(key, false)
+    }
+
+    // TODO set in batch
+    fun setBoolean(key: String, value: Boolean?) {
+        sharedPrefs.edit(commit = true) {
+            if (value == null) {
+                remove(key)
+            } else putBoolean(key, value)
+        }
+    }
 }

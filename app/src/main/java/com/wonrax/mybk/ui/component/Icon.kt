@@ -26,7 +26,9 @@ enum class Icons {
     Message,
     Logout,
     Info,
-    ExternalLink
+    ExternalLink,
+    ToggleEnabled,
+    ToggleDisabled,
 }
 
 val mapIconToResourceId: Map<Icons, Int> = mapOf(
@@ -48,7 +50,9 @@ val mapIconToResourceId: Map<Icons, Int> = mapOf(
     Icons.Message to R.drawable.ic_message,
     Icons.Info to R.drawable.ic_info,
     Icons.Logout to R.drawable.ic_logout,
-    Icons.ExternalLink to R.drawable.ic_externallink
+    Icons.ExternalLink to R.drawable.ic_externallink,
+    Icons.ToggleDisabled to R.drawable.ic_toggledisabled,
+    Icons.ToggleEnabled to R.drawable.ic_toggleenabled
 )
 
 @Composable

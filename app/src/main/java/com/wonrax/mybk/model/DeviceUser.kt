@@ -85,11 +85,9 @@ enum class MybkState {
 // TODO Consider making this a class to avoid concurrent (coroutines) problems
 object DeviceUser {
     var username: String? = null
-
     var password: String? = null
 
     var fullName: String? = null
-
     var faculty: String? = null
 
     var stinfoToken: String? = null

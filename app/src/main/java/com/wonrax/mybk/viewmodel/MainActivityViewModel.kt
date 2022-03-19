@@ -8,6 +8,7 @@ import com.wonrax.mybk.LoginActivity
 import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.model.SSOState
 import com.wonrax.mybk.model.SnackbarManager
+import com.wonrax.mybk.model.UserSettings
 import com.wonrax.mybk.network.OkHttpClientSingleton
 import com.wonrax.mybk.repository.ExamsRepository
 import com.wonrax.mybk.repository.GradesRepository
@@ -81,31 +82,36 @@ class MainActivityViewModel : ViewModel() {
 
         logOut = { _logOut(context, mybkViewModel) }
 
-        CoroutineScope(Dispatchers.IO).launch(coroutineExceptionHandler) {
-            when (DeviceUser.signIn()) {
-                SSOState.LOGGED_IN -> {
-                    DeviceUser.getMybkToken()
-                    mybkViewModel.update()
-                }
-                SSOState.TOO_MANY_TRIES -> {
-                    withContext(Dispatchers.Main) {
-                        snackbarManager.showMessage("Bạn đang tạm thời bị chặn. Vui lòng đợi ít nhất 1 phút trước khi thử lại.")
+        if (UserSettings.updateWhenStartUp.value)
+            CoroutineScope(Dispatchers.IO).launch(coroutineExceptionHandler) {
+                when (DeviceUser.signIn()) {
+                    SSOState.LOGGED_IN -> {
+                        DeviceUser.getMybkToken()
+                        mybkViewModel.update()
                     }
-                    mybkViewModel.isLoading.value = false
-                    mybkViewModel.isRefreshing.value = false
-                }
-                SSOState.UNKNOWN -> {
-                    withContext(Dispatchers.Main) {
-                        snackbarManager.showMessage("Không thể đăng nhập vào tài khoản. Đang hiển thị dữ liệu cũ.")
+                    SSOState.TOO_MANY_TRIES -> {
+                        withContext(Dispatchers.Main) {
+                            snackbarManager.showMessage("Bạn đang tạm thời bị chặn. Vui lòng đợi ít nhất 1 phút trước khi thử lại.")
+                        }
+                        mybkViewModel.isLoading.value = false
+                        mybkViewModel.isRefreshing.value = false
                     }
-                    mybkViewModel.isLoading.value = false
-                    mybkViewModel.isRefreshing.value = false
-                }
-                else -> {
-                    _logOut(context, mybkViewModel)
-                    return@launch
+                    SSOState.UNKNOWN -> {
+                        withContext(Dispatchers.Main) {
+                            snackbarManager.showMessage("Không thể đăng nhập vào tài khoản. Đang hiển thị dữ liệu cũ.")
+                        }
+                        mybkViewModel.isLoading.value = false
+                        mybkViewModel.isRefreshing.value = false
+                    }
+                    else -> {
+                        _logOut(context, mybkViewModel)
+                        return@launch
+                    }
                 }
             }
+        else {
+            mybkViewModel.isLoading.value = false
+            mybkViewModel.isRefreshing.value = false
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.wonrax.mybk.ui.screens
 
 import android.app.Activity
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +19,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +31,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.wonrax.mybk.APP_VERSION
 import com.wonrax.mybk.WEBSITE_URL
 import com.wonrax.mybk.model.DeviceUser
+import com.wonrax.mybk.model.UserSettings
 import com.wonrax.mybk.ui.component.FontSize
 import com.wonrax.mybk.ui.component.FontWeight
 import com.wonrax.mybk.ui.component.Icon
@@ -35,6 +41,7 @@ import com.wonrax.mybk.ui.component.Text
 import com.wonrax.mybk.ui.theme.Color
 import com.wonrax.mybk.viewmodel.MainActivityViewModel
 import com.wonrax.mybk.viewmodel.openBrowser
+import kotlinx.coroutines.flow.update
 
 @Composable
 fun ProfileScreen(
@@ -76,6 +83,14 @@ fun ProfileScreen(
                 }
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    val updateWhenStartUpSetting = UserSettings.updateWhenStartUp.collectAsState()
+                    Toggle(
+                        text = "Tự động cập nhật dữ liệu khi mở ứng dụng",
+                        description = "Tắt tính năng này để ứng dụng không tự cập nhật dữ liệu mỗi khi khởi động. Hữu ích những lúc trường cập nhật dữ liệu và làm mất dữ liệu học kỳ hiện tại. Bạn vẫn có thể vuốt xuống để cập nhật dữ liệu một cách thủ công.",
+                        defaultState = updateWhenStartUpSetting.value
+                    ) { newValue ->
+                        UserSettings.updateWhenStartUp.update { newValue }
+                    }
                     FullWidthButton(
                         text = "Điều khoản sử dụng",
                         icon = Icons.Info,
@@ -131,7 +146,7 @@ fun FullWidthButton(
         modifier.then(
             Modifier
                 .background(if (!disabled) Color.Light else Color.Transparent)
-                .padding(24.dp, 16.dp)
+                .padding(16.dp)
         ),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -140,5 +155,41 @@ fun FullWidthButton(
             Icon(icon, tint = contentColor)
         }
         Text(text, fontWeight = FontWeight.Medium, color = contentColor)
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun Toggle(
+    text: String,
+    description: String? = null,
+    defaultState: Boolean,
+    onToggle: ((Boolean) -> Unit)
+) {
+    val isEnabled = remember { mutableStateOf(defaultState) }
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(32.dp))
+            .background(Color.Light)
+            .clickable {
+                onToggle(!isEnabled.value)
+                isEnabled.value = !isEnabled.value
+            }
+            .padding(20.dp, 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(text, fontWeight = FontWeight.Medium)
+            description?.let { Text(it, fontSize = FontSize.Small, color = Color.Grey50) }
+        }
+        AnimatedContent(
+            targetState = isEnabled.value,
+        ) { isEnabledState ->
+            if (isEnabledState) Icon(Icons.ToggleEnabled)
+            else Icon(Icons.ToggleDisabled)
+        }
     }
 }
