@@ -19,8 +19,8 @@ android {
         applicationId "com.wonrax.mybk"
         minSdk 25
         targetSdk 31
-        versionCode 202202101
-        versionName "1.0.0-rc"
+        versionCode 202203191
+        versionName "1.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
