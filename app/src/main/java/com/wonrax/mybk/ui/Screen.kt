@@ -8,7 +8,7 @@ sealed class Screen(
     val icon: Icons,
     val iconSelected: Icons,
 ) {
-    object Schedules : Screen("home/schedules", "Lịch học", Icons.Calendar, Icons.CalendarBold)
+    object Schedules : Screen("home/schedules", "TKB", Icons.Calendar, Icons.CalendarBold)
     object Exams : Screen("home/exams", "Lịch thi", Icons.Paper, Icons.PaperBold)
     object Transcript : Screen("home/transcript", "Bảng điểm", Icons.Chart, Icons.ChartBold)
     object Profile : Screen("home/profile", "Cá nhân", Icons.Profile, Icons.ProfileBold)

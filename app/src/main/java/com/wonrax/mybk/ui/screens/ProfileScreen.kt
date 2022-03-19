@@ -70,14 +70,8 @@ fun ProfileScreen(
                         )
                     }
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        DeviceUser.username?.let {
-                            Text(
-                                it,
-                                fontWeight = FontWeight.Medium,
-                                color = Color.Primary
-                            )
-                        }
-                        DeviceUser.faculty?.let { Text(it, fontWeight = FontWeight.Medium) }
+                        DeviceUser.username?.let { Text(it, color = Color.Primary) }
+                        DeviceUser.faculty?.let { Text(it) }
                     }
                 }
 
@@ -145,6 +139,6 @@ fun FullWidthButton(
         if (icon != null) {
             Icon(icon, tint = contentColor)
         }
-        Text(text, fontWeight = FontWeight.Medium, color = contentColor, lineHeight = 1.0)
+        Text(text, fontWeight = FontWeight.Medium, color = contentColor)
     }
 }

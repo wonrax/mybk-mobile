@@ -46,7 +46,7 @@ fun SchedulesScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    "Lịch học",
+                    "Thời khóa biểu",
                     fontWeight = FontWeight.Medium,
                     fontSize = FontSize.Heading,
                 )

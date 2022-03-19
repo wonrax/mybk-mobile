@@ -60,7 +60,6 @@ fun BottomNavigation(navController: NavHostController) {
         ) {
             items.forEach { screen ->
                 val selected = screen.route == backStackEntry.value?.destination?.route
-                val iconColor = if (selected) Color.Primary else Color.Grey50
 
                 Column(
                     modifier = Modifier
@@ -75,13 +74,12 @@ fun BottomNavigation(navController: NavHostController) {
                 ) {
                     Icon(
                         icon = if (selected) screen.iconSelected else screen.icon,
-                        tint = iconColor
+                        tint = Color.Dark
                     )
                     Text(
                         screen.title,
                         fontSize = FontSize.Small,
-                        color = iconColor,
-                        fontWeight = FontWeight.Medium,
+                        color = Color.Dark,
                         textAlign = TextAlign.Center,
                         softWrap = false,
                         letterSpacing = (-0.2).sp
