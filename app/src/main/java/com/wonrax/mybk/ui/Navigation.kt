@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.dialog
@@ -41,9 +42,12 @@ fun Navigation(
                 Screen.Schedules.route,
                 enterTransition = { homeRouteEnterAnim() },
                 exitTransition = { homeRouteExitAnim() }
-            ) {
+            ) { from ->
                 SchedulesScreen(mainActivityViewModel.mybkViewModel) { semester, courseId ->
-                    navController.navigate("courseDetail/$semester/$courseId")
+                    // In order to discard duplicated navigation events, we check the Lifecycle
+                    if (from.lifecycleIsResumed()) {
+                        navController.navigate("courseDetail/$semester/$courseId")
+                    }
                 }
             }
             composable(
@@ -67,8 +71,8 @@ fun Navigation(
             ) {
                 ProfileScreen(
                     mainActivityViewModel,
-                    { navController.navigate("policy") },
-                    { navController.navigate("feedback") }
+                    { navController.navigate("policy") { launchSingleTop = true } },
+                    { navController.navigate("feedback") { launchSingleTop = true } }
                 )
             }
         }
@@ -166,3 +170,11 @@ fun AnimatedContentScope<NavBackStackEntry>.homeRouteExitAnim(): ExitTransition 
         ExitTransition.None
     else slideOutLeft()
 }
+
+/**
+ * If the lifecycle is not resumed it means this NavBackStackEntry already processed a nav event.
+ *
+ * This is used to de-duplicate navigation events.
+ */
+private fun NavBackStackEntry.lifecycleIsResumed() =
+    this.lifecycle.currentState == Lifecycle.State.RESUMED
