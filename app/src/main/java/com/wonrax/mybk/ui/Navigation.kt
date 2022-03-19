@@ -81,6 +81,7 @@ fun Navigation(
             enterTransition = { slideInLeft() },
             exitTransition = { slideOutRight() },
         ) { backStackEntry ->
+            // TODO bring this to CourseDetailScreen
             val courseSchedule = remember { mutableStateOf<CourseSchedule?>(null) }
             LaunchedEffect(key1 = true) {
                 val courseId = backStackEntry.arguments?.getString("courseId")

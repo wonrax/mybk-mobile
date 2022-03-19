@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.wonrax.mybk.ui.theme.Color
 import com.wonrax.mybk.viewmodel.openBrowser
 
+// TODO consider removing this
 @Composable
 fun TextLink(context: Context, title: String, url: String) {
     Box(
