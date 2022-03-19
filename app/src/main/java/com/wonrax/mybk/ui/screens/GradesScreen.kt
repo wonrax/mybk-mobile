@@ -75,6 +75,29 @@ fun GradesScreen(mybkViewModel: MybkViewModel) {
             }
         }
 
+        if (listOfNotNull( // Avoid redundant padding gap when the list is empty
+                mybkViewModel.selectedGradeSemester.value?.dtb_1hocky,
+                mybkViewModel.selectedGradeSemester.value?.diem_renluyen,
+                mybkViewModel.selectedGradeSemester.value?.sotc_dat_hocky,
+                mybkViewModel.selectedGradeSemester.value?.dtb_chung_morong,
+                mybkViewModel.selectedGradeSemester.value?.dieukien_hbkk,
+                mybkViewModel.selectedGradeSemester.value?.kq_hbkk,
+                mybkViewModel.selectedGradeSemester.value?.ngay_hbkk
+            ).isNotEmpty()
+        ) {
+            item {
+                ScholarshipConditions(
+                    dtb_1hocky = mybkViewModel.selectedGradeSemester.value?.dtb_1hocky,
+                    diem_renluyen = mybkViewModel.selectedGradeSemester.value?.diem_renluyen,
+                    sotc_dat_hocky = mybkViewModel.selectedGradeSemester.value?.sotc_dat_hocky,
+                    dtb_chung_morong = mybkViewModel.selectedGradeSemester.value?.dtb_chung_morong,
+                    dieukien_hbkk = mybkViewModel.selectedGradeSemester.value?.dieukien_hbkk,
+                    kq_hbkk = mybkViewModel.selectedGradeSemester.value?.kq_hbkk,
+                    ngay_hbkk = mybkViewModel.selectedGradeSemester.value?.ngay_hbkk
+                )
+            }
+        }
+
         mybkViewModel.selectedGradeSemester.value?.diem?.forEach {
             item {
                 GradeCard(it)
@@ -106,30 +129,74 @@ fun SemesterSummary(
     so_tctl: String?,
     diem_tbtl: String?
 ) {
-    val isEmpty = listOfNotNull(so_tc, so_tctl_hk, diem_tb, so_tctl, diem_tbtl).isEmpty()
-
-    if (!isEmpty) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp, 0.dp)
-        ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                listOf(so_tc, so_tctl_hk, diem_tb, so_tctl, diem_tbtl)
-                    .forEachIndexed() { index, item ->
-                        item?.let {
-                            if (index != 0) {
-                                Divider()
-                            }
-                            SemesterSummaryRow(title = summaryTitles[index], value = item)
-                        }
-                    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp, 8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            "Tổng kết",
+            fontSize = FontSize.Large,
+            fontWeight = FontWeight.Medium,
+            color = Color.Primary
+        )
+        listOf(so_tc, so_tctl_hk, diem_tb, so_tctl, diem_tbtl)
+            .forEachIndexed() { index, item ->
+                item?.let {
+                    Divider()
+                    SemesterSummaryRow(title = summaryTitles[index], value = item)
+                }
             }
-            Spacer(modifier = Modifier.height(16.dp))
+    }
+}
+
+val scholarshipTitles = listOf<String>(
+    "ĐTB 1 học kỳ",
+    "Điểm rèn luyện",
+    "Số TC đạt trong học kỳ",
+    "Số TC tích lũy",
+    "Điều kiện xét HBKK",
+    "Kết quả xét HBKK",
+    "Ngày cập nhật",
+)
+
+@Composable
+fun ScholarshipConditions(
+    dtb_1hocky: String?,
+    diem_renluyen: String?,
+    sotc_dat_hocky: String?,
+    dtb_chung_morong: String?,
+    dieukien_hbkk: String?,
+    kq_hbkk: String?,
+    ngay_hbkk: String?
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp, 4.dp, 12.dp, 8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            "Thông tin xét học bổng khuyến khích",
+            fontSize = FontSize.Large,
+            fontWeight = FontWeight.Medium,
+            color = Color.Primary
+        )
+
+        listOf(
+            dtb_1hocky,
+            diem_renluyen,
+            sotc_dat_hocky,
+            dtb_chung_morong,
+            dieukien_hbkk,
+            kq_hbkk,
+            ngay_hbkk
+        ).forEachIndexed() { index, item ->
+            item?.let {
+                Divider()
+                SemesterSummaryRow(title = scholarshipTitles[index], value = item)
+            }
         }
     }
 }
@@ -140,7 +207,7 @@ fun SemesterSummaryRow(title: String, value: String) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(title, fontWeight = FontWeight.Medium)
+        Text(title)
         Text(value, fontWeight = FontWeight.Medium, color = Color.Primary)
     }
 }
