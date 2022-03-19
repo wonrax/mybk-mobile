@@ -40,7 +40,7 @@ fun IconedText(icon: Icons, text: String) {
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(icon)
+        Icon(icon, size = IconSize.Small)
         Text(text)
     }
 }

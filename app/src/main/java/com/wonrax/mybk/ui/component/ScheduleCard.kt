@@ -46,28 +46,23 @@ fun ScheduleCard(schedule: CourseSchedule, onCourseClick: (semester: String, cou
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 // Course start & end time
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.TimeCircle)
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        schedule.thu1?.let { Text("Thứ $it") }
-                        if (schedule.giobd != null && schedule.giokt != null) {
-                            Text("${schedule.giobd} - ${schedule.giokt}", color = Color.Primary)
-                        }
+                    Icon(Icons.TimeCircle, size = IconSize.Small)
+                    schedule.thu1?.let { Text("Thứ $it") }
+                    if (schedule.giobd != null && schedule.giokt != null) {
+                        Text("${schedule.giobd} - ${schedule.giokt}", color = Color.Primary)
                     }
                 }
 
                 // Course location
                 schedule.phong1?.let {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(Icons.Location)
+                        Icon(Icons.Location, size = IconSize.Small)
                         Text(schedule.phong1)
                     }
                 }

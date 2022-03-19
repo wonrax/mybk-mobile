@@ -1,8 +1,10 @@
 package com.wonrax.mybk.ui.component
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.wonrax.mybk.R
 import com.wonrax.mybk.ui.theme.Color
 import androidx.compose.material.Icon as MaterialIcon
@@ -55,20 +57,28 @@ val mapIconToResourceId: Map<Icons, Int> = mapOf(
     Icons.ToggleEnabled to R.drawable.ic_toggleenabled
 )
 
+enum class IconSize {
+    Small,
+    Unchanged
+}
+
 @Composable
 fun Icon(
     icon: Icons,
     modifier: Modifier = Modifier,
-    tint: androidx.compose.ui.graphics.Color = Color.Dark
+    tint: androidx.compose.ui.graphics.Color = Color.Dark,
+    size: IconSize = IconSize.Unchanged
 ) {
     if (mapIconToResourceId[icon] == null) {
         throw Exception("No defined icon available.")
     } else {
+        var iconModifier = modifier
+        if (size == IconSize.Small) iconModifier = modifier.size(18.dp)
         mapIconToResourceId[icon]?.let { painterResource(id = it) }?.let {
             MaterialIcon(
                 painter = it,
                 contentDescription = "app icon",
-                modifier = modifier,
+                modifier = iconModifier,
                 tint = tint
             )
         }
