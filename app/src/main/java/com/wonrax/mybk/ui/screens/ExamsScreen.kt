@@ -51,17 +51,17 @@ fun ExamsScreen(mybkViewModel: MybkViewModel) {
             }
         }
 
+        mybkViewModel.selectedExamSemester.value?.lichthi?.forEach {
+            item {
+                ExamCard(courseExam = it)
+            }
+        }
+
         item {
             LastUpdated(
                 mybkViewModel.selectedExamSemester.value?.ngay_cap_nhat ?: "",
                 "dd/MM/yyyy HH:mm:ss aa"
             )
-        }
-
-        mybkViewModel.selectedExamSemester.value?.lichthi?.forEach {
-            item {
-                ExamCard(courseExam = it)
-            }
         }
     }
 }

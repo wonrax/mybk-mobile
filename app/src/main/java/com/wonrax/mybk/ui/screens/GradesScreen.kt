@@ -55,18 +55,23 @@ fun GradesScreen(mybkViewModel: MybkViewModel) {
                 )
             }
 
-            item {
-                LastUpdated(
-                    mybkViewModel.selectedGradeSemester.value?.ngay_cap_nhat ?: "",
-                    "dd/MM/yyyy hh:mm:ss aa"
-                )
-                SemesterSummary(
-                    so_tc = mybkViewModel.selectedGradeSemester.value?.so_tc,
-                    so_tctl_hk = mybkViewModel.selectedGradeSemester.value?.so_tctl_hk,
-                    diem_tb = mybkViewModel.selectedGradeSemester.value?.diem_tb,
-                    so_tctl = mybkViewModel.selectedGradeSemester.value?.so_tctl,
-                    diem_tbtl = mybkViewModel.selectedGradeSemester.value?.diem_tbtl
-                )
+            if (listOfNotNull( // Avoid redundant padding gap when the list is empty
+                    mybkViewModel.selectedGradeSemester.value?.so_tc,
+                    mybkViewModel.selectedGradeSemester.value?.so_tctl_hk,
+                    mybkViewModel.selectedGradeSemester.value?.diem_tb,
+                    mybkViewModel.selectedGradeSemester.value?.so_tctl,
+                    mybkViewModel.selectedGradeSemester.value?.diem_tbtl
+                ).isNotEmpty()
+            ) {
+                item {
+                    SemesterSummary(
+                        so_tc = mybkViewModel.selectedGradeSemester.value?.so_tc,
+                        so_tctl_hk = mybkViewModel.selectedGradeSemester.value?.so_tctl_hk,
+                        diem_tb = mybkViewModel.selectedGradeSemester.value?.diem_tb,
+                        so_tctl = mybkViewModel.selectedGradeSemester.value?.so_tctl,
+                        diem_tbtl = mybkViewModel.selectedGradeSemester.value?.diem_tbtl
+                    )
+                }
             }
         }
 
@@ -74,6 +79,13 @@ fun GradesScreen(mybkViewModel: MybkViewModel) {
             item {
                 GradeCard(it)
             }
+        }
+
+        item {
+            LastUpdated(
+                mybkViewModel.selectedGradeSemester.value?.ngay_cap_nhat ?: "",
+                "dd/MM/yyyy hh:mm:ss aa"
+            )
         }
     }
 }

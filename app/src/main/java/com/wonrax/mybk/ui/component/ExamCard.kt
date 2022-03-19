@@ -41,7 +41,7 @@ fun IconedText(icon: Icons, text: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(icon)
-        Text(text, fontWeight = FontWeight.Medium)
+        Text(text)
     }
 }
 
@@ -50,7 +50,7 @@ fun ExamSchedule(title: String, date: String?, time: String?, location: String?)
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(title, fontWeight = FontWeight.Bold)
+        Text(title, fontWeight = FontWeight.Medium)
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             if (date != null) IconedText(icon = Icons.Calendar, text = date)
             if (time != null) IconedText(icon = Icons.TimeCircle, text = time)

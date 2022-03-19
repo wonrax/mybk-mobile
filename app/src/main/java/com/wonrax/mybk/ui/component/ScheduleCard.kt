@@ -54,12 +54,7 @@ fun ScheduleCard(schedule: CourseSchedule, onCourseClick: (semester: String, cou
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        schedule.thu1?.let {
-                            Text(
-                                "Thứ $it".uppercase(),
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
+                        schedule.thu1?.let { Text("Thứ $it") }
                         if (schedule.giobd != null && schedule.giokt != null) {
                             Text("${schedule.giobd} - ${schedule.giokt}", color = Color.Primary)
                         }
@@ -73,7 +68,7 @@ fun ScheduleCard(schedule: CourseSchedule, onCourseClick: (semester: String, cou
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(Icons.Location)
-                        Text(schedule.phong1, fontWeight = FontWeight.Bold)
+                        Text(schedule.phong1)
                     }
                 }
             }
@@ -83,7 +78,7 @@ fun ScheduleCard(schedule: CourseSchedule, onCourseClick: (semester: String, cou
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Tuần", fontWeight = FontWeight.Medium)
+                    Text("Tuần")
                     AvailableWeeksScrollable(schedule.tuan_hoc, Color.Light)
                 }
             }
@@ -117,17 +112,12 @@ fun AvailableWeeksScrollable(
                                 .padding(6.dp, 4.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                String.format("%02d", week),
-                                color = Color.Primary,
-                                fontWeight = FontWeight.Medium
-                            )
+                            Text(String.format("%02d", week), color = Color.Primary)
                         }
                     } else {
                         Text(
                             "--",
-                            color = Color.Grey30,
-                            fontWeight = FontWeight.Medium
+                            color = Color.Grey30
                         )
                     }
                 }
@@ -139,7 +129,7 @@ fun AvailableWeeksScrollable(
         // Fading edge to indicate scrollable
         Box(
             Modifier
-                .size(36.dp)
+                .size(48.dp, 36.dp)
                 .drawWithContent {
                     val colors = listOf(fadeColor, Color.Transparent)
                     drawContent()

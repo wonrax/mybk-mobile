@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -138,11 +139,12 @@ fun FullWidthButton(
                 .background(if (!disabled) Color.Light else Color.Transparent)
                 .padding(24.dp, 16.dp)
         ),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         if (icon != null) {
             Icon(icon, tint = contentColor)
         }
-        Text(text, fontWeight = FontWeight.Medium, color = contentColor)
+        Text(text, fontWeight = FontWeight.Medium, color = contentColor, lineHeight = 1.0)
     }
 }

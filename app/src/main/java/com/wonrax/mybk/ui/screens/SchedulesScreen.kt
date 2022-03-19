@@ -71,17 +71,17 @@ fun SchedulesScreen(
             }
         }
 
+        mybkViewModel.selectedScheduleSemester.value?.tkb?.forEach { schedule ->
+            item {
+                ScheduleCard(schedule, onCourseClick)
+            }
+        }
+
         item {
             LastUpdated(
                 mybkViewModel.selectedScheduleSemester.value?.ngay_cap_nhat ?: "",
                 "yyyy-MM-dd HH:mm:ss"
             )
-        }
-
-        mybkViewModel.selectedScheduleSemester.value?.tkb?.forEach { schedule ->
-            item {
-                ScheduleCard(schedule, onCourseClick)
-            }
         }
     }
 }
