@@ -85,8 +85,8 @@ fun ProfileScreen(
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     val updateWhenStartUpSetting = UserSettings.updateWhenStartUp.collectAsState()
                     Toggle(
-                        text = "Tự động cập nhật dữ liệu khi mở ứng dụng",
-                        description = "Tắt tính năng này để ứng dụng không tự cập nhật dữ liệu mỗi khi khởi động. Hữu ích những lúc trường cập nhật dữ liệu và làm mất dữ liệu học kỳ hiện tại. Bạn vẫn có thể vuốt xuống để cập nhật dữ liệu một cách thủ công.",
+                        text = "Tự động cập nhật dữ liệu",
+                        description = "Tắt tính năng này để ứng dụng không tự cập nhật dữ liệu mỗi khi khởi động. Bạn vẫn có thể vuốt xuống để cập nhật dữ liệu.",
                         defaultState = updateWhenStartUpSetting.value
                     ) { newValue ->
                         UserSettings.updateWhenStartUp.update { newValue }

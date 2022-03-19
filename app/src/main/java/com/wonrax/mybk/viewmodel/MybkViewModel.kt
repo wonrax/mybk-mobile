@@ -40,13 +40,18 @@ class MybkViewModel(
     val selectedExamSemester = mutableStateOf<SemesterExam?>(null)
     val selectedGradeSemester = mutableStateOf<SemesterGrade?>(null)
 
+    // If there are data cached in local storage
+    var isDataCached = false
+
     init {
         // Get cached data
         val isSchedulesCached = this.schedulesRepository.getLocal()
         val isExamsCached = this.examsRepository.getLocal()
         val isGradesCached = this.gradesRepository.getLocal()
 
-        if (isExamsCached && isSchedulesCached && isGradesCached) {
+        isDataCached = isExamsCached && isSchedulesCached && isGradesCached
+
+        if (isDataCached) {
             selectedScheduleSemester.value = schedulesData.value!![0]
             selectedExamSemester.value = examsData.value!![0]
             selectedGradeSemester.value = gradesData.value!![0]
