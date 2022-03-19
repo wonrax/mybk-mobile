@@ -1,5 +1,7 @@
 package com.wonrax.mybk.ui.component
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +29,7 @@ import androidx.compose.ui.unit.toSize
 import com.wonrax.mybk.ui.theme.Color
 import androidx.compose.material.DropdownMenu as MaterialDropdownMenu
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun <T> DropdownMenu(
     items: Array<T>,
@@ -60,7 +63,10 @@ fun <T> DropdownMenu(
                     itemToStringRepresentation(selectedItem)?.let { Text(it, Modifier.weight(1f)) }
                 else
                     Text("Chưa chọn")
-                Icon(Icons.ArrowDown, Modifier.padding(start = 8.dp))
+                AnimatedContent(targetState = expanded) { isExpanded ->
+                    if (isExpanded) Icon(Icons.ArrowUp, Modifier.padding(start = 8.dp))
+                    else Icon(Icons.ArrowDown, Modifier.padding(start = 8.dp))
+                }
             }
         }
         MaterialDropdownMenu(

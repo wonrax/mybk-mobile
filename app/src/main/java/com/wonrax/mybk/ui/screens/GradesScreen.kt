@@ -1,5 +1,9 @@
 package com.wonrax.mybk.ui.screens
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,14 +11,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.wonrax.mybk.ui.component.Divider
 import com.wonrax.mybk.ui.component.DropdownMenu
 import com.wonrax.mybk.ui.component.FontSize
 import com.wonrax.mybk.ui.component.FontWeight
 import com.wonrax.mybk.ui.component.GradeCard
+import com.wonrax.mybk.ui.component.Icon
+import com.wonrax.mybk.ui.component.Icons
 import com.wonrax.mybk.ui.component.LastUpdated
 import com.wonrax.mybk.ui.component.MainScreenLayout
 import com.wonrax.mybk.ui.component.Text
@@ -110,6 +120,8 @@ fun GradesScreen(mybkViewModel: MybkViewModel) {
                 "dd/MM/yyyy hh:mm:ss aa"
             )
         }
+
+        item { SpecialGrades() }
     }
 }
 
@@ -209,5 +221,137 @@ fun SemesterSummaryRow(title: String, value: String) {
     ) {
         Text(title)
         Text(value, fontWeight = FontWeight.Medium, color = Color.Primary)
+    }
+}
+sealed class SpecialGrade(
+    val name: String,
+    val description: String,
+    val numericGrade: String,
+    val literalGrade: String,
+) {
+    object CT : SpecialGrade(
+        "Cấm thi",
+        "Được tính như điểm 0",
+        "11",
+        "CT"
+    )
+    object MT : SpecialGrade(
+        "Miễn học, miễn thi",
+        "Đạt nhưng không tính vào ĐTB",
+        "12",
+        "MT"
+    )
+    object VT : SpecialGrade(
+        "Vắng thi",
+        "Được tính như điểm 0",
+        "13",
+        "VT"
+    )
+    object HT : SpecialGrade(
+        "Hoãn thi, được phép thi sau",
+        "Không đạt và không tính vào ĐTB Được thỏa điều kiện môn học trước",
+        "14",
+        "HT"
+    )
+    object CH : SpecialGrade(
+        "Chưa có điểm",
+        "Chưa tính số TCTL và ĐTB",
+        "15",
+        "CH"
+    )
+    object RT : SpecialGrade(
+        "Rút môn học",
+        "Không ghi vào bảng điểm",
+        "17",
+        "RT"
+    )
+    object KD : SpecialGrade(
+        "Không đạt",
+        "Được tính như điểm 0",
+        "20",
+        "KD"
+    )
+    object DT : SpecialGrade(
+        "Đạt",
+        "Đạt nhưng không tính vào ĐTB",
+        "21",
+        "DT"
+    )
+    object VP : SpecialGrade(
+        "Vắng thi có phép",
+        "Không đạt và không tính vào ĐTB Được thỏa điều kiện môn học trước",
+        "22",
+        "VP"
+    )
+
+    object Items {
+        val list = listOf(CT, MT, VT, HT, CH, RT, KD, DT, VP)
+    }
+}
+
+@Composable
+fun SpecialGrades() {
+    Collapsible(title = "Các điểm đặc biệt") {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(12.dp, 0.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            SpecialGrade.Items.list.forEachIndexed { i, item ->
+                if (i != 0) Divider()
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(text = item.name, fontWeight = FontWeight.Medium)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(
+                                text = item.numericGrade,
+                                fontWeight = FontWeight.Medium,
+                                color = Color.Primary
+                            )
+                            Text(
+                                text = item.literalGrade,
+                                fontWeight = FontWeight.Medium,
+                                color = Color.Primary
+                            )
+                        }
+                    }
+                    Text(text = item.description, color = Color.Grey50)
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun Collapsible(title: String, content: @Composable () -> Unit) {
+    val isCollapsed = remember { mutableStateOf(true) }
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(32.dp))
+                .clickable { isCollapsed.value = !isCollapsed.value }
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = title,
+                fontSize = FontSize.Large,
+                fontWeight = FontWeight.Medium,
+                color = Color.Primary
+            )
+            AnimatedContent(
+                targetState = isCollapsed.value,
+            ) { isCollapsedState ->
+                if (isCollapsedState) Icon(Icons.ArrowDown)
+                else Icon(Icons.ArrowUp)
+            }
+        }
+        AnimatedVisibility(visible = !isCollapsed.value) {
+            content()
+        }
     }
 }
