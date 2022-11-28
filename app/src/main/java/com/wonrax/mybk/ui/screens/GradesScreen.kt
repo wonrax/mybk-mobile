@@ -114,7 +114,7 @@ fun GradesScreen(mybkViewModel: MybkViewModel) {
         item {
             LastUpdated(
                 mybkViewModel.selectedGradeSemester.value?.ngay_cap_nhat ?: "",
-                "dd/MM/yyyy hh:mm:ss aa"
+                "MM/dd/yyyy hh:mm:ss aa"
             )
         }
 

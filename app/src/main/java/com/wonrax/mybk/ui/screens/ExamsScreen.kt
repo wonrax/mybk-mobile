@@ -56,7 +56,7 @@ fun ExamsScreen(mybkViewModel: MybkViewModel) {
         item {
             LastUpdated(
                 mybkViewModel.selectedExamSemester.value?.ngay_cap_nhat ?: "",
-                "dd/MM/yyyy HH:mm:ss aa"
+                "MM/dd/yyyy HH:mm:ss aa"
             )
         }
     }
