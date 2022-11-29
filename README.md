@@ -1,3 +1,6 @@
+### 🔔 Call for repo maintainer
+I've graduated from our school, so I might not be able to access the system in the near future. New features may need active class schedules to test too. If you're interested, open an issue (or contact me, link in bio) and I'll consider to make you a repo maintainer. I can still help with product design and code.
+ 
 # Mybk Mobile
 Mybk Mobile is an unofficial Android app for Ho Chi Minh City University of Technology students. The app supports viewing course/exam schedules and academic transcript.
 
