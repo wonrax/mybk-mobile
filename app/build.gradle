@@ -19,7 +19,7 @@ android {
         applicationId "com.wonrax.mybk"
         minSdk 25
         targetSdk 33
-        versionCode 202203191
+        versionCode 202306121
         versionName "1.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -76,7 +76,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // Network
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
     implementation 'com.github.franmontiel:PersistentCookieJar:1.0.1'
     // Network debug
