@@ -46,7 +46,9 @@ object EncryptedStorage {
         sharedPrefs.edit(commit = true) {
             if (value == null) {
                 remove(key)
-            } else putString(key, value)
+            } else {
+                putString(key, value)
+            }
         }
     }
 
@@ -61,7 +63,9 @@ object EncryptedStorage {
         sharedPrefs.edit(commit = true) {
             if (value == null) {
                 remove(key)
-            } else putBoolean(key, value)
+            } else {
+                putBoolean(key, value)
+            }
         }
     }
 }

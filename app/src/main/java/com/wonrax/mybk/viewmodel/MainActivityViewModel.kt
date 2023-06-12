@@ -83,7 +83,7 @@ class MainActivityViewModel : ViewModel() {
 
         logOut = { _logOut(context, mybkViewModel) }
 
-        if (UserSettings.updateWhenStartUp.value || !mybkViewModel.isDataCached)
+        if (UserSettings.updateWhenStartUp.value || !mybkViewModel.isDataCached) {
             CoroutineScope(Dispatchers.IO).launch(coroutineExceptionHandler) {
                 when (DeviceUser.signIn()) {
                     SSOState.LOGGED_IN -> {
@@ -110,7 +110,7 @@ class MainActivityViewModel : ViewModel() {
                     }
                 }
             }
-        else {
+        } else {
             mybkViewModel.isLoading.value = false
             mybkViewModel.isRefreshing.value = false
         }

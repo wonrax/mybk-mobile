@@ -75,7 +75,7 @@ class Cookuest {
 
     fun post(
         url: String,
-        requestBody: RequestBody,
+        requestBody: RequestBody
     ): Call {
         val request: Request = requestTemplate
             .url(url)

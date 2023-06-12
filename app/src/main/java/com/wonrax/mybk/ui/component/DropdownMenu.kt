@@ -37,7 +37,6 @@ fun <T> DropdownMenu(
     selectedItem: T? = null,
     onSelectItem: ((T) -> Unit)? = null
 ) {
-
     var expanded by remember { mutableStateOf(false) }
 
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
@@ -57,15 +56,19 @@ fun <T> DropdownMenu(
         ) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                if (selectedItem != null)
+                if (selectedItem != null) {
                     itemToStringRepresentation(selectedItem)?.let { Text(it, Modifier.weight(1f)) }
-                else
+                } else {
                     Text("Chưa chọn")
+                }
                 AnimatedContent(targetState = expanded) { isExpanded ->
-                    if (isExpanded) Icon(Icons.ArrowUp, Modifier.padding(start = 8.dp))
-                    else Icon(Icons.ArrowDown, Modifier.padding(start = 8.dp))
+                    if (isExpanded) {
+                        Icon(Icons.ArrowUp, Modifier.padding(start = 8.dp))
+                    } else {
+                        Icon(Icons.ArrowDown, Modifier.padding(start = 8.dp))
+                    }
                 }
             }
         }
@@ -73,7 +76,7 @@ fun <T> DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .width(with(LocalDensity.current) { textfieldSize.width.toDp() }),
+                .width(with(LocalDensity.current) { textfieldSize.width.toDp() })
         ) {
             items.forEach { item ->
                 DropdownMenuItem(onClick = {

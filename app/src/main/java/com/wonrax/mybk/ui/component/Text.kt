@@ -34,7 +34,6 @@ fun Text(
     letterSpacing: TextUnit? = null,
     lineHeight: Double = 1.35
 ) {
-
     val fw = when (fontWeight) {
         FontWeight.Regular -> androidx.compose.ui.text.font.FontWeight(400)
         FontWeight.Medium -> androidx.compose.ui.text.font.FontWeight(500)

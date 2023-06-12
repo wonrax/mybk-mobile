@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 class MybkAppState(
     val navController: NavHostController,
     val scaffoldState: ScaffoldState,
-    private val snackbarManager: SnackbarManager,
+    private val snackbarManager: SnackbarManager
 ) {
     init {
         CoroutineScope(Dispatchers.IO).launch {
@@ -78,7 +78,7 @@ class MybkAppState(
 fun rememberMybkAppState(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     navController: NavHostController = rememberAnimatedNavController(),
-    snackbarManager: SnackbarManager = SnackbarManager,
+    snackbarManager: SnackbarManager = SnackbarManager
 ) =
     remember(scaffoldState, navController, snackbarManager) {
         MybkAppState(navController, scaffoldState, snackbarManager)
@@ -105,7 +105,7 @@ fun MybkUI(mainActivityViewModel: MainActivityViewModel) {
             Box(
                 modifier = Modifier
                     .background(Color.Grey10)
-                    .fillMaxSize(),
+                    .fillMaxSize()
             ) {
                 Navigation(navController, mainActivityViewModel)
             }

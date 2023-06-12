@@ -42,8 +42,8 @@ fun SchedulesScreen(
                     itemToStringRepresentation = { item -> item.ten_hocky },
                     selectedItem = mybkViewModel.selectedScheduleSemester.value,
                     onSelectItem = {
-                        // TODO bring this up to viewmodel
-                        item ->
+                            // TODO bring this up to viewmodel
+                            item ->
                         mybkViewModel.selectedScheduleSemester.value = item
                     }
                 )

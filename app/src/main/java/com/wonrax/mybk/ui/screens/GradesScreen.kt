@@ -55,8 +55,8 @@ fun GradesScreen(mybkViewModel: MybkViewModel) {
                     itemToStringRepresentation = { item -> item.ten_hocky },
                     selectedItem = mybkViewModel.selectedGradeSemester.value,
                     onSelectItem = {
-                        // TODO bring this up to viewmodel
-                        item ->
+                            // TODO bring this up to viewmodel
+                            item ->
                         mybkViewModel.selectedGradeSemester.value = item
                     }
                 )
@@ -167,7 +167,7 @@ val scholarshipTitles = listOf<String>(
     "Số TC tích lũy",
     "Điều kiện xét HBKK",
     "Kết quả xét HBKK",
-    "Ngày cập nhật",
+    "Ngày cập nhật"
 )
 
 @Composable
@@ -224,7 +224,7 @@ sealed class SpecialGrade(
     val name: String,
     val description: String,
     val numericGrade: String,
-    val literalGrade: String,
+    val literalGrade: String
 ) {
     object CT : SpecialGrade(
         "Cấm thi",
@@ -341,10 +341,13 @@ fun Collapsible(title: String, content: @Composable () -> Unit) {
                 color = Color.Primary
             )
             AnimatedContent(
-                targetState = isCollapsed.value,
+                targetState = isCollapsed.value
             ) { isCollapsedState ->
-                if (isCollapsedState) Icon(Icons.ArrowDown)
-                else Icon(Icons.ArrowUp)
+                if (isCollapsedState) {
+                    Icon(Icons.ArrowDown)
+                } else {
+                    Icon(Icons.ArrowUp)
+                }
             }
         }
         AnimatedVisibility(visible = !isCollapsed.value) {

@@ -52,7 +52,8 @@ fun MainScreenLayout(
                     item { Spacer(Modifier.height(36.dp)) }
                 }
                 PullRefreshIndicator(
-                    refreshing = isRefreshing, state = pullRefreshState,
+                    refreshing = isRefreshing,
+                    state = pullRefreshState,
                     Modifier.align(
                         Alignment.TopCenter
                     )
