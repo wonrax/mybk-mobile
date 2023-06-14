@@ -97,8 +97,8 @@ fun MybkUI(mainActivityViewModel: MainActivityViewModel) {
             bottomBar = {
                 AnimatedVisibility(
                     appState.shouldShowBottomBar,
-                    enter = slideIn { IntOffset(0, 200) },
-                    exit = slideOut { IntOffset(0, 200) }
+                    enter = slideIn { IntOffset(0, 250) },
+                    exit = slideOut { IntOffset(0, 250) }
                 ) { BottomNavigation(navController) }
             }
         ) {
