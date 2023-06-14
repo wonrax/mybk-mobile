@@ -17,7 +17,7 @@ class CourseExam(
     val phong_thi: String? = null,
 //    val ten_file: String? = null,
 //    val ten_hk_nh: String? = null,
-    val ten_mh: String? = null,
+    val ten_mh: String? = null
 //    val tiet_bd_ktra: String? = null,
 //    val tiet_bd_thi: String? = null,
 //    val trang_thai: String? = null,

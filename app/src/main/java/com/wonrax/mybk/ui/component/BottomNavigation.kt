@@ -62,7 +62,7 @@ fun BottomNavigation(navController: NavHostController) {
                     .fillMaxWidth()
                     .height(48.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 items.forEach { screen ->
                     val selected = screen.route == backStackEntry.value?.destination?.route
@@ -71,7 +71,7 @@ fun BottomNavigation(navController: NavHostController) {
                         modifier = Modifier
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
+                                indication = null
                             ) { onItemClick(screen.route) }
                             .fillMaxHeight()
                             .weight(1f),
@@ -91,7 +91,6 @@ fun BottomNavigation(navController: NavHostController) {
 
 @Composable
 fun StatusLine() {
-
     val weekOfYear = remember { mutableStateOf(0) }
     val dayOfWeek = remember { mutableStateOf(1) }
 
@@ -131,15 +130,17 @@ fun StatusLine() {
                 fontWeight = FontWeight.Bold,
                 fontSize = FontSize.Small
             )
-            if (dayOfWeek.value != 1)
+            if (dayOfWeek.value != 1) {
                 Text(
                     "Thứ ${dayOfWeek.value}",
                     fontSize = FontSize.Small
                 )
-            else Text(
-                "Chủ nhật",
-                fontSize = FontSize.Small
-            )
+            } else {
+                Text(
+                    "Chủ nhật",
+                    fontSize = FontSize.Small
+                )
+            }
         }
     }
 }

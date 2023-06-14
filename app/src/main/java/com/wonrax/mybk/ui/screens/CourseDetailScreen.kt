@@ -25,7 +25,7 @@ fun CourseDetailScreen(courseSchedule: CourseSchedule?, upAction: (() -> Unit)?)
             Modifier
                 .fillMaxSize()
                 .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             if (courseSchedule != null) {
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {

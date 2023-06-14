@@ -18,6 +18,6 @@ class SemesterGrade(
     val so_tctl_hk: String? = null,
     val sotc_dat_hocky: String? = null,
 //    val sotien_hbkk: null
-    val ten_hocky: String? = null,
+    val ten_hocky: String? = null
 //    val trang_thai: String? = null,
 )

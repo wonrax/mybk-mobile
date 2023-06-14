@@ -191,7 +191,7 @@ fun LoginScreen(userCredential: UserCredential, navigateToPolicyScreen: () -> Un
                     )
                 }
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     TextField(
                         "Tên đăng nhập",
@@ -206,7 +206,7 @@ fun LoginScreen(userCredential: UserCredential, navigateToPolicyScreen: () -> Un
                         userCredential.password.value,
                         imeAction = ImeAction.Go,
                         keyboardActions = KeyboardActions(
-                            onGo = { keyboardController?.hide(); onLogin() },
+                            onGo = { keyboardController?.hide(); onLogin() }
                         ),
                         password = true
                     ) { userCredential.password.value = it }

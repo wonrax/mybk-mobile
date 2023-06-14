@@ -50,7 +50,7 @@ fun TitleBarScreen(
         ) {
             Row(
                 Modifier.height(IntrinsicSize.Min),
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     icon = Icons.ArrowLeft,
@@ -59,7 +59,7 @@ fun TitleBarScreen(
                         .padding(16.dp, 0.dp)
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false),
+                            indication = rememberRipple(bounded = false)
                         ) { if (upAction != null) upAction() },
                     tint = Color.Primary
                 )
@@ -68,7 +68,7 @@ fun TitleBarScreen(
                     color = Color.Primary,
                     fontSize = FontSize.Large,
                     fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(0.dp, 16.dp),
+                    modifier = Modifier.padding(0.dp, 16.dp)
                 )
             }
         }

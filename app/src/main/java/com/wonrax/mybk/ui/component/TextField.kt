@@ -36,10 +36,14 @@ fun TextField(
     var showPassword by remember { mutableStateOf(false) }
     val visualTransformation =
         if (password) {
-            if (!showPassword)
+            if (!showPassword) {
                 PasswordVisualTransformation()
-            else VisualTransformation.None
-        } else VisualTransformation.None
+            } else {
+                VisualTransformation.None
+            }
+        } else {
+            VisualTransformation.None
+        }
 
     OutlinedTextField(
         modifier = mod,
@@ -67,17 +71,18 @@ fun TextField(
         ),
         visualTransformation = visualTransformation,
         trailingIcon = {
-            if (password && value != "")
+            if (password && value != "") {
                 Icon(
                     Icons.EyeOff,
                     modifier = Modifier
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false),
+                            indication = rememberRipple(bounded = false)
                         ) {
                             showPassword = !showPassword
                         }
                 )
+            }
         }
     )
 }

@@ -33,7 +33,6 @@ fun Navigation(
     mainActivityViewModel: MainActivityViewModel
 ) {
     AnimatedNavHost(navController = navController, startDestination = "home") {
-
         /* ###################################
         ############ HOME SCREEN #############
         ###################################### */
@@ -83,7 +82,7 @@ fun Navigation(
         composable(
             "courseDetail/{semester}/{courseId}",
             enterTransition = { slideInLeft() },
-            exitTransition = { slideOutRight() },
+            exitTransition = { slideOutRight() }
         ) { backStackEntry ->
             // TODO bring this to CourseDetailScreen
             val courseSchedule = remember { mutableStateOf<CourseSchedule?>(null) }
@@ -104,7 +103,7 @@ fun Navigation(
         composable(
             "policy",
             enterTransition = { slideInLeft() },
-            exitTransition = { slideOutRight() },
+            exitTransition = { slideOutRight() }
         ) {
             PolicyScreen(navController::popBackStack)
         }
@@ -125,50 +124,60 @@ fun isHomeSubRoutes(route: String?): Boolean {
             Screen.Transcript.route,
             Screen.Profile.route
         )
-    ) return true
+    ) {
+        return true
+    }
     return false
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 fun AnimatedContentScope<NavBackStackEntry>.slideOutRight(): ExitTransition {
     return slideOutOfContainer(
-        AnimatedContentScope.SlideDirection.Right, animationSpec = tween(150)
+        AnimatedContentScope.SlideDirection.Right,
+        animationSpec = tween(150)
     )
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 fun AnimatedContentScope<NavBackStackEntry>.slideOutLeft(): ExitTransition {
     return slideOutOfContainer(
-        AnimatedContentScope.SlideDirection.Left, animationSpec = tween(150)
+        AnimatedContentScope.SlideDirection.Left,
+        animationSpec = tween(150)
     )
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 fun AnimatedContentScope<NavBackStackEntry>.slideInRight(): EnterTransition {
     return slideIntoContainer(
-        AnimatedContentScope.SlideDirection.Right, animationSpec = tween(150)
+        AnimatedContentScope.SlideDirection.Right,
+        animationSpec = tween(150)
     )
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 fun AnimatedContentScope<NavBackStackEntry>.slideInLeft(): EnterTransition {
     return slideIntoContainer(
-        AnimatedContentScope.SlideDirection.Left, animationSpec = tween(150)
+        AnimatedContentScope.SlideDirection.Left,
+        animationSpec = tween(150)
     )
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 fun AnimatedContentScope<NavBackStackEntry>.homeRouteEnterAnim(): EnterTransition {
-    return if (isHomeSubRoutes(initialState.destination.route))
+    return if (isHomeSubRoutes(initialState.destination.route)) {
         EnterTransition.None
-    else slideInRight()
+    } else {
+        slideInRight()
+    }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 fun AnimatedContentScope<NavBackStackEntry>.homeRouteExitAnim(): ExitTransition {
-    return if (isHomeSubRoutes(targetState.destination.route))
+    return if (isHomeSubRoutes(targetState.destination.route)) {
         ExitTransition.None
-    else slideOutLeft()
+    } else {
+        slideOutLeft()
+    }
 }
 
 /**

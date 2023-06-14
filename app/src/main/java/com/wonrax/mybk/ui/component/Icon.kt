@@ -30,7 +30,7 @@ enum class Icons {
     Info,
     ExternalLink,
     ToggleEnabled,
-    ToggleDisabled,
+    ToggleDisabled
 }
 
 val mapIconToResourceId: Map<Icons, Int> = mapOf(

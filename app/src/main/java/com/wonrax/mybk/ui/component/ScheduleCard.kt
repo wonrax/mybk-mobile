@@ -133,7 +133,7 @@ fun AvailableWeeksScrollable(
                             colors,
                             startX = Float.POSITIVE_INFINITY,
                             endX = 0f
-                        ),
+                        )
                     )
                 }
         )

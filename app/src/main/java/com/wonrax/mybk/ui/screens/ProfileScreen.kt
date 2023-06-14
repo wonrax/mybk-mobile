@@ -49,7 +49,6 @@ fun ProfileScreen(
     navigateToPolicyScreen: () -> Unit,
     navigateToFeedback: () -> Unit
 ) {
-
     // Change status bar to grey when come back from other screens
     val systemUIController = rememberSystemUiController()
     LaunchedEffect(true) {
@@ -63,7 +62,7 @@ fun ProfileScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(12.dp, 72.dp),
-                verticalArrangement = Arrangement.spacedBy(32.dp),
+                verticalArrangement = Arrangement.spacedBy(32.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(12.dp, 0.dp),
@@ -186,10 +185,13 @@ fun Toggle(
             description?.let { Text(it, fontSize = FontSize.Small, color = Color.Grey50) }
         }
         AnimatedContent(
-            targetState = isEnabled.value,
+            targetState = isEnabled.value
         ) { isEnabledState ->
-            if (isEnabledState) Icon(Icons.ToggleEnabled)
-            else Icon(Icons.ToggleDisabled)
+            if (isEnabledState) {
+                Icon(Icons.ToggleEnabled)
+            } else {
+                Icon(Icons.ToggleDisabled)
+            }
         }
     }
 }

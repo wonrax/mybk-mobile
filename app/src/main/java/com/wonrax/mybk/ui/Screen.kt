@@ -6,7 +6,7 @@ sealed class Screen(
     val route: String,
     val title: String,
     val icon: Icons,
-    val iconSelected: Icons,
+    val iconSelected: Icons
 ) {
     object Schedules : Screen("home/schedules", "TKB", Icons.Calendar, Icons.CalendarBold)
     object Exams : Screen("home/exams", "Lịch thi", Icons.Paper, Icons.PaperBold)
