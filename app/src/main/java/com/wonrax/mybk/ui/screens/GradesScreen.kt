@@ -80,6 +80,15 @@ fun GradesScreen(mybkViewModel: MybkViewModel) {
                     )
                 }
             }
+        } else {
+            item {
+                Text(
+                    text = "Không có dữ liệu.",
+                    fontSize = FontSize.Large,
+                    color = Color.Grey50,
+                    modifier = Modifier.padding(12.dp, 0.dp)
+                )
+            }
         }
 
         if (listOfNotNull( // Avoid redundant padding gap when the list is empty

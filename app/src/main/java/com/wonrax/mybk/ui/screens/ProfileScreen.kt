@@ -55,6 +55,8 @@ fun ProfileScreen(
         systemUIController.setStatusBarColor(Color.Grey10, darkIcons = true)
     }
 
+    val userFullName = DeviceUser.fullName ?: "Mybk"
+
     val context = LocalContext.current as Activity
     ScreenLayout {
         Box(Modifier.verticalScroll(rememberScrollState())) {
@@ -68,13 +70,11 @@ fun ProfileScreen(
                     modifier = Modifier.padding(12.dp, 0.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    DeviceUser.fullName?.let {
-                        Text(
-                            it,
-                            fontSize = FontSize.Heading,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
+                    Text(
+                        userFullName,
+                        fontSize = FontSize.Heading,
+                        fontWeight = FontWeight.Medium
+                    )
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         DeviceUser.username?.let { Text(it, color = Color.Primary) }
                         DeviceUser.faculty?.let { Text(it) }
