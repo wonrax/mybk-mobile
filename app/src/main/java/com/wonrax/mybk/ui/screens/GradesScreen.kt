@@ -2,7 +2,6 @@ package com.wonrax.mybk.ui.screens
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -61,25 +60,6 @@ fun GradesScreen(mybkViewModel: MybkViewModel) {
                     }
                 )
             }
-
-            if (listOfNotNull( // Avoid redundant padding gap when the list is empty
-                    mybkViewModel.selectedGradeSemester.value?.so_tc,
-                    mybkViewModel.selectedGradeSemester.value?.so_tctl_hk,
-                    mybkViewModel.selectedGradeSemester.value?.diem_tb,
-                    mybkViewModel.selectedGradeSemester.value?.so_tctl,
-                    mybkViewModel.selectedGradeSemester.value?.diem_tbtl
-                ).isNotEmpty()
-            ) {
-                item {
-                    SemesterSummary(
-                        so_tc = mybkViewModel.selectedGradeSemester.value?.so_tc,
-                        so_tctl_hk = mybkViewModel.selectedGradeSemester.value?.so_tctl_hk,
-                        diem_tb = mybkViewModel.selectedGradeSemester.value?.diem_tb,
-                        so_tctl = mybkViewModel.selectedGradeSemester.value?.so_tctl,
-                        diem_tbtl = mybkViewModel.selectedGradeSemester.value?.diem_tbtl
-                    )
-                }
-            }
         } else {
             item {
                 Text(
@@ -91,32 +71,57 @@ fun GradesScreen(mybkViewModel: MybkViewModel) {
             }
         }
 
+        mybkViewModel.selectedGradeSemester.value?.diem?.forEach {
+            item {
+                GradeCard(it)
+            }
+        }
+
+        if (listOfNotNull( // Avoid redundant padding gap when the list is empty
+                mybkViewModel.selectedGradeSemester.value?.so_tc,
+                mybkViewModel.selectedGradeSemester.value?.so_tctl_hk,
+                mybkViewModel.selectedGradeSemester.value?.diem_tb,
+                mybkViewModel.selectedGradeSemester.value?.so_tctl,
+                mybkViewModel.selectedGradeSemester.value?.diem_tbtl
+            ).isNotEmpty()
+        ) {
+            item {
+                SemesterSummary(
+                    so_tc = mybkViewModel.selectedGradeSemester.value?.so_tc,
+                    so_tctl_hk = mybkViewModel.selectedGradeSemester.value?.so_tctl_hk,
+                    diem_tb = mybkViewModel.selectedGradeSemester.value?.diem_tb,
+                    so_tctl = mybkViewModel.selectedGradeSemester.value?.so_tctl,
+                    diem_tbtl = mybkViewModel.selectedGradeSemester.value?.diem_tbtl
+                )
+            }
+        }
+
         if (listOfNotNull( // Avoid redundant padding gap when the list is empty
                 mybkViewModel.selectedGradeSemester.value?.dtb_1hocky,
                 mybkViewModel.selectedGradeSemester.value?.diem_renluyen,
                 mybkViewModel.selectedGradeSemester.value?.sotc_dat_hocky,
                 mybkViewModel.selectedGradeSemester.value?.dtb_chung_morong,
+                mybkViewModel.selectedGradeSemester.value?.diemtb_he10,
+                mybkViewModel.selectedGradeSemester.value?.diemtbtl_he10,
                 mybkViewModel.selectedGradeSemester.value?.dieukien_hbkk,
                 mybkViewModel.selectedGradeSemester.value?.kq_hbkk,
+                mybkViewModel.selectedGradeSemester.value?.sotien_hbkk,
                 mybkViewModel.selectedGradeSemester.value?.ngay_hbkk
             ).isNotEmpty()
         ) {
             item {
-                ScholarshipConditions(
+                ScholarshipInfo(
                     dtb_1hocky = mybkViewModel.selectedGradeSemester.value?.dtb_1hocky,
                     diem_renluyen = mybkViewModel.selectedGradeSemester.value?.diem_renluyen,
                     sotc_dat_hocky = mybkViewModel.selectedGradeSemester.value?.sotc_dat_hocky,
                     dtb_chung_morong = mybkViewModel.selectedGradeSemester.value?.dtb_chung_morong,
+                    diemtb_he10 = mybkViewModel.selectedGradeSemester.value?.diemtb_he10,
+                    diemtbtl_he10 = mybkViewModel.selectedGradeSemester.value?.diemtbtl_he10,
                     dieukien_hbkk = mybkViewModel.selectedGradeSemester.value?.dieukien_hbkk,
                     kq_hbkk = mybkViewModel.selectedGradeSemester.value?.kq_hbkk,
+                    sotien_hbkk = mybkViewModel.selectedGradeSemester.value?.sotien_hbkk,
                     ngay_hbkk = mybkViewModel.selectedGradeSemester.value?.ngay_hbkk
                 )
-            }
-        }
-
-        mybkViewModel.selectedGradeSemester.value?.diem?.forEach {
-            item {
-                GradeCard(it)
             }
         }
 
@@ -174,19 +179,25 @@ val scholarshipTitles = listOf<String>(
     "Điểm rèn luyện",
     "Số TC đạt trong học kỳ",
     "Số TC tích lũy",
+    "Điểm trung bình hệ 10",
+    "Điểm trung bình tích lũy hệ 10",
     "Điều kiện xét HBKK",
     "Kết quả xét HBKK",
+    "Số tiền HBKK",
     "Ngày cập nhật"
 )
 
 @Composable
-fun ScholarshipConditions(
+fun ScholarshipInfo(
     dtb_1hocky: String?,
     diem_renluyen: String?,
     sotc_dat_hocky: String?,
     dtb_chung_morong: String?,
+    diemtb_he10: String?,
+    diemtbtl_he10: String?,
     dieukien_hbkk: String?,
     kq_hbkk: String?,
+    sotien_hbkk: String?,
     ngay_hbkk: String?
 ) {
     Column(
@@ -202,13 +213,18 @@ fun ScholarshipConditions(
             color = Color.Primary
         )
 
+        val verboseDKHBKK = if (dieukien_hbkk == null) null else if (dieukien_hbkk == "1") "Đủ" else "Không đủ"
+
         listOf(
             dtb_1hocky,
             diem_renluyen,
             sotc_dat_hocky,
             dtb_chung_morong,
-            dieukien_hbkk,
-            kq_hbkk,
+            diemtb_he10,
+            diemtbtl_he10,
+            verboseDKHBKK,
+            if (kq_hbkk != null) "Loại $kq_hbkk" else null,
+            if (sotien_hbkk != null) "$sotien_hbkk₫" else null,
             ngay_hbkk
         ).forEachIndexed() { index, item ->
             item?.let {
@@ -330,7 +346,6 @@ fun SpecialGrades() {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Collapsible(title: String, content: @Composable () -> Unit) {
     val isCollapsed = remember { mutableStateOf(true) }
@@ -350,7 +365,8 @@ fun Collapsible(title: String, content: @Composable () -> Unit) {
                 color = Color.Primary
             )
             AnimatedContent(
-                targetState = isCollapsed.value
+                targetState = isCollapsed.value,
+                label = "SpecialGradeCollapsible"
             ) { isCollapsedState ->
                 if (isCollapsedState) {
                     Icon(Icons.ArrowDown)

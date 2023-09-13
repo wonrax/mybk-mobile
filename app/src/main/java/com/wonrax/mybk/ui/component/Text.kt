@@ -42,7 +42,7 @@ fun Text(
 
     val fs = when (fontSize) {
         FontSize.Small -> 12.sp
-        FontSize.Body -> 14.sp
+        FontSize.Body -> 15.sp
         FontSize.Large -> 16.sp
         FontSize.Heading -> 24.sp
     }
