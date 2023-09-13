@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.rememberNavController
 import com.wonrax.mybk.model.SnackbarManager
 import com.wonrax.mybk.ui.component.BottomNavigation
 import com.wonrax.mybk.ui.component.FontWeight
@@ -77,7 +77,7 @@ class MybkAppState(
 @Composable
 fun rememberMybkAppState(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
-    navController: NavHostController = rememberAnimatedNavController(),
+    navController: NavHostController = rememberNavController(),
     snackbarManager: SnackbarManager = SnackbarManager
 ) =
     remember(scaffoldState, navController, snackbarManager) {
