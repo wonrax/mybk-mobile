@@ -101,10 +101,11 @@ fun MybkUI(mainActivityViewModel: MainActivityViewModel) {
                     exit = slideOut { IntOffset(0, 250) }
                 ) { BottomNavigation(navController) }
             }
-        ) {
+        ) { padding ->
             Box(
                 modifier = Modifier
                     .background(Color.Grey10)
+                    .padding(padding)
                     .fillMaxSize()
             ) {
                 Navigation(navController, mainActivityViewModel)
