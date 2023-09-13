@@ -1,11 +1,11 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'org.jlleitschuh.gradle.ktlint' version '11.4.0'
+    id 'org.jlleitschuh.gradle.ktlint' version '11.5.1'
 }
 
 ext {
-    compose_version = '1.4.3'
+    compose_version = '1.5.1'
 }
 
 android {
@@ -13,12 +13,12 @@ android {
         release {
         }
     }
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.wonrax.mybk"
         minSdk 25
-        targetSdk 33
+        targetSdk 34
         versionCode 202306121
         versionName "1.1.0"
 
@@ -59,7 +59,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
 
     // Compose
@@ -84,13 +84,13 @@ dependencies {
     implementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
 
     // Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
 
     // Encrypted SharedPrefs
     implementation "androidx.security:security-crypto:1.0.0"
 
     // Navigation
-    implementation "androidx.navigation:navigation-compose:2.6.0"
+    implementation "androidx.navigation:navigation-compose:2.7.2"
 
     // Gson
     implementation 'com.google.code.gson:gson:2.10.1'
