@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.rememberNavController
 import com.wonrax.mybk.model.SnackbarManager
 import com.wonrax.mybk.ui.component.BottomNavigation
 import com.wonrax.mybk.ui.component.FontWeight
@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 class MybkAppState(
     val navController: NavHostController,
     val scaffoldState: ScaffoldState,
-    private val snackbarManager: SnackbarManager,
+    private val snackbarManager: SnackbarManager
 ) {
     init {
         CoroutineScope(Dispatchers.IO).launch {
@@ -77,8 +77,8 @@ class MybkAppState(
 @Composable
 fun rememberMybkAppState(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
-    navController: NavHostController = rememberAnimatedNavController(),
-    snackbarManager: SnackbarManager = SnackbarManager,
+    navController: NavHostController = rememberNavController(),
+    snackbarManager: SnackbarManager = SnackbarManager
 ) =
     remember(scaffoldState, navController, snackbarManager) {
         MybkAppState(navController, scaffoldState, snackbarManager)
@@ -97,15 +97,16 @@ fun MybkUI(mainActivityViewModel: MainActivityViewModel) {
             bottomBar = {
                 AnimatedVisibility(
                     appState.shouldShowBottomBar,
-                    enter = slideIn { IntOffset(0, 200) },
-                    exit = slideOut { IntOffset(0, 200) }
+                    enter = slideIn { IntOffset(0, 250) },
+                    exit = slideOut { IntOffset(0, 250) }
                 ) { BottomNavigation(navController) }
             }
-        ) {
+        ) { padding ->
             Box(
                 modifier = Modifier
                     .background(Color.Grey10)
-                    .fillMaxSize(),
+                    .padding(padding)
+                    .fillMaxSize()
             ) {
                 Navigation(navController, mainActivityViewModel)
             }

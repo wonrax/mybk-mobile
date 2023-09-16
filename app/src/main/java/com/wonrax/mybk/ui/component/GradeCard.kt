@@ -19,7 +19,6 @@ fun GradeCard(courseGrade: CourseGrade) {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-
             courseGrade.diem_thanhphan?.let {
                 GradeSection(title = "Điểm thành phần") { Text(it) }
             }

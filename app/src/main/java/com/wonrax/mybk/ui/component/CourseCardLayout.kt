@@ -32,10 +32,11 @@ fun CourseCardLayout(
             .fillMaxWidth()
     ) {
         var courseHeaderModifier = Modifier.fillMaxWidth()
-        if (onCourseClick != null)
+        if (onCourseClick != null) {
             courseHeaderModifier = courseHeaderModifier.then(
                 Modifier.clickable(onClick = onCourseClick)
             )
+        }
         Row(
             courseHeaderModifier.then(Modifier.padding(24.dp, 16.dp, 24.dp, 12.dp)),
             horizontalArrangement = Arrangement.spacedBy(8.dp),

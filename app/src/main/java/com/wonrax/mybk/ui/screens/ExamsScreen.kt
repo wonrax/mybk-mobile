@@ -13,6 +13,7 @@ import com.wonrax.mybk.ui.component.FontWeight
 import com.wonrax.mybk.ui.component.LastUpdated
 import com.wonrax.mybk.ui.component.MainScreenLayout
 import com.wonrax.mybk.ui.component.Text
+import com.wonrax.mybk.ui.theme.Color
 import com.wonrax.mybk.viewmodel.MybkViewModel
 
 @Composable
@@ -39,10 +40,19 @@ fun ExamsScreen(mybkViewModel: MybkViewModel) {
                     itemToStringRepresentation = { item -> item.ten_hocky },
                     selectedItem = mybkViewModel.selectedExamSemester.value,
                     onSelectItem = {
-                        // TODO bring this up to viewmodel
-                        item ->
+                            // TODO bring this up to viewmodel
+                            item ->
                         mybkViewModel.selectedExamSemester.value = item
                     }
+                )
+            }
+        } else {
+            item {
+                Text(
+                    text = "Không có dữ liệu.",
+                    fontSize = FontSize.Large,
+                    color = Color.Grey50,
+                    modifier = Modifier.padding(12.dp, 0.dp)
                 )
             }
         }

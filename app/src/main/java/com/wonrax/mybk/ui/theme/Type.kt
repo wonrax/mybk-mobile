@@ -12,7 +12,7 @@ val Inter = FontFamily(
     Font(R.font.inter_medium, FontWeight.Medium)
 )
 val Typography = Typography(
-    defaultFontFamily = Inter,
+    defaultFontFamily = Inter
     /* Other default text styles to override
     button = TextStyle(
         fontFamily = FontFamily.Default,

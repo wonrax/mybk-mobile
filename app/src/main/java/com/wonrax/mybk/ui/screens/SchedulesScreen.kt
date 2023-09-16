@@ -13,6 +13,7 @@ import com.wonrax.mybk.ui.component.LastUpdated
 import com.wonrax.mybk.ui.component.MainScreenLayout
 import com.wonrax.mybk.ui.component.ScheduleCard
 import com.wonrax.mybk.ui.component.Text
+import com.wonrax.mybk.ui.theme.Color
 import com.wonrax.mybk.viewmodel.MybkViewModel
 
 @Composable
@@ -42,10 +43,19 @@ fun SchedulesScreen(
                     itemToStringRepresentation = { item -> item.ten_hocky },
                     selectedItem = mybkViewModel.selectedScheduleSemester.value,
                     onSelectItem = {
-                        // TODO bring this up to viewmodel
-                        item ->
+                            // TODO bring this up to viewmodel
+                            item ->
                         mybkViewModel.selectedScheduleSemester.value = item
                     }
+                )
+            }
+        } else {
+            item {
+                Text(
+                    text = "Không có dữ liệu.",
+                    fontSize = FontSize.Large,
+                    color = Color.Grey50,
+                    modifier = Modifier.padding(12.dp, 0.dp)
                 )
             }
         }

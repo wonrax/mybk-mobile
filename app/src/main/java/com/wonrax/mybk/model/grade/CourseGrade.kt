@@ -30,7 +30,7 @@ class CourseGrade(
 //    sotien_hbkk: null
 //    ten_file: String? = null,
 //    ten_hocky: String? = null,
-    val ten_mh: String? = null,
+    val ten_mh: String? = null
 //    trang_thai: String? = null,
 //    trangthai_th: String? = null,
 )

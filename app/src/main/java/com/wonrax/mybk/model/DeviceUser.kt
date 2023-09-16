@@ -149,15 +149,17 @@ object DeviceUser {
             input = htmlStringContent
         ) ?: ""
         val loginStatus =
-            if (response.code == 403)
+            if (response.code == 403) {
                 SSOState.TOO_MANY_TRIES
-            else if (htmlStringContent.contains(HTML_WRONG_CREDENTIAL))
+            } else if (htmlStringContent.contains(HTML_WRONG_CREDENTIAL)) {
                 SSOState.WRONG_PASSWORD
-            else if (htmlStringContent.contains(HTML_LOGIN_SUCCESS))
+            } else if (htmlStringContent.contains(HTML_LOGIN_SUCCESS)) {
                 SSOState.LOGGED_IN
-            else if (lt != "" || execution != "")
+            } else if (lt != "" || execution != "") {
                 SSOState.UNAUTHORIZED
-            else SSOState.UNKNOWN
+            } else {
+                SSOState.UNKNOWN
+            }
 
         object {
             var loginStatus: SSOState = loginStatus
@@ -202,8 +204,9 @@ object DeviceUser {
         return if (token != null) {
             stinfoToken = token
             MybkState.LOGGED_IN
-        } else
+        } else {
             MybkState.UNKNOWN
+        }
     }
 
     private fun getProfileInfo(responseBody: String) {
@@ -242,10 +245,11 @@ object DeviceUser {
             val savedUsername = this.username
             val savedPassword = this.password
 
-            if (savedPassword == null || savedUsername == null)
+            if (savedPassword == null || savedUsername == null) {
                 SSOState.NO_CREDENTIALS
-            else
+            } else {
                 ssoSignIn(savedUsername, savedPassword)
+            }
         }
     }
 
@@ -263,7 +267,7 @@ object DeviceUser {
      */
     private fun updateCredentialsStore(
         username: String?,
-        password: String?,
+        password: String?
     ) {
         this.username = username
         this.password = password

@@ -13,7 +13,7 @@ fun ExamCard(courseExam: CourseExam) {
     CourseCardLayout(
         courseName = courseExam.ten_mh,
         courseClassNumber = courseExam.nhomto,
-        courseId = courseExam.ma_mh,
+        courseId = courseExam.ma_mh
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp)

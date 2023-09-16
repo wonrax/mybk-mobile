@@ -27,7 +27,7 @@ val paragraphs = listOf(
         bạn được mã hóa và bảo vệ bởi hệ điều hành. Tuy nhiên, Mybk Mobile không chịu trách nhiệm
         cho các sự cố liên quan về tài khoản Mybk của bạn (chẳng hạn như bị mất tài khoản do
         hacker, hay do cài đặt và sử dụng các phiên bản Mybk Mobile đã bị chỉnh sửa, v.v.).
-    """.trimIndent().replace("\n", " "),
+    """.trimIndent().replace("\n", " ")
 )
 
 @Composable
@@ -37,7 +37,7 @@ fun PolicyScreen(upAction: () -> Unit) {
             Modifier
                 .fillMaxSize()
                 .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
                 "Điều khoản sử dụng",

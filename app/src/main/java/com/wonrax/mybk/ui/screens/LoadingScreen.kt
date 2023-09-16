@@ -15,7 +15,7 @@ fun LoadingScreen() {
         modifier = Modifier
             .background(Color.Grey10)
             .fillMaxSize(),
-        contentAlignment = Alignment.Center,
+        contentAlignment = Alignment.Center
     ) {
         LoadingIcon()
     }

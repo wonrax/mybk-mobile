@@ -63,8 +63,11 @@ interface BaseRepository<D> {
 
     fun localStore(data: String?) {
         val file = File(this.filesDir, this.storageFileName)
-        if (data == null) file.delete()
-        else file.writeText(data)
+        if (data == null) {
+            file.delete()
+        } else {
+            file.writeText(data)
+        }
     }
 
     private fun localRead(): String {

@@ -21,7 +21,6 @@ fun LastUpdated(
             .padding(12.dp, 0.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-
         var displayDate: String? = formatDateToDisplay(
             dateString,
             dateFormat

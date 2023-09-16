@@ -40,9 +40,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.wonrax.mybk.model.DeviceUser
 import com.wonrax.mybk.model.SSOState
@@ -69,7 +69,7 @@ class LoginActivity : ComponentActivity() {
         setTheme(R.style.Mybk_NoActionBar)
         setContent {
             MybkTheme(false) {
-                LoginNavigation(navController = rememberAnimatedNavController(), UserCredential())
+                LoginNavigation(navController = rememberNavController(), UserCredential())
             }
         }
     }
@@ -84,7 +84,7 @@ class UserCredential(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun LoginNavigation(navController: NavHostController, userCredential: UserCredential) {
-    AnimatedNavHost(navController = navController, startDestination = "login") {
+    NavHost(navController = navController, startDestination = "login") {
         composable(
             "login",
             popEnterTransition = { slideInRight() },
@@ -191,7 +191,7 @@ fun LoginScreen(userCredential: UserCredential, navigateToPolicyScreen: () -> Un
                     )
                 }
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     TextField(
                         "Tên đăng nhập",
@@ -206,7 +206,7 @@ fun LoginScreen(userCredential: UserCredential, navigateToPolicyScreen: () -> Un
                         userCredential.password.value,
                         imeAction = ImeAction.Go,
                         keyboardActions = KeyboardActions(
-                            onGo = { keyboardController?.hide(); onLogin() },
+                            onGo = { keyboardController?.hide(); onLogin() }
                         ),
                         password = true
                     ) { userCredential.password.value = it }

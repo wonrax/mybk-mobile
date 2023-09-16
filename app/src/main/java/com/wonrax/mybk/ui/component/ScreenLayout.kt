@@ -12,7 +12,7 @@ fun ScreenLayout(content: @Composable () -> Unit) {
     Box(
         modifier = Modifier
             .background(Color.Grey10)
-            .fillMaxSize(),
+            .fillMaxSize()
     ) {
         content()
     }

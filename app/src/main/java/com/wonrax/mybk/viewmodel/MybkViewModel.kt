@@ -23,7 +23,7 @@ class MybkViewModel(
     private val schedulesRepository: SchedulesRepository,
     private val examsRepository: ExamsRepository,
     private val gradesRepository: GradesRepository,
-    private val snackbarManager: SnackbarManager,
+    private val snackbarManager: SnackbarManager
 ) {
 
     // TODO make these read only states

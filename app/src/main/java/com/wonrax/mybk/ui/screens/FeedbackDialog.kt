@@ -23,14 +23,14 @@ import com.wonrax.mybk.ui.theme.Color
 
 val messages = listOf(
     "Hello, cám ơn bạn đã sử dụng app, hiện tại mình không nhận phản hồi qua tin nhắn hay email.",
-    "Bạn vui lòng mở issue trên GitHub nếu có yêu cầu thêm hay thay đổi tính năng.",
+    "Bạn vui lòng mở issue trên GitHub nếu có yêu cầu thêm hay thay đổi tính năng."
 )
 
 @Composable
 fun FeedbackDialog(upAction: () -> Unit) {
     Card(
         shape = RoundedCornerShape(32.dp),
-        backgroundColor = Color.Light,
+        backgroundColor = Color.Light
     ) {
         Column() {
             Column(
