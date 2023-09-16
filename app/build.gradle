@@ -19,7 +19,7 @@ android {
         applicationId "com.wonrax.mybk"
         minSdk 25
         targetSdk 34
-        versionCode 202309141
+        versionCode 202309161
         versionName "1.1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
